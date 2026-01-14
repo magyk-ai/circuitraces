@@ -10,8 +10,8 @@ export function App() {
   const [events, setEvents] = useState<EngineEvent[]>([]);
 
   useEffect(() => {
-    // Load sample puzzle
-    fetch('/sample.json')
+    // Load sample puzzle - use relative path for GitHub Pages
+    fetch('./sample.json')
       .then(res => {
         if (!res.ok) {
           throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
