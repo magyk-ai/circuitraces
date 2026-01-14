@@ -5,6 +5,8 @@ export class SelectionAdapter {
   private cellMap: Map<string, Cell>;
   private startCellId: string | null = null;
   private currentDirection: [number, number] | null = null;
+  private lockedDirection: [number, number] | null = null;
+  private readonly DEAD_ZONE_THRESHOLD = 0.3; // 30% of cell size in grid units
 
   constructor(puzzle: WaywordsPuzzle) {
     this.puzzle = puzzle;
@@ -14,6 +16,11 @@ export class SelectionAdapter {
   begin(cellId: string): void {
     this.startCellId = cellId;
     this.currentDirection = null;
+    this.lockedDirection = null;
+  }
+
+  isActive(): boolean {
+    return this.startCellId !== null;
   }
 
   update(cellId: string): string[] {
@@ -27,13 +34,31 @@ export class SelectionAdapter {
     // Calculate direction
     const dx = current.x - start.x;
     const dy = current.y - start.y;
+    const distance = Math.sqrt(dx*dx + dy*dy);
+
+    // Dead zone: ignore small movements
+    if (distance < this.DEAD_ZONE_THRESHOLD) {
+      return [this.startCellId];
+    }
 
     // Snap to 8 directions
-    const dir = this.snapTo8Dir(dx, dy);
-    this.currentDirection = dir;
+    const newDir = this.snapTo8Dir(dx, dy);
+
+    // Direction locking: require significant angle change (45°)
+    if (this.lockedDirection) {
+      const angleDiff = this.angleBetween(this.lockedDirection, newDir);
+      if (angleDiff < Math.PI / 4) { // < 45 degrees
+        // Keep locked direction
+        return this.getCellsAlongRay(start, this.lockedDirection, current);
+      }
+    }
+
+    // Lock new direction
+    this.lockedDirection = newDir;
+    this.currentDirection = newDir;
 
     // Get cells along ray
-    return this.getCellsAlongRay(start, dir, current);
+    return this.getCellsAlongRay(start, newDir, current);
   }
 
   end(cellId: string): string[] {
@@ -63,6 +88,12 @@ export class SelectionAdapter {
 
     const idx = (octant + 8) % 8;
     return dirs[idx];
+  }
+
+  private angleBetween(dir1: [number, number], dir2: [number, number]): number {
+    const angle1 = Math.atan2(dir1[1], dir1[0]);
+    const angle2 = Math.atan2(dir2[1], dir2[0]);
+    return Math.abs(angle1 - angle2);
   }
 
   private getCellsAlongRay(

@@ -35,6 +35,13 @@ export function App() {
     setState(result.state);
     setEvents(result.effects.events);
 
+    // Haptic feedback on word found
+    result.effects.events.forEach(event => {
+      if (event.type === 'WORD_FOUND' && 'vibrate' in navigator) {
+        navigator.vibrate(10); // 10ms pulse
+      }
+    });
+
     // Clear events after display
     setTimeout(() => setEvents([]), 2000);
   }, [puzzle, state]);
