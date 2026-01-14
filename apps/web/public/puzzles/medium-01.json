@@ -1,0 +1,168 @@
+{
+  "puzzleId": "medium-01",
+  "theme": "Hidden Words",
+  "config": {
+    "selectionModel": "RAY_8DIR",
+    "connectivityModel": "ORTHO_4",
+    "allowReverseSelection": true,
+    "cluePersistMs": 3000
+  },
+  "grid": {
+    "width": 6,
+    "height": 6,
+    "cells": [
+      { "id": "r0c0", "x": 0, "y": 0, "type": "LETTER", "value": "B" },
+      { "id": "r0c1", "x": 1, "y": 0, "type": "LETTER", "value": "R" },
+      { "id": "r0c2", "x": 2, "y": 0, "type": "LETTER", "value": "I" },
+      { "id": "r0c3", "x": 3, "y": 0, "type": "LETTER", "value": "D" },
+      { "id": "r0c4", "x": 4, "y": 0, "type": "LETTER", "value": "G" },
+      { "id": "r0c5", "x": 5, "y": 0, "type": "LETTER", "value": "E" },
+
+      { "id": "r1c0", "x": 0, "y": 1, "type": "LETTER", "value": "S" },
+      { "id": "r1c1", "x": 1, "y": 1, "type": "LETTER", "value": "T" },
+      { "id": "r1c2", "x": 2, "y": 1, "type": "LETTER", "value": "O" },
+      { "id": "r1c3", "x": 3, "y": 1, "type": "LETTER", "value": "N" },
+      { "id": "r1c4", "x": 4, "y": 1, "type": "LETTER", "value": "E" },
+      { "id": "r1c5", "x": 5, "y": 1, "type": "LETTER", "value": "S" },
+
+      { "id": "r2c0", "x": 0, "y": 2, "type": "LETTER", "value": "W" },
+      { "id": "r2c1", "x": 1, "y": 2, "type": "LETTER", "value": "A" },
+      { "id": "r2c2", "x": 2, "y": 2, "type": "LETTER", "value": "T" },
+      { "id": "r2c3", "x": 3, "y": 2, "type": "LETTER", "value": "E" },
+      { "id": "r2c4", "x": 4, "y": 2, "type": "LETTER", "value": "R" },
+      { "id": "r2c5", "x": 5, "y": 2, "type": "LETTER", "value": "Y" },
+
+      { "id": "r3c0", "x": 0, "y": 3, "type": "LETTER", "value": "F" },
+      { "id": "r3c1", "x": 1, "y": 3, "type": "LETTER", "value": "L" },
+      { "id": "r3c2", "x": 2, "y": 3, "type": "LETTER", "value": "O" },
+      { "id": "r3c3", "x": 3, "y": 3, "type": "LETTER", "value": "W" },
+      { "id": "r3c4", "x": 4, "y": 3, "type": "LETTER", "value": "E" },
+      { "id": "r3c5", "x": 5, "y": 3, "type": "LETTER", "value": "R" },
+
+      { "id": "r4c0", "x": 0, "y": 4, "type": "LETTER", "value": "G" },
+      { "id": "r4c1", "x": 1, "y": 4, "type": "LETTER", "value": "A" },
+      { "id": "r4c2", "x": 2, "y": 4, "type": "LETTER", "value": "R" },
+      { "id": "r4c3", "x": 3, "y": 4, "type": "LETTER", "value": "D" },
+      { "id": "r4c4", "x": 4, "y": 4, "type": "LETTER", "value": "E" },
+      { "id": "r4c5", "x": 5, "y": 4, "type": "LETTER", "value": "N" },
+
+      { "id": "r5c0", "x": 0, "y": 5, "type": "LETTER", "value": "S" },
+      { "id": "r5c1", "x": 1, "y": 5, "type": "LETTER", "value": "T" },
+      { "id": "r5c2", "x": 2, "y": 5, "type": "LETTER", "value": "R" },
+      { "id": "r5c3", "x": 3, "y": 5, "type": "LETTER", "value": "E" },
+      { "id": "r5c4", "x": 4, "y": 5, "type": "LETTER", "value": "A" },
+      { "id": "r5c5", "x": 5, "y": 5, "type": "LETTER", "value": "M" }
+    ],
+    "start": { "adjacentCellId": "r0c0" },
+    "end": { "adjacentCellId": "r5c5" }
+  },
+  "words": {
+    "path": [
+      {
+        "wordId": "BRIDGE",
+        "tokens": [
+          { "t": "L", "v": "B" },
+          { "t": "L", "v": "R" },
+          { "t": "L", "v": "I" },
+          { "t": "L", "v": "D" },
+          { "t": "L", "v": "G" },
+          { "t": "L", "v": "E" }
+        ],
+        "size": 6,
+        "placements": [["r0c0", "r0c1", "r0c2", "r0c3", "r0c4", "r0c5"]]
+      },
+      {
+        "wordId": "STONES",
+        "tokens": [
+          { "t": "L", "v": "S" },
+          { "t": "L", "v": "T" },
+          { "t": "L", "v": "O" },
+          { "t": "L", "v": "N" },
+          { "t": "L", "v": "E" },
+          { "t": "L", "v": "S" }
+        ],
+        "size": 6,
+        "placements": [["r1c0", "r1c1", "r1c2", "r1c3", "r1c4", "r1c5"]]
+      },
+      {
+        "wordId": "WATERY",
+        "tokens": [
+          { "t": "L", "v": "W" },
+          { "t": "L", "v": "A" },
+          { "t": "L", "v": "T" },
+          { "t": "L", "v": "E" },
+          { "t": "L", "v": "R" },
+          { "t": "L", "v": "Y" }
+        ],
+        "size": 6,
+        "placements": [["r2c0", "r2c1", "r2c2", "r2c3", "r2c4", "r2c5"]]
+      },
+      {
+        "wordId": "FLOWER",
+        "tokens": [
+          { "t": "L", "v": "F" },
+          { "t": "L", "v": "L" },
+          { "t": "L", "v": "O" },
+          { "t": "L", "v": "W" },
+          { "t": "L", "v": "E" },
+          { "t": "L", "v": "R" }
+        ],
+        "size": 6,
+        "placements": [["r3c0", "r3c1", "r3c2", "r3c3", "r3c4", "r3c5"]]
+      },
+      {
+        "wordId": "GARDEN",
+        "tokens": [
+          { "t": "L", "v": "G" },
+          { "t": "L", "v": "A" },
+          { "t": "L", "v": "R" },
+          { "t": "L", "v": "D" },
+          { "t": "L", "v": "E" },
+          { "t": "L", "v": "N" }
+        ],
+        "size": 6,
+        "placements": [["r4c0", "r4c1", "r4c2", "r4c3", "r4c4", "r4c5"]]
+      },
+      {
+        "wordId": "STREAM",
+        "tokens": [
+          { "t": "L", "v": "S" },
+          { "t": "L", "v": "T" },
+          { "t": "L", "v": "R" },
+          { "t": "L", "v": "E" },
+          { "t": "L", "v": "A" },
+          { "t": "L", "v": "M" }
+        ],
+        "size": 6,
+        "placements": [["r5c0", "r5c1", "r5c2", "r5c3", "r5c4", "r5c5"]]
+      }
+    ],
+    "additional": [
+      {
+        "wordId": "STONE",
+        "tokens": [
+          { "t": "L", "v": "S" },
+          { "t": "L", "v": "T" },
+          { "t": "L", "v": "O" },
+          { "t": "L", "v": "N" },
+          { "t": "L", "v": "E" }
+        ],
+        "size": 5,
+        "placements": [["r1c0", "r1c1", "r1c2", "r1c3", "r1c4"]],
+        "clueCellId": "r0c1"
+      },
+      {
+        "wordId": "FLOW",
+        "tokens": [
+          { "t": "L", "v": "F" },
+          { "t": "L", "v": "L" },
+          { "t": "L", "v": "O" },
+          { "t": "L", "v": "W" }
+        ],
+        "size": 4,
+        "placements": [["r3c0", "r3c1", "r3c2", "r3c3"]],
+        "clueCellId": "r2c1"
+      }
+    ]
+  }
+}

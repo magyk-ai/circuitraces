@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "puzzles": [
+    {
+      "id": "sample",
+      "path": "./sample.json",
+      "title": "First Steps",
+      "difficulty": "easy",
+      "gridSize": "5x5",
+      "estimatedMinutes": 2,
+      "description": "Learn the basics with a simple path puzzle"
+    },
+    {
+      "id": "easy-01",
+      "path": "./puzzles/easy-01.json",
+      "title": "Short Path",
+      "difficulty": "easy",
+      "gridSize": "3x3",
+      "estimatedMinutes": 1,
+      "description": "Tiny grid, quick solve"
+    },
+    {
+      "id": "easy-02",
+      "path": "./puzzles/easy-02.json",
+      "title": "Simple Square",
+      "difficulty": "easy",
+      "gridSize": "4x4",
+      "estimatedMinutes": 2,
+      "description": "A gentle introduction to word paths"
+    },
+    {
+      "id": "medium-01",
+      "path": "./puzzles/medium-01.json",
+      "title": "Hidden Words",
+      "difficulty": "medium",
+      "gridSize": "6x6",
+      "estimatedMinutes": 5,
+      "description": "Find additional words for helpful clues"
+    },
+    {
+      "id": "medium-02",
+      "path": "./puzzles/medium-02.json",
+      "title": "Crossroads",
+      "difficulty": "medium",
+      "gridSize": "5x5",
+      "estimatedMinutes": 4,
+      "description": "Multiple additional words to discover"
+    }
+  ]
+}
