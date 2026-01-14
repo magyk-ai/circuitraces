@@ -52,6 +52,30 @@ export function App() {
     setEvents([]);
   }, [puzzle]);
 
+  const handleHint = useCallback(() => {
+    if (!puzzle || !state) return;
+    const result = reduce(puzzle, state, { type: 'PRESS_HINT' });
+    setState(result.state);
+    setEvents(result.effects.events);
+
+    // Clear events after display
+    setTimeout(() => setEvents([]), 2000);
+  }, [puzzle, state]);
+
+  // TICK timer for clue expiration
+  useEffect(() => {
+    if (!puzzle || !state || state.status === 'COMPLETED') return;
+
+    const interval = setInterval(() => {
+      const result = reduce(puzzle, state, { type: 'TICK', now: Date.now() });
+      if (result.state !== state) {
+        setState(result.state);
+      }
+    }, 100); // Tick every 100ms
+
+    return () => clearInterval(interval);
+  }, [puzzle, state]);
+
   if (!puzzle || !state) {
     return (
       <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
@@ -67,12 +91,19 @@ export function App() {
     <div className="app">
       <header>
         <h1>{puzzle.theme}</h1>
-        <button onClick={handleReset}>Reset</button>
+        <div className="controls">
+          <button onClick={handleHint} disabled={state.status === 'COMPLETED'}>
+            💡 Hint ({state.hintUsedCount})
+          </button>
+          <button onClick={handleReset}>Reset</button>
+        </div>
       </header>
 
       <Grid
         puzzle={puzzle}
         pathCells={pathCells}
+        hintCells={selectors.getHintCells(state)}
+        clueCells={selectors.getClueCells(state)}
         onSelection={handleSelection}
       />
 
@@ -80,9 +111,11 @@ export function App() {
         <div className="feedback">
           {events.map((e, i) => (
             <div key={i} className={`event ${e.type}`}>
-              {e.type === 'WORD_FOUND' && `Found: ${e.wordId}`}
+              {e.type === 'WORD_FOUND' && `Found: ${e.wordId} (${e.category})`}
               {e.type === 'INVALID_SELECTION' && 'Invalid selection'}
               {e.type === 'ALREADY_FOUND' && `Already found: ${e.wordId}`}
+              {e.type === 'HINT_APPLIED' && '💡 Hint applied!'}
+              {e.type === 'CLUE_APPLIED' && '🔍 Clue revealed!'}
               {e.type === 'COMPLETED' && '🎉 Completed!'}
             </div>
           ))}
@@ -93,6 +126,7 @@ export function App() {
         <div className="completion">
           <h2>Puzzle Complete!</h2>
           <p>Time: {Math.round((state.completedAt! - state.startedAt) / 1000)}s</p>
+          <p>Hints used: {state.hintUsedCount}</p>
         </div>
       )}
     </div>

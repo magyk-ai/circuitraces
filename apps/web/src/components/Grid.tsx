@@ -6,10 +6,12 @@ import './Grid.css';
 interface GridProps {
   puzzle: WaywordsPuzzle;
   pathCells: Set<string>;
+  hintCells: Set<string>;
+  clueCells: Set<string>;
   onSelection: (cellIds: string[]) => void;
 }
 
-export function Grid({ puzzle, pathCells, onSelection }: GridProps) {
+export function Grid({ puzzle, pathCells, hintCells, clueCells, onSelection }: GridProps) {
   const [selecting, setSelecting] = useState(false);
   const [previewCells, setPreviewCells] = useState<string[]>([]);
   const adapterRef = useRef<SelectionAdapter | null>(null);
@@ -84,12 +86,14 @@ export function Grid({ puzzle, pathCells, onSelection }: GridProps) {
 
         const isPath = pathCells.has(cell.id);
         const isPreview = previewCells.includes(cell.id);
+        const isHint = hintCells.has(cell.id);
+        const isClue = clueCells.has(cell.id);
 
         return (
           <div
             key={cell.id}
             data-cell-id={cell.id}
-            className={`cell ${isPath ? 'path' : ''} ${isPreview ? 'preview' : ''}`}
+            className={`cell ${isPath ? 'path' : ''} ${isPreview ? 'preview' : ''} ${isHint ? 'hint' : ''} ${isClue ? 'clue' : ''}`}
             onPointerDown={(e) => handlePointerDown(cell.id, e)}
             style={{ gridColumn: cell.x + 1, gridRow: cell.y + 1 }}
           >
