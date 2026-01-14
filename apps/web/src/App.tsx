@@ -12,10 +12,19 @@ export function App() {
   useEffect(() => {
     // Load sample puzzle
     fetch('/sample.json')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
+        }
+        return res.json();
+      })
       .then(data => {
         setPuzzle(data);
         setState(init(data, Date.now()));
+      })
+      .catch(err => {
+        console.error('Error loading puzzle:', err);
+        alert(`Failed to load puzzle: ${err.message}`);
       });
   }, []);
 
@@ -37,7 +46,12 @@ export function App() {
   }, [puzzle]);
 
   if (!puzzle || !state) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
+        <h2>Loading puzzle...</h2>
+        <p>If this takes too long, check the browser console for errors.</p>
+      </div>
+    );
   }
 
   const pathCells = selectors.getPathCells(puzzle, state);
