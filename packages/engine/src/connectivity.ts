@@ -1,4 +1,4 @@
-import type { WaywordsPuzzle, RuntimeState, Cell } from './types.js';
+import type { WaywordsPuzzle, RuntimeState } from './types.js';
 
 export function isConnected(
   puzzle: WaywordsPuzzle,

@@ -9,11 +9,18 @@
   "scripts": {
     "test": "npm run test -w @circuitraces/engine",
     "test:e2e": "npm run test:e2e -w @circuitraces/web",
+    "lint": "eslint packages apps",
+    "lint:fix": "eslint packages apps --fix",
+    "typecheck": "tsc --noEmit -p packages/engine && tsc --noEmit -p packages/generator && tsc --noEmit -p apps/web",
+    "precommit": "npm run lint && npm run typecheck && npm test && npm run build",
     "build": "npm run build -w @circuitraces/engine && npm run build -w @circuitraces/web",
     "dev": "npm run dev -w @circuitraces/web",
     "validate": "npm run validate -w @circuitraces/generator"
   },
   "devDependencies": {
-    "typescript": "^5.7.0"
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.53.0"
   }
 }
