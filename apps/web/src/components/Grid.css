@@ -1,0 +1,46 @@
+.grid {
+  display: grid;
+  gap: 4px;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  touch-action: none; /* Prevent scrolling during selection */
+}
+
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  background: #2a2a2a;
+  border: 2px solid #3a3a3a;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+
+.cell.void {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.cell.path {
+  background: #2a7a2a;
+  border-color: #3a9a3a;
+}
+
+.cell.preview {
+  background: #4a4aaa;
+  border-color: #5a5aff;
+  transform: scale(0.95);
+}
+
+.cell:hover:not(.void) {
+  border-color: #5a5aff;
+}

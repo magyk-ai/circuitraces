@@ -1,0 +1,19 @@
+{
+  "name": "circuitraces-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "npm run test -w @circuitraces/engine",
+    "test:e2e": "npm run test:e2e -w @circuitraces/web",
+    "build": "npm run build -w @circuitraces/engine && npm run build -w @circuitraces/web",
+    "dev": "npm run dev -w @circuitraces/web",
+    "validate": "npm run validate -w @circuitraces/generator"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

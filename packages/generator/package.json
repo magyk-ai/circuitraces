@@ -1,0 +1,18 @@
+{
+  "name": "@circuitraces/generator",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "circuitraces-validate": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "validate": "node ./dist/cli.js"
+  },
+  "dependencies": {
+    "@circuitraces/engine": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
