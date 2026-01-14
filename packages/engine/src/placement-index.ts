@@ -2,7 +2,7 @@ import type { WaywordsPuzzle, WordDef } from './types.js';
 
 export interface PlacementMatch {
   wordId: string;
-  category: 'PATH';
+  category: 'PATH' | 'ADDITIONAL';
   placementIndex: number;
 }
 
@@ -19,11 +19,16 @@ export class PlacementIndex {
     for (const word of puzzle.words.path) {
       this.indexWord(word, 'PATH', puzzle.config.allowReverseSelection);
     }
+
+    // Index additional words
+    for (const word of puzzle.words.additional) {
+      this.indexWord(word, 'ADDITIONAL', puzzle.config.allowReverseSelection);
+    }
   }
 
   private indexWord(
     word: WordDef,
-    category: 'PATH',
+    category: 'PATH' | 'ADDITIONAL',
     allowReverse: boolean
   ): void {
     word.placements.forEach((placement, idx) => {

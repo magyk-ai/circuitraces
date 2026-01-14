@@ -14,7 +14,8 @@ export const simplePuzzle: WaywordsPuzzle = {
   config: {
     selectionModel: 'RAY_8DIR',
     connectivityModel: 'ORTHO_4',
-    allowReverseSelection: true
+    allowReverseSelection: true,
+    cluePersistMs: 3000
   },
   grid: {
     width: 3,
@@ -52,6 +53,15 @@ export const simplePuzzle: WaywordsPuzzle = {
         tokens: [{ t: 'L', v: 'D' }, { t: 'L', v: 'O' }, { t: 'L', v: 'G' }],
         size: 3,
         placements: [['c6', 'c7', 'c8']]
+      }
+    ],
+    additional: [
+      {
+        wordId: 'CAT',
+        tokens: [{ t: 'L', v: 'C' }, { t: 'L', v: 'A' }, { t: 'L', v: 'T' }],
+        size: 3,
+        placements: [['c0', 'c1', 'c2']],
+        clueCellId: 'c4' // Clue points to 'R' in CAR
       }
     ]
   }
