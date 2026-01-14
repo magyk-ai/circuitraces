@@ -4,7 +4,31 @@
 
 Circuit Races is a path-based word puzzle game built with an engine-first architecture. Players find words in a grid that form a connected path from START to END.
 
-**Full specification:** See `spec-v1.0.md` for complete game mechanics and architecture details.
+## Documentation Index
+
+- **`OPERATIONS.md`** ⭐ - **START HERE for development workflow**
+  - Pre-commit checklist
+  - Local testing procedures
+  - GitHub CLI (gh) commands
+  - CI/CD pipeline details
+  - Deployment workflows
+  - Troubleshooting guides
+
+- **`spec-v1.0.md`** - Complete game mechanics and architecture specification
+
+- **`CURRENT_STATUS.md`** - Project status snapshot, what works, what needs fixing
+
+- **`NEXT_STEPS.md`** - Prioritized roadmap (Sprints A-D)
+
+- **`TESTING_GUIDE.md`** - How to test on desktop and mobile
+
+- **`IMPLEMENTATION_SUMMARY.md`** - What was built, metrics, decisions
+
+- **`CLAUDE.md`** (this file) - Technical architecture and code organization
+
+- **`README.md`** - User-facing quick start
+
+- **`GITHUB_PAGES_SETUP.md`** - Deployment setup guide
 
 ## Quick Start
 
@@ -12,17 +36,22 @@ Circuit Races is a path-based word puzzle game built with an engine-first archit
 # Install all dependencies
 npm install
 
-# Run engine tests
-npm test
+# Before ANY commit - run this!
+npm run precommit  # Runs: lint + typecheck + test + build
 
-# Start development server
-npm run dev
+# Or run checks individually:
+npm run lint        # ESLint code quality check
+npm run typecheck   # TypeScript type checking
+npm test            # Unit tests (9 tests)
+npm run build       # Build engine + web app
 
-# Build for production
-npm run build
+# Development
+npm run dev         # Start dev server (http://localhost:5173)
 
-# Validate puzzle JSON
-npm run validate puzzles/sample.json
+# Validation
+npm run validate puzzles/sample.json  # Validate puzzle JSON
+
+# See OPERATIONS.md for complete workflow details!
 ```
 
 ## Project Structure
