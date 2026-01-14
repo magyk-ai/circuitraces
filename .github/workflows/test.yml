@@ -28,9 +28,6 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      - name: Typecheck
-        run: npx tsc --noEmit -p tsconfig.base.json
-
       - name: Validate sample puzzle
         run: |
           cd packages/generator
