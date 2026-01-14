@@ -1,6 +1,11 @@
 # Circuit Races
 
+[![Test](https://github.com/magyk-ai/circuitraces/actions/workflows/test.yml/badge.svg)](https://github.com/magyk-ai/circuitraces/actions/workflows/test.yml)
+[![Deploy](https://github.com/magyk-ai/circuitraces/actions/workflows/deploy.yml/badge.svg)](https://github.com/magyk-ai/circuitraces/actions/workflows/deploy.yml)
+
 A path-based word puzzle game where players find words that form a connected route from START to END.
+
+🎮 **[Play Now](https://magyk-ai.github.io/circuitraces/)**
 
 ## Quick Start
 
