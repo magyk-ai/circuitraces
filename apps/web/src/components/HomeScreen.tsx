@@ -22,7 +22,7 @@ export function HomeScreen({ todaysEntry, onPlayDaily, onSelectTopic }: HomeScre
   const dailyTopics = todaysEntry ? Object.keys(todaysEntry.puzzles) : [];
 
   return (
-    <div className="home-screen">
+    <div className="home-screen app">
       <header className="home-header">
         <h1>Circuit Races</h1>
         <p className="tagline">Daily word puzzles for professional topics</p>
