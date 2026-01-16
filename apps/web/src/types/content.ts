@@ -7,17 +7,19 @@ export interface GridSize {
   height: number;
 }
 
-export interface DailyPuzzleEntry {
-  date: string; // YYYY-MM-DD
-  id: string; // "daily-YYYY-MM-DD"
-  revision: number;
+export interface DailyPuzzleMetadata {
+  id: string; 
   title: string;
-  topicId: string;
   difficulty: 'easy' | 'medium' | 'hard';
   grid: GridSize;
   estimatedMinutes: number;
   puzzlePath: string;
   tags: string[];
+}
+
+export interface DailyPuzzleEntry {
+  date: string; // YYYY-MM-DD
+  puzzles: Record<string, DailyPuzzleMetadata>; // topicId -> metadata
 }
 
 export interface DailySchedule {

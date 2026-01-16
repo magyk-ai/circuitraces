@@ -1,0 +1,348 @@
+{
+  "puzzleId": "daily-2026-01-18-product-management",
+  "theme": "Product Management Daily",
+  "config": {
+    "selectionModel": "RAY_8DIR",
+    "connectivityModel": "ORTHO_4",
+    "allowReverseSelection": true
+  },
+  "grid": {
+    "width": 5,
+    "height": 5,
+    "cells": [
+      {
+        "id": "r0c0",
+        "x": 0,
+        "y": 0,
+        "type": "LETTER",
+        "value": "R"
+      },
+      {
+        "id": "r0c1",
+        "x": 1,
+        "y": 0,
+        "type": "LETTER",
+        "value": "R"
+      },
+      {
+        "id": "r0c2",
+        "x": 2,
+        "y": 0,
+        "type": "LETTER",
+        "value": "P"
+      },
+      {
+        "id": "r0c3",
+        "x": 3,
+        "y": 0,
+        "type": "LETTER",
+        "value": "K"
+      },
+      {
+        "id": "r0c4",
+        "x": 4,
+        "y": 0,
+        "type": "LETTER",
+        "value": "P"
+      },
+      {
+        "id": "r1c0",
+        "x": 0,
+        "y": 1,
+        "type": "LETTER",
+        "value": "E"
+      },
+      {
+        "id": "r1c1",
+        "x": 1,
+        "y": 1,
+        "type": "LETTER",
+        "value": "D"
+      },
+      {
+        "id": "r1c2",
+        "x": 2,
+        "y": 1,
+        "type": "LETTER",
+        "value": "I"
+      },
+      {
+        "id": "r1c3",
+        "x": 3,
+        "y": 1,
+        "type": "LETTER",
+        "value": "S"
+      },
+      {
+        "id": "r1c4",
+        "x": 4,
+        "y": 1,
+        "type": "LETTER",
+        "value": "I"
+      },
+      {
+        "id": "r2c0",
+        "x": 0,
+        "y": 2,
+        "type": "LETTER",
+        "value": "A"
+      },
+      {
+        "id": "r2c1",
+        "x": 1,
+        "y": 2,
+        "type": "LETTER",
+        "value": "G"
+      },
+      {
+        "id": "r2c2",
+        "x": 2,
+        "y": 2,
+        "type": "LETTER",
+        "value": "I"
+      },
+      {
+        "id": "r2c3",
+        "x": 3,
+        "y": 2,
+        "type": "LETTER",
+        "value": "A"
+      },
+      {
+        "id": "r2c4",
+        "x": 4,
+        "y": 2,
+        "type": "LETTER",
+        "value": "T"
+      },
+      {
+        "id": "r3c0",
+        "x": 0,
+        "y": 3,
+        "type": "LETTER",
+        "value": "O"
+      },
+      {
+        "id": "r3c1",
+        "x": 1,
+        "y": 3,
+        "type": "LETTER",
+        "value": "V"
+      },
+      {
+        "id": "r3c2",
+        "x": 2,
+        "y": 3,
+        "type": "LETTER",
+        "value": "L"
+      },
+      {
+        "id": "r3c3",
+        "x": 3,
+        "y": 3,
+        "type": "LETTER",
+        "value": "E"
+      },
+      {
+        "id": "r3c4",
+        "x": 4,
+        "y": 3,
+        "type": "LETTER",
+        "value": "L"
+      },
+      {
+        "id": "r4c0",
+        "x": 0,
+        "y": 4,
+        "type": "LETTER",
+        "value": "Q"
+      },
+      {
+        "id": "r4c1",
+        "x": 1,
+        "y": 4,
+        "type": "LETTER",
+        "value": "U"
+      },
+      {
+        "id": "r4c2",
+        "x": 2,
+        "y": 4,
+        "type": "LETTER",
+        "value": "E"
+      },
+      {
+        "id": "r4c3",
+        "x": 3,
+        "y": 4,
+        "type": "LETTER",
+        "value": "H"
+      },
+      {
+        "id": "r4c4",
+        "x": 4,
+        "y": 4,
+        "type": "LETTER",
+        "value": "P"
+      }
+    ],
+    "start": {
+      "adjacentCellId": "r2c4"
+    },
+    "end": {
+      "adjacentCellId": "r4c2"
+    }
+  },
+  "words": {
+    "path": [
+      {
+        "wordId": "TASK",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "T"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "S"
+          },
+          {
+            "t": "L",
+            "v": "K"
+          }
+        ],
+        "size": 4,
+        "placements": [
+          [
+            "r2c4",
+            "r2c3",
+            "r1c3",
+            "r0c3"
+          ]
+        ]
+      },
+      {
+        "wordId": "KPI",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "K"
+          },
+          {
+            "t": "L",
+            "v": "P"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          }
+        ],
+        "size": 3,
+        "placements": [
+          [
+            "r0c3",
+            "r0c2",
+            "r1c2"
+          ]
+        ]
+      },
+      {
+        "wordId": "IDEA",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "D"
+          },
+          {
+            "t": "L",
+            "v": "E"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          }
+        ],
+        "size": 4,
+        "placements": [
+          [
+            "r1c2",
+            "r1c1",
+            "r1c0",
+            "r2c0"
+          ]
+        ]
+      },
+      {
+        "wordId": "AGILE",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "G"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "L"
+          },
+          {
+            "t": "L",
+            "v": "E"
+          }
+        ],
+        "size": 5,
+        "placements": [
+          [
+            "r2c0",
+            "r2c1",
+            "r2c2",
+            "r3c2",
+            "r4c2"
+          ]
+        ]
+      }
+    ],
+    "additional": [
+      {
+        "wordId": "KPI",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "K"
+          },
+          {
+            "t": "L",
+            "v": "P"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          }
+        ],
+        "size": 3,
+        "placements": [
+          [
+            "r0c3",
+            "r0c4",
+            "r1c4"
+          ]
+        ],
+        "hintCellId": "r0c3"
+      }
+    ]
+  }
+}

@@ -3,12 +3,12 @@ import type { DailyPuzzleEntry } from '../types/content';
 import './HomeScreen.css';
 
 interface HomeScreenProps {
-  todaysPuzzle: DailyPuzzleEntry | null;
-  onPlayDaily: () => void;
+  todaysEntry: DailyPuzzleEntry | null;
+  onPlayDaily: (topicId: string) => void;
   onSelectTopic: (topicId: string) => void;
 }
 
-export function HomeScreen({ todaysPuzzle, onPlayDaily, onSelectTopic }: HomeScreenProps) {
+export function HomeScreen({ todaysEntry, onPlayDaily, onSelectTopic }: HomeScreenProps) {
   const { index: topicIndex, loading, error } = useTopicIndex();
 
   if (loading) {
@@ -19,6 +19,8 @@ export function HomeScreen({ todaysPuzzle, onPlayDaily, onSelectTopic }: HomeScr
     return <div className="home-screen error">Error: {error}</div>;
   }
 
+  const dailyTopics = todaysEntry ? Object.keys(todaysEntry.puzzles) : [];
+
   return (
     <div className="home-screen">
       <header className="home-header">
@@ -26,21 +28,38 @@ export function HomeScreen({ todaysPuzzle, onPlayDaily, onSelectTopic }: HomeScr
         <p className="tagline">Daily word puzzles for professional topics</p>
       </header>
 
-      {todaysPuzzle && (
-        <section className="daily-card">
-          <div className="daily-header">
-            <span className="daily-label">Today's Puzzle</span>
-            <span className="daily-date">{todaysPuzzle.date}</span>
+      {todaysEntry && (
+        <section className="daily-section">
+          <div className="section-header">
+            <h2>Today's Puzzles</h2>
+            <span className="date-badge">{todaysEntry.date}</span>
           </div>
-          <h2 className="daily-title">{todaysPuzzle.title}</h2>
-          <div className="daily-meta">
-            <span className="difficulty">{todaysPuzzle.difficulty}</span>
-            <span className="grid-size">{todaysPuzzle.grid.width}×{todaysPuzzle.grid.height}</span>
-            <span className="time-estimate">{todaysPuzzle.estimatedMinutes} min</span>
+          
+          <div className="daily-grid">
+            {dailyTopics.map(topicId => {
+              const puzzle = todaysEntry.puzzles[topicId];
+              // Try to find topic metadata for icon, fallback to puzzle title
+              const topicMeta = topicIndex?.topics.find(t => t.topicId === topicId);
+              
+              return (
+                <button 
+                  key={topicId} 
+                  className="daily-card" 
+                  onClick={() => onPlayDaily(topicId)}
+                >
+                  <div className="card-header">
+                    <span className="topic-icon">{topicMeta?.icon || '🧩'}</span>
+                    <span className="difficulty-badge {puzzle.difficulty}">{puzzle.difficulty}</span>
+                  </div>
+                  <h3>{topicMeta?.title || puzzle.title}</h3>
+                  <div className="card-meta">
+                    <span>{puzzle.grid.width}×{puzzle.grid.height}</span>
+                    <span>~{puzzle.estimatedMinutes}m</span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
-          <button className="play-button" onClick={onPlayDaily}>
-            Play Today's Puzzle →
-          </button>
         </section>
       )}
 

@@ -11,7 +11,7 @@ import type { DailySchedule, DailyPuzzleEntry } from '../types/content';
  */
 export function useDailyPuzzle(dateOverride?: string) {
   const [schedule, setSchedule] = useState<DailySchedule | null>(null);
-  const [todaysPuzzle, setTodaysPuzzle] = useState<DailyPuzzleEntry | null>(null);
+  const [todaysEntry, setTodaysEntry] = useState<DailyPuzzleEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,17 +37,17 @@ export function useDailyPuzzle(dateOverride?: string) {
           targetDate = `${year}-${month}-${day}`;
         }
 
-        // Find puzzle for target date
-        let puzzle = data.schedule.find(p => p.date === targetDate);
+        // Find puzzle entry for target date
+        let entry = data.schedule.find(p => p.date === targetDate);
 
         // Fallback to latest if no match
-        if (!puzzle && data.schedule.length > 0) {
+        if (!entry && data.schedule.length > 0) {
           const sorted = [...data.schedule].sort((a, b) => b.date.localeCompare(a.date));
-          puzzle = sorted[0];
-          console.warn(`No puzzle found for ${targetDate}, using latest: ${puzzle.date}`);
+          entry = sorted[0];
+          console.warn(`No puzzle found for ${targetDate}, using latest: ${entry.date}`);
         }
 
-        setTodaysPuzzle(puzzle || null);
+        setTodaysEntry(entry || null);
         setError(null);
       } catch (err) {
         console.error('Error loading daily schedule:', err);
@@ -60,5 +60,5 @@ export function useDailyPuzzle(dateOverride?: string) {
     loadSchedule();
   }, [dateOverride]);
 
-  return { schedule, todaysPuzzle, loading, error };
+  return { schedule, todaysEntry, loading, error };
 }

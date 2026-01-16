@@ -1,92 +1,631 @@
 {
-  "version": 1,
+  "version": 2,
   "contentVersion": "2026.01.17",
   "timezone": "UTC",
   "defaultMode": "DAILY",
   "schedule": [
     {
       "date": "2026-01-17",
-      "id": "daily-2026-01-17",
-      "revision": 1,
-      "title": "Product Signals",
-      "topicId": "product-management",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-17.json",
-      "tags": ["metrics", "strategy"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-17-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-17-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-17-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-17-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-17-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-17-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-17-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-physiotherapy.json",
+          "tags": []
+        }
+      }
     },
     {
       "date": "2026-01-18",
-      "id": "daily-2026-01-18",
-      "revision": 1,
-      "title": "Ship It",
-      "topicId": "devops",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-18.json",
-      "tags": ["deploy", "build"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-18-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-18-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-18-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-18-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-18-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-18-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-18-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-18-physiotherapy.json",
+          "tags": []
+        }
+      }
     },
     {
       "date": "2026-01-19",
-      "id": "daily-2026-01-19",
-      "revision": 1,
-      "title": "Money Moves",
-      "topicId": "personal-finance",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-19.json",
-      "tags": ["budget", "save"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-19-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-19-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-19-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-19-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-19-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-19-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-19-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-physiotherapy.json",
+          "tags": []
+        }
+      }
     },
     {
       "date": "2026-01-20",
-      "id": "daily-2026-01-20",
-      "revision": 1,
-      "title": "Design Basics",
-      "topicId": "design",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-20.json",
-      "tags": ["ui", "layout"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-20-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-20-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-20-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-20-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-20-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-20-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-20-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-20-physiotherapy.json",
+          "tags": []
+        }
+      }
     },
     {
       "date": "2026-01-21",
-      "id": "daily-2026-01-21",
-      "revision": 1,
-      "title": "Threat Model",
-      "topicId": "cybersecurity",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-21.json",
-      "tags": ["security", "threat"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-21-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-21-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-21-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-21-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-21-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-21-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-21-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-21-physiotherapy.json",
+          "tags": []
+        }
+      }
     },
     {
       "date": "2026-01-22",
-      "id": "daily-2026-01-22",
-      "revision": 1,
-      "title": "Ledger Lines",
-      "topicId": "finance-accounting",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-22.json",
-      "tags": ["ledger", "tax"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-22-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-22-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-22-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-22-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-22-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-22-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-22-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-22-physiotherapy.json",
+          "tags": []
+        }
+      }
     },
     {
       "date": "2026-01-23",
-      "id": "daily-2026-01-23",
-      "revision": 1,
-      "title": "Move Better",
-      "topicId": "physiotherapy",
-      "difficulty": "easy",
-      "grid": { "width": 5, "height": 5 },
-      "estimatedMinutes": 3,
-      "puzzlePath": "/daily/2026-01-23.json",
-      "tags": ["movement", "mobility"]
+      "puzzles": {
+        "product-management": {
+          "id": "daily-2026-01-23-product-management",
+          "title": "Product Management Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-product-management.json",
+          "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-23-devops",
+          "title": "DevOps Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-23-personal-finance",
+          "title": "Personal Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-personal-finance.json",
+          "tags": []
+        },
+        "design": {
+          "id": "daily-2026-01-23-design",
+          "title": "Design Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-design.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-23-cybersecurity",
+          "title": "Cybersecurity Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-23-finance-accounting",
+          "title": "Finance Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-finance-accounting.json",
+          "tags": []
+        },
+        "physiotherapy": {
+          "id": "daily-2026-01-23-physiotherapy",
+          "title": "Physio Daily",
+          "difficulty": "easy",
+          "grid": {
+            "width": 5,
+            "height": 5
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-physiotherapy.json",
+          "tags": []
+        }
+      }
     }
   ]
 }

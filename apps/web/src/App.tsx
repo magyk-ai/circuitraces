@@ -41,8 +41,10 @@ export function App() {
 
   // Determine view state
   const [view, setView] = useState<'home' | 'daily' | 'topic' | 'puzzle'>(() => {
-    if (mode === 'daily' || dailyDate) return 'daily';
+    // Only enter daily play mode if we have a topic selected
+    if ((mode === 'daily' || dailyDate) && topicId) return 'daily';
     if (topicId && puzzleIdParam) return 'puzzle';
+    if (puzzleIdParam) return 'puzzle'; // Direct legacy access
     if (topicId) return 'topic';
     return 'home';
   });
@@ -52,11 +54,11 @@ export function App() {
   const [currentPuzzlePath, setCurrentPuzzlePath] = useState<string | null>(null);
 
   // Daily puzzle loading
-  const { todaysPuzzle } = useDailyPuzzle(dailyDate || undefined);
+  const { todaysEntry } = useDailyPuzzle(dailyDate || undefined);
 
   // Legacy puzzle selector state
   const [puzzleIndex, setPuzzleIndex] = useState<PuzzleIndex | null>(null);
-  const [selectedPuzzleId, setSelectedPuzzleId] = useState<string>('sample');
+  const [selectedPuzzleId, setSelectedPuzzleId] = useState<string>(puzzleIdParam || 'sample');
   const [puzzle, setPuzzle] = useState<WaywordsPuzzle | null>(null);
   const [state, setState] = useState<RuntimeState | null>(null);
   const [events, setEvents] = useState<EngineEvent[]>([]);
@@ -116,8 +118,14 @@ export function App() {
   useEffect(() => {
     let pathToLoad: string | null = null;
 
-    if (view === 'daily' && todaysPuzzle) {
-      pathToLoad = todaysPuzzle.puzzlePath;
+    if (view === 'daily' && todaysEntry && currentTopic) {
+      // Find the specific puzzle for the selected topic
+      const puzzleMeta = todaysEntry.puzzles[currentTopic];
+      if (puzzleMeta) {
+        pathToLoad = puzzleMeta.puzzlePath;
+      } else {
+        console.warn(`No puzzle found for topic ${currentTopic} in daily entry`);
+      }
     } else if (view === 'puzzle' && currentPuzzlePath) {
       pathToLoad = currentPuzzlePath;
     }
@@ -140,7 +148,7 @@ export function App() {
         console.error('Error loading puzzle:', err);
         alert(`Failed to load puzzle: ${err.message}`);
       });
-  }, [view, todaysPuzzle, currentPuzzlePath]);
+  }, [view, todaysEntry, currentTopic, currentPuzzlePath]);
 
   const handleSelection = useCallback((cellIds: string[]) => {
     if (!puzzle || !state) return;
@@ -201,12 +209,13 @@ export function App() {
   }, [selectedPuzzleId]);
 
   // Navigation handlers
-  const handlePlayDaily = useCallback(() => {
-    if (!todaysPuzzle) return;
-    const date = todaysPuzzle.date;
-    window.history.pushState({}, '', `?mode=daily&daily=${date}`);
+  const handlePlayDaily = useCallback((topicId: string) => {
+    if (!todaysEntry) return;
+    const date = todaysEntry.date;
+    window.history.pushState({}, '', `?mode=daily&daily=${date}&topic=${topicId}`);
+    setCurrentTopic(topicId);
     setView('daily');
-  }, [todaysPuzzle]);
+  }, [todaysEntry]);
 
   const handleSelectTopic = useCallback((topicId: string) => {
     window.history.pushState({}, '', `?topic=${topicId}`);
@@ -255,7 +264,7 @@ export function App() {
   // Render home or topic browser if not in puzzle view
   if (view === 'home') {
     return <HomeScreen
-      todaysPuzzle={todaysPuzzle}
+      todaysEntry={todaysEntry}
       onPlayDaily={handlePlayDaily}
       onSelectTopic={handleSelectTopic}
     />;

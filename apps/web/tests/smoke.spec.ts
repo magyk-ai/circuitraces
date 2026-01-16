@@ -43,15 +43,16 @@ async function dragSelect(
 }
 
 // Select medium-01 puzzle (has bonus words)
+// Select medium-01 puzzle (has bonus words)
 async function selectMediumPuzzle(page: Page) {
-  await page.selectOption('.puzzle-selector', 'medium-01');
-  // Wait for puzzle to load
+  // Already loaded via URL in beforeEach, just verify header
   await expect(page.locator('header h1')).toContainText('Hidden Words');
 }
 
 test.describe('Circuit Races - Smoke Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    // Load medium-01 directly to test grid interactions on a known puzzle
+    await page.goto('/?puzzle=medium-01');
     // Wait for initial puzzle to load
     await expect(page.locator('[data-testid="grid"]')).toBeVisible();
   });
@@ -153,5 +154,38 @@ test.describe('Circuit Races - Smoke Tests', () => {
     // Close modal
     await page.click('[data-testid="words-close"]');
     await expect(modal).not.toBeVisible();
+  });
+  /**
+   * Test 5: Parallel Daily Navigation (Home -> Topic -> Puzzle)
+   */
+  test('navigates to daily puzzle from home screen', async ({ page }) => {
+    // Navigate to home (fresh state)
+    await page.goto('/');
+    
+    // Should see "Today's Puzzles" section
+    await expect(page.locator('text=Today\'s Puzzles')).toBeVisible();
+
+    // Find the first daily card (e.g. Product Management)
+    const firstCard = page.locator('.daily-card').first();
+    
+    // Get expected title (e.g. "Product Signals" or "Product Management")
+    // Note: The card displays topic title (e.g. "Product Management") usually
+    const cardTitle = await firstCard.locator('h3').textContent();
+    expect(cardTitle).toBeTruthy();
+
+    console.log(`Clicking daily card: ${cardTitle}`);
+    await firstCard.click();
+
+    // URL should update
+    await expect(page).toHaveURL(/mode=daily/);
+    await expect(page).toHaveURL(/topic=/);
+    
+    // Wait for puzzle to load
+    await expect(page.locator('[data-testid="grid"]')).toBeVisible();
+    
+    // Check header matches theme (might differ slightly if topic title != puzzle title, but usually related)
+    // For now just check we are in puzzle view (grid visible) and URL is correct.
+    // Ensure back button exists
+    await expect(page.locator('button.back-button')).toBeVisible();
   });
 });
