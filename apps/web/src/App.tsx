@@ -3,6 +3,9 @@ import type { WaywordsPuzzle, RuntimeState, EngineEvent } from '@circuitraces/en
 import { init, reduce, selectors } from '@circuitraces/engine';
 import { Grid } from './components/Grid';
 import { WordsList } from './components/WordsList';
+import { HomeScreen } from './components/HomeScreen';
+import { TopicBrowser } from './components/TopicBrowser';
+import { useDailyPuzzle } from './hooks/useDailyPuzzle';
 import './App.css';
 
 function formatTime(ms: number): string {
@@ -28,6 +31,30 @@ interface PuzzleIndex {
 }
 
 export function App() {
+  // Parse query params
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode');
+  const dailyDate = params.get('daily');
+  const topicId = params.get('topic');
+  const puzzleIdParam = params.get('puzzle');
+  const devMode = params.get('dev') === '1';
+
+  // Determine view state
+  const [view, setView] = useState<'home' | 'daily' | 'topic' | 'puzzle'>(() => {
+    if (mode === 'daily' || dailyDate) return 'daily';
+    if (topicId && puzzleIdParam) return 'puzzle';
+    if (topicId) return 'topic';
+    return 'home';
+  });
+
+  // Navigation state
+  const [currentTopic, setCurrentTopic] = useState<string | null>(topicId);
+  const [currentPuzzlePath, setCurrentPuzzlePath] = useState<string | null>(null);
+
+  // Daily puzzle loading
+  const { todaysPuzzle } = useDailyPuzzle(dailyDate || undefined);
+
+  // Legacy puzzle selector state
   const [puzzleIndex, setPuzzleIndex] = useState<PuzzleIndex | null>(null);
   const [selectedPuzzleId, setSelectedPuzzleId] = useState<string>('sample');
   const [puzzle, setPuzzle] = useState<WaywordsPuzzle | null>(null);
@@ -84,6 +111,36 @@ export function App() {
         alert(`Failed to load puzzle: ${err.message}`);
       });
   }, [puzzleIndex, selectedPuzzleId]);
+
+  // Load puzzle from daily or topic when in those views
+  useEffect(() => {
+    let pathToLoad: string | null = null;
+
+    if (view === 'daily' && todaysPuzzle) {
+      pathToLoad = todaysPuzzle.puzzlePath;
+    } else if (view === 'puzzle' && currentPuzzlePath) {
+      pathToLoad = currentPuzzlePath;
+    }
+
+    if (!pathToLoad) return;
+
+    fetch(pathToLoad)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        setPuzzle(data);
+        setState(init(data, Date.now()));
+        setEvents([]);
+      })
+      .catch(err => {
+        console.error('Error loading puzzle:', err);
+        alert(`Failed to load puzzle: ${err.message}`);
+      });
+  }, [view, todaysPuzzle, currentPuzzlePath]);
 
   const handleSelection = useCallback((cellIds: string[]) => {
     if (!puzzle || !state) return;
@@ -143,6 +200,75 @@ export function App() {
     setIsPaused(false);
   }, [selectedPuzzleId]);
 
+  // Navigation handlers
+  const handlePlayDaily = useCallback(() => {
+    if (!todaysPuzzle) return;
+    const date = todaysPuzzle.date;
+    window.history.pushState({}, '', `?mode=daily&daily=${date}`);
+    setView('daily');
+  }, [todaysPuzzle]);
+
+  const handleSelectTopic = useCallback((topicId: string) => {
+    window.history.pushState({}, '', `?topic=${topicId}`);
+    setCurrentTopic(topicId);
+    setView('topic');
+  }, []);
+
+  const handleSelectPuzzle = useCallback((puzzlePath: string, puzzleId: string) => {
+    window.history.pushState({}, '', `?topic=${currentTopic}&puzzle=${puzzleId}`);
+    setCurrentPuzzlePath(puzzlePath);
+    setView('puzzle');
+  }, [currentTopic]);
+
+  const handleBackToHome = useCallback(() => {
+    window.history.pushState({}, '', '/');
+    setView('home');
+    setCurrentTopic(null);
+    setCurrentPuzzlePath(null);
+  }, []);
+
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
+      const topicId = params.get('topic');
+      const puzzleId = params.get('puzzle');
+
+      if (mode === 'daily' || params.has('daily')) {
+        setView('daily');
+      } else if (topicId && puzzleId) {
+        setCurrentTopic(topicId);
+        setView('puzzle');
+      } else if (topicId) {
+        setCurrentTopic(topicId);
+        setView('topic');
+      } else {
+        setView('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Render home or topic browser if not in puzzle view
+  if (view === 'home') {
+    return <HomeScreen
+      todaysPuzzle={todaysPuzzle}
+      onPlayDaily={handlePlayDaily}
+      onSelectTopic={handleSelectTopic}
+    />;
+  }
+
+  if (view === 'topic' && currentTopic) {
+    return <TopicBrowser
+      topicId={currentTopic}
+      onSelectPuzzle={handleSelectPuzzle}
+      onBack={handleBackToHome}
+    />;
+  }
+
   if (!puzzleIndex) {
     return (
       <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
@@ -189,17 +315,22 @@ export function App() {
           >
             {isPaused ? '▶️' : '⏸️'}
           </button>
-          <select
-            value={selectedPuzzleId}
-            onChange={(e) => setSelectedPuzzleId(e.target.value)}
-            className="puzzle-selector"
-          >
-            {puzzleIndex.puzzles.map(p => (
-              <option key={p.id} value={p.id}>
-                {p.title}
-              </option>
-            ))}
-          </select>
+          {devMode && (
+            <select
+              value={selectedPuzzleId}
+              onChange={(e) => setSelectedPuzzleId(e.target.value)}
+              className="puzzle-selector"
+            >
+              {puzzleIndex.puzzles.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.title}
+                </option>
+              ))}
+            </select>
+          )}
+          <button onClick={handleBackToHome} className="back-button">
+            ← Home
+          </button>
           <button onClick={() => setShowWordsList(true)} disabled={state.status === 'COMPLETED'} data-testid="btn-words">
             📝 Words
           </button>

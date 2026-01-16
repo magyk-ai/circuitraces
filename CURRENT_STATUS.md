@@ -1,7 +1,7 @@
 # Circuit Races - Current Status
 
 **Last Updated:** 2026-01-16
-**Status:** PR #4 (Testing + Auditor Hardening) Complete
+**Status:** PR #4 Complete, Ready for PR #5 (Daily Puzzle Infrastructure)
 
 ## Recent Changes (PR #4 - 2026-01-16)
 
@@ -144,16 +144,43 @@ cd apps/web && npm run dev:network
 
 ## What's Next
 
-### Daily Puzzle Infrastructure
-- Daily puzzle index format
-- Date-based puzzle loading
-- Archive navigation
+### PR #5: Infrastructure + UI + Sample Puzzle (Next)
+**Goal:** Daily/topic routing with 1 sample daily puzzle
 
-### Sprint B
+**Key deliverables:**
+- Daily schedule index (`daily/index.json`) with `contentVersion` and `revision` fields
+- Topic master index + PM topic catalog
+- Home screen (daily card + 7 topic tiles)
+- Query param routing with canonical URLs
+- Dev flag (`?dev=1`) for puzzle selector
+- Stable `puzzleId` conventions enforced
+
+**Acceptance:**
+- `?mode=daily` loads today's puzzle (UTC, with fallback)
+- `?mode=daily&daily=2026-01-17` loads specific date (canonical share link)
+- `?topic=product-management` shows topic browser
+- All existing tests pass
+
+### PR #6: Content Production
+**Goal:** 7 daily puzzles + topic library baseline
+
+**Key deliverables:**
+- 6 more daily puzzles (2026-01-18 through 2026-01-23)
+- Topic indexes for remaining 6 topics
+- Content QA metrics script (reports stats, warns if grindy)
+- LLM wordlist generation (enhanced prompt with ranked candidates)
+
+**Validation:**
+- All puzzles pass `npm run audit` (14 error codes)
+- All `puzzleId` values follow conventions
+- Content QA metrics run without warnings
+- Mobile playtest complete
+
+### Future
 - Skin system (CIRCUIT + CLASSIC themes)
 - A/B testing harness
-- More puzzles (scale to 15-20)
-- Persistence (localStorage)
+- Persistence (localStorage progress tracking)
+- "Copy link" in completion modal
 - Accessibility improvements
 
 ## Known State

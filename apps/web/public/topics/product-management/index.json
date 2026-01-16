@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "contentVersion": "2026.01.17",
+  "topicId": "product-management",
+  "title": "Product Management",
+  "description": "Roadmaps, strategy, metrics, execution.",
+  "puzzles": [
+    {
+      "id": "daily-2026-01-17",
+      "revision": 1,
+      "title": "Product Signals",
+      "difficulty": "easy",
+      "grid": { "width": 5, "height": 5 },
+      "estimatedMinutes": 3,
+      "tags": ["metrics", "strategy"],
+      "puzzlePath": "/daily/2026-01-17.json",
+      "createdAt": "2026-01-17"
+    }
+  ]
+}
