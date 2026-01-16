@@ -239,7 +239,8 @@ export function App() {
   }, [currentTopic]);
 
   const handleBackToHome = useCallback(() => {
-    window.history.pushState({}, '', '/');
+    const baseUrl = import.meta.env.BASE_URL;
+    window.history.pushState({}, '', baseUrl);
     setView('home');
     setCurrentTopic(null);
     setCurrentPuzzlePath(null);
