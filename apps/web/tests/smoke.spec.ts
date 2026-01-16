@@ -1,178 +1,157 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+
+/**
+ * Circuit Races E2E Smoke Tests (PR #4)
+ *
+ * Minimal suite (4 tests) to verify UI wiring works.
+ * Unit tests (Vitest) cover engine correctness.
+ */
+
+// Helper to drag-select cells on the grid
+async function dragSelect(
+  page: Page,
+  gridSelector: string,
+  gridWidth: number,
+  gridHeight: number,
+  cells: Array<{ row: number; col: number }>
+) {
+  const grid = page.locator(gridSelector);
+  const gridBox = await grid.boundingBox();
+  if (!gridBox) throw new Error('Grid not found');
+
+  const cellWidth = gridBox.width / gridWidth;
+  const cellHeight = gridBox.height / gridHeight;
+
+  const getCellCenter = (row: number, col: number) => ({
+    x: gridBox.x + col * cellWidth + cellWidth / 2,
+    y: gridBox.y + row * cellHeight + cellHeight / 2,
+  });
+
+  const start = getCellCenter(cells[0].row, cells[0].col);
+  const end = getCellCenter(cells[cells.length - 1].row, cells[cells.length - 1].col);
+
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
+
+  // Move through intermediate points for better gesture recognition
+  for (let i = 1; i < cells.length; i++) {
+    const point = getCellCenter(cells[i].row, cells[i].col);
+    await page.mouse.move(point.x, point.y);
+  }
+
+  await page.mouse.up();
+}
+
+// Select medium-01 puzzle (has bonus words)
+async function selectMediumPuzzle(page: Page) {
+  await page.selectOption('.puzzle-selector', 'medium-01');
+  // Wait for puzzle to load
+  await expect(page.locator('header h1')).toContainText('Hidden Words');
+}
 
 test.describe('Circuit Races - Smoke Tests', () => {
-  test('should load the application', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/');
-
-    // Check that the header is visible
-    await expect(page.locator('header h1')).toContainText('Simple Path');
-
-    // Check that the grid is rendered
-    const grid = page.locator('.grid');
-    await expect(grid).toBeVisible();
-
-    // Check that cells are rendered (5x5 = 25 cells)
-    const cells = page.locator('.cell:not(.void)');
-    await expect(cells).toHaveCount(25);
+    // Wait for initial puzzle to load
+    await expect(page.locator('[data-testid="grid"]')).toBeVisible();
   });
 
-  test('should display reset button', async ({ page }) => {
-    await page.goto('/');
+  /**
+   * Test 1: Drag-select PATH word → tiles turn green
+   */
+  test('drag-select PATH word turns tiles green', async ({ page }) => {
+    await selectMediumPuzzle(page);
 
-    const resetButton = page.locator('button:has-text("Reset")');
-    await expect(resetButton).toBeVisible();
-  });
+    // Grid is 6x6, select START (row 0: S-T-A-R-T, cols 0-4)
+    await dragSelect(page, '[data-testid="grid"]', 6, 6, [
+      { row: 0, col: 0 },
+      { row: 0, col: 1 },
+      { row: 0, col: 2 },
+      { row: 0, col: 3 },
+      { row: 0, col: 4 },
+    ]);
 
-  test('should show cell values', async ({ page }) => {
-    await page.goto('/');
+    // Wait for state update
+    await page.waitForTimeout(300);
 
-    // Check that first cell shows "S"
-    const firstCell = page.locator('.cell').first();
-    await expect(firstCell).toContainText('S');
-  });
-
-  test('should complete puzzle when all words found', async ({ page }) => {
-    await page.goto('/');
-
-    // Get grid bounding box for calculations
-    const grid = page.locator('.grid');
-    const gridBox = await grid.boundingBox();
-
-    if (!gridBox) {
-      throw new Error('Grid not found');
-    }
-
-    // Calculate cell size (grid is 5x5)
-    const cellWidth = gridBox.width / 5;
-    const cellHeight = gridBox.height / 5;
-
-    // Helper to get cell center coordinates
-    const getCellCenter = (row: number, col: number) => ({
-      x: gridBox.x + (col * cellWidth) + (cellWidth / 2),
-      y: gridBox.y + (row * cellHeight) + (cellHeight / 2)
-    });
-
-    // Select STAR (row 0: S-T-A-R, cells 0-3)
-    const star_start = getCellCenter(0, 0);
-    const star_end = getCellCenter(0, 3);
-    await page.mouse.move(star_start.x, star_start.y);
-    await page.mouse.down();
-    await page.mouse.move(star_end.x, star_end.y);
-    await page.mouse.up();
-
-    // Wait for feedback
-    await page.waitForTimeout(500);
-
-    // Check for "Found: STAR" feedback
-    await expect(page.locator('.feedback')).toContainText('Found: STAR');
-
-    // Select PATH (row 1: P-A-T-H, cells 0-3)
-    const path_start = getCellCenter(1, 0);
-    const path_end = getCellCenter(1, 3);
-    await page.mouse.move(path_start.x, path_start.y);
-    await page.mouse.down();
-    await page.mouse.move(path_end.x, path_end.y);
-    await page.mouse.up();
-
-    await page.waitForTimeout(500);
-
-    // Select ECHO (row 2: E-C-H-O, cells 0-3)
-    const echo_start = getCellCenter(2, 0);
-    const echo_end = getCellCenter(2, 3);
-    await page.mouse.move(echo_start.x, echo_start.y);
-    await page.mouse.down();
-    await page.mouse.move(echo_end.x, echo_end.y);
-    await page.mouse.up();
-
-    await page.waitForTimeout(500);
-
-    // Select GOAL (row 4: G-O-A-L, cells 0-3)
-    const goal_start = getCellCenter(4, 0);
-    const goal_end = getCellCenter(4, 3);
-    await page.mouse.move(goal_start.x, goal_start.y);
-    await page.mouse.down();
-    await page.mouse.move(goal_end.x, goal_end.y);
-    await page.mouse.up();
-
-    // Wait for completion screen
-    await page.waitForTimeout(1000);
-
-    // Check for completion message
-    const completion = page.locator('.completion');
-    await expect(completion).toBeVisible();
-    await expect(completion).toContainText('Puzzle Complete!');
-  });
-
-  test('should reset puzzle', async ({ page }) => {
-    await page.goto('/');
-
-    // Select one word
-    const grid = page.locator('.grid');
-    const gridBox = await grid.boundingBox();
-
-    if (!gridBox) {
-      throw new Error('Grid not found');
-    }
-
-    const cellWidth = gridBox.width / 5;
-    const cellHeight = gridBox.height / 5;
-
-    const getCellCenter = (row: number, col: number) => ({
-      x: gridBox.x + (col * cellWidth) + (cellWidth / 2),
-      y: gridBox.y + (row * cellHeight) + (cellHeight / 2)
-    });
-
-    // Select STAR
-    const start = getCellCenter(0, 0);
-    const end = getCellCenter(0, 3);
-    await page.mouse.move(start.x, start.y);
-    await page.mouse.down();
-    await page.mouse.move(end.x, end.y);
-    await page.mouse.up();
-
-    await page.waitForTimeout(500);
-
-    // Check that word was found
+    // Check that path cells are green (have .path class)
     const pathCells = page.locator('.cell.path');
-    await expect(pathCells).not.toHaveCount(0);
-
-    // Click reset
-    await page.click('button:has-text("Reset")');
-
-    // Check that path cells are cleared
-    await expect(pathCells).toHaveCount(0);
+    await expect(pathCells).toHaveCount(5);
   });
 
-  test('should show invalid selection feedback', async ({ page }) => {
-    await page.goto('/');
+  /**
+   * Test 2: Drag-select BONUS word → gray tiles + yellow hint
+   */
+  test('drag-select BONUS word shows gray tiles and yellow hint', async ({ page }) => {
+    await selectMediumPuzzle(page);
 
-    const grid = page.locator('.grid');
-    const gridBox = await grid.boundingBox();
-
-    if (!gridBox) {
-      throw new Error('Grid not found');
-    }
-
-    const cellWidth = gridBox.width / 5;
-    const cellHeight = gridBox.height / 5;
-
-    const getCellCenter = (row: number, col: number) => ({
-      x: gridBox.x + (col * cellWidth) + (cellWidth / 2),
-      y: gridBox.y + (row * cellHeight) + (cellHeight / 2)
-    });
-
-    // Try to select CAT (not in puzzle) - row 0: C-A-T (cells 2-4)
-    // Actually S-T-A, so let's try T-A-R-K which is not a word
-    const start = getCellCenter(0, 1);
-    const end = getCellCenter(0, 4);
-    await page.mouse.move(start.x, start.y);
-    await page.mouse.down();
-    await page.mouse.move(end.x, end.y);
-    await page.mouse.up();
+    // Select HOW (bonus word): r2c2 → r2c3 → r2c4 (horizontal)
+    // H at (2,2), O at (2,3), W at (2,4)
+    // hintCellId is r2c2 (intersection with ECHO path word)
+    await dragSelect(page, '[data-testid="grid"]', 6, 6, [
+      { row: 2, col: 2 },
+      { row: 2, col: 3 },
+      { row: 2, col: 4 },
+    ]);
 
     await page.waitForTimeout(500);
 
-    // Check for invalid selection feedback
-    await expect(page.locator('.feedback')).toContainText('Invalid selection');
+    // Check that hint (yellow) cell appeared - hintCellId is r2c2
+    // Note: r2c2 gets hint class, r2c3 and r2c4 get additional class
+    const hintCells = page.locator('.cell.hint');
+    await expect(hintCells).toHaveCount(1);
+
+    // Check that additional (gray) cells appeared (r2c3 O, r2c4 W)
+    // These are the non-hint cells from HOW
+    const additionalCells = page.locator('.cell.additional');
+    await expect(additionalCells).toHaveCount(2);
+  });
+
+  /**
+   * Test 3: Hint button → yellow hint persists after pause/resume
+   */
+  test('hint persists after pause/resume', async ({ page }) => {
+    await selectMediumPuzzle(page);
+
+    // Click hint button
+    await page.click('[data-testid="btn-hint"]');
+    await page.waitForTimeout(300);
+
+    // Verify hint appeared
+    const hintCells = page.locator('.cell.hint');
+    await expect(hintCells).toHaveCount(1);
+
+    // Pause
+    await page.click('[data-testid="btn-pause"]');
+    await expect(page.locator('.pause-overlay')).toBeVisible();
+
+    // Resume by clicking the pause overlay (it has onClick to resume)
+    await page.click('.pause-overlay');
+    await expect(page.locator('.pause-overlay')).not.toBeVisible();
+
+    // Hint should still be there (v1.1: hints persist indefinitely)
+    await expect(hintCells).toHaveCount(1);
+  });
+
+  /**
+   * Test 4: Words modal opens and closes
+   */
+  test('words modal opens and closes', async ({ page }) => {
+    await selectMediumPuzzle(page);
+
+    // Click Words button
+    await page.click('[data-testid="btn-words"]');
+
+    // Modal should be visible
+    const modal = page.locator('[data-testid="words-modal"]');
+    await expect(modal).toBeVisible();
+
+    // Should show Theme Words and Bonus Words sections
+    await expect(modal.locator('text=Theme Words')).toBeVisible();
+    await expect(modal.locator('text=Bonus Words')).toBeVisible();
+
+    // Close modal
+    await page.click('[data-testid="words-close"]');
+    await expect(modal).not.toBeVisible();
   });
 });

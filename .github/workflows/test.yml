@@ -7,14 +7,15 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  unit:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'npm'
@@ -36,3 +37,28 @@ jobs:
 
       - name: Build web app
         run: cd apps/web && npm run build
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build engine
+        run: cd packages/engine && npm run build
+
+      - name: Install Playwright browsers
+        run: cd apps/web && npx playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        run: npm run test:e2e

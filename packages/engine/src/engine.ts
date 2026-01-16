@@ -15,9 +15,9 @@ export function init(puzzle: WaywordsPuzzle, now: number): RuntimeState {
     status: 'IN_PROGRESS',
     foundPathWords: {},
     foundAdditionalWords: {},
-    hintUsedCount: 0,
+    hintUsedFromButton: 0,
+    hintRevealedFromBonus: 0,
     hintMarkedCells: {},
-    clueMarkedCells: {},
     startedAt: now
   };
 }
@@ -36,8 +36,6 @@ export function reduce(
       return handleSelect(puzzle, state, action.cellIds);
     case 'PRESS_HINT':
       return handleHint(puzzle, state);
-    case 'TICK':
-      return handleTick(puzzle, state, action.now);
     case 'RESET':
       return { state: init(puzzle, Date.now()), effects: { events: [] } };
   }
@@ -76,13 +74,20 @@ function handleSelect(
 
   const events: EngineEvent[] = [{ type: 'WORD_FOUND', wordId, category }];
 
-  // If additional word, apply clue
+  // If additional word, apply hint (v1.1: hints persist and accumulate)
   if (category === 'ADDITIONAL') {
     const word = puzzle.words.additional.find(w => w.wordId === wordId);
-    if (word?.clueCellId) {
-      newState.clueMarkedCells = { [word.clueCellId]: true };
-      newState.lastClueExpiresAt = state.startedAt + puzzle.config.cluePersistMs;
-      events.push({ type: 'CLUE_APPLIED', cellId: word.clueCellId });
+    // Support both hintCellId (v1.1) and clueCellId (deprecated) during migration
+    const hintCellId = word?.hintCellId ?? word?.clueCellId;
+    if (hintCellId) {
+      // Only add hint if cell is not already part of a found path word (green overrides)
+      const pathCells = getPathCells(puzzle, newState);
+      if (!pathCells.has(hintCellId)) {
+        // Accumulate hints (don't replace)
+        newState.hintMarkedCells = { ...state.hintMarkedCells, [hintCellId]: true };
+        newState.hintRevealedFromBonus = state.hintRevealedFromBonus + 1;
+        events.push({ type: 'HINT_APPLIED', cellId: hintCellId, source: 'BONUS' });
+      }
     }
   }
 
@@ -114,63 +119,62 @@ function handleHint(
   const word = unfoundWords[0];
 
   // Pick a cell from first placement
-  // Prefer cells not already marked
+  // Prefer cells not already marked (v1.1: hints accumulate, no clue system)
   const placement = word.placements[0];
   const pathCells = getPathCells(puzzle, state);
 
   let chosenCell: string | null = null;
   for (const cellId of placement) {
-    if (!pathCells.has(cellId) && !state.hintMarkedCells[cellId] && !state.clueMarkedCells[cellId]) {
+    // Skip cells that are already green (path) or already hinted
+    if (!pathCells.has(cellId) && !state.hintMarkedCells[cellId]) {
       chosenCell = cellId;
       break;
     }
   }
 
-  // Fallback: any cell from placement
+  // Fallback: any cell from placement (even if already hinted)
   if (!chosenCell) {
     chosenCell = placement[0];
   }
 
-  // Apply hint
+  // Apply hint (v1.1: hints persist indefinitely and accumulate)
   const newState: RuntimeState = {
     ...state,
     hintMarkedCells: { ...state.hintMarkedCells, [chosenCell]: true },
-    hintUsedCount: state.hintUsedCount + 1
+    hintUsedFromButton: state.hintUsedFromButton + 1
   };
 
   return {
     state: newState,
-    effects: { events: [{ type: 'HINT_APPLIED', cellId: chosenCell }] }
+    effects: { events: [{ type: 'HINT_APPLIED', cellId: chosenCell, source: 'BUTTON' }] }
   };
 }
 
-function handleTick(
-  puzzle: WaywordsPuzzle,
-  state: RuntimeState,
-  now: number
-): EngineResult {
-  // Check if clue should expire
-  if (state.lastClueExpiresAt && now >= state.lastClueExpiresAt) {
-    return {
-      state: {
-        ...state,
-        clueMarkedCells: {},
-        lastClueExpiresAt: undefined
-      },
-      effects: { events: [] }
-    };
-  }
+// v1.1: handleTick removed - timer is now UI-only state
 
-  return { state, effects: { events: [] } };
+/**
+ * Get all cells belonging to found additional words
+ */
+function getAdditionalWordCells(puzzle: WaywordsPuzzle, state: RuntimeState): Set<string> {
+  const cells = new Set<string>();
+  for (const word of puzzle.words.additional) {
+    if (state.foundAdditionalWords[word.wordId]) {
+      for (const placement of word.placements) {
+        for (const cellId of placement) {
+          cells.add(cellId);
+        }
+      }
+    }
+  }
+  return cells;
 }
 
 export const selectors = {
   getPathCells,
+  getAdditionalWordCells,
   isConnected,
   getHintCells: (state: RuntimeState): Set<string> => {
     return new Set(Object.keys(state.hintMarkedCells));
-  },
-  getClueCells: (state: RuntimeState): Set<string> => {
-    return new Set(Object.keys(state.clueMarkedCells));
   }
+  // v1.1: getClueCells removed - clue system replaced by persistent hints
 };

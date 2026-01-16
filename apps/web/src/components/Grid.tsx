@@ -6,12 +6,13 @@ import './Grid.css';
 interface GridProps {
   puzzle: WaywordsPuzzle;
   pathCells: Set<string>;
+  additionalCells: Set<string>;
   hintCells: Set<string>;
-  clueCells: Set<string>;
   onSelection: (cellIds: string[]) => void;
 }
 
-export function Grid({ puzzle, pathCells, hintCells, clueCells, onSelection }: GridProps) {
+// v1.1: Visual priority order: preview > path (green) > hint (yellow) > additional (gray)
+export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelection }: GridProps) {
   const [selecting, setSelecting] = useState(false);
   const [previewCells, setPreviewCells] = useState<string[]>([]);
   const adapterRef = useRef<SelectionAdapter | null>(null);
@@ -71,6 +72,7 @@ export function Grid({ puzzle, pathCells, hintCells, clueCells, onSelection }: G
   return (
     <div
       className="grid"
+      data-testid="grid"
       style={{
         gridTemplateColumns: `repeat(${puzzle.grid.width}, 1fr)`,
         gridTemplateRows: `repeat(${puzzle.grid.height}, 1fr)`
@@ -87,13 +89,22 @@ export function Grid({ puzzle, pathCells, hintCells, clueCells, onSelection }: G
         const isPath = pathCells.has(cell.id);
         const isPreview = previewCells.includes(cell.id);
         const isHint = hintCells.has(cell.id);
-        const isClue = clueCells.has(cell.id);
+        const isAdditional = additionalCells.has(cell.id);
+
+        // v1.1: Priority order (highest to lowest):
+        // preview (purple) > path (green) > hint (yellow) > additional (gray) > base
+        // CSS handles priority via specificity, so we apply all applicable classes
+        const classes = ['cell'];
+        if (isPreview) classes.push('preview');
+        if (isPath) classes.push('path');
+        if (isHint && !isPath) classes.push('hint'); // Yellow only if not green
+        if (isAdditional && !isPath && !isHint) classes.push('additional'); // Gray only if not green or yellow
 
         return (
           <div
             key={cell.id}
             data-cell-id={cell.id}
-            className={`cell ${isPath ? 'path' : ''} ${isPreview ? 'preview' : ''} ${isHint ? 'hint' : ''} ${isClue ? 'clue' : ''}`}
+            className={classes.join(' ')}
             onPointerDown={(e) => handlePointerDown(cell.id, e)}
             style={{ gridColumn: cell.x + 1, gridRow: cell.y + 1 }}
           >

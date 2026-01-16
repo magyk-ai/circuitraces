@@ -1,18 +1,33 @@
-# Waywords — Web-first, Engine-ready Gameplay Spec (v0.1)
+# Waywords — Web-first, Engine-ready Gameplay Spec (v1.1)
 
 > **Goal of this document:** A single, self-contained spec that a dev team can implement from day 1.
 >
 > **Focus:** game mechanics + implementation architecture (engine + web UI). Content strategy is out of scope, but generation stubs are included.
+>
+> **v1.1 Updates:** Netflix Waywords fidelity alignment — persistent hints, gray additional word tiles, hintCellId terminology, auditor/validator rules, TICK action removed.
+>
+> **Last Updated:** 2026-01-16 (PR #2 Engine + Puzzle Migration complete)
 
 ---
 
 ## 0) Summary
 
-**Waywords mechanics (constant):** a themed word-search puzzle where the player finds *path words* whose tiles form a connected route from **START → END**. Some tiles are **emoji tokens** (tap to reveal meaning). The puzzle also includes **Additional Words** (separate theme) that reveal a **single-letter clue** pointing toward the path.
+**Waywords mechanics (constant):** a themed word-search puzzle where the player finds *path words* whose tiles form a connected route from **START → END**. Some tiles are **emoji tokens** (tap to reveal meaning). The puzzle also includes **Additional Words** (decoys/bonus words, separate theme) that when found:
+- Turn their tiles **gray**
+- Reveal a **persistent hint letter** (yellow) that indicates where the path is
 
-**Visual metaphor (v1 default):** **Circuit Traces** — found path words “power” PCB traces; START→END is “Source→Sink”. This is a UI skin; the engine is unchanged.
+**Visual metaphor (v1 default):** **Circuit Traces** — found path words "power" PCB traces; START→END is "Source→Sink". This is a UI skin; the engine is unchanged.
 
 This spec is **web-first**, **mobile-form-factor-first**, and designed to deploy as a **static site** (e.g., GitHub Pages). The engine (rules/state/validation) is a **pure TypeScript** library runnable and testable in **Node**.
+
+### v1.1 Fidelity Notes (Netflix Waywords alignment)
+
+Based on Netflix Waywords (Puzzled) research ([games-netflix.helpshift.com](https://games-netflix.helpshift.com/hc/en/8-netflix-puzzled/faq/1656-how-to-play-waywords/)):
+- **Path word tiles turn green** when found
+- **Additional word tiles turn gray** when found (green overrides gray if overlap)
+- **Hint letters are yellow** and **persist indefinitely** (from both Hint button and Additional Word reveals)
+- **Words List** shows found words and **sizes only** for unfound words
+- **Timer + pause** controls in the UI (timer is UI-only, not engine-driven)
 
 ---
 
@@ -40,6 +55,22 @@ This spec is **web-first**, **mobile-form-factor-first**, and designed to deploy
 ### 2.2 Form-factor priority
 - **Mobile UX first** (touch + small screen).
 - Must still work on desktop web.
+
+### 2.2.1 Tile rendering priority (v1.1) — MUST
+
+At any time, a tile's **visual state** MUST be derived in this priority (highest to lowest):
+
+1. **Selected preview** (purple overlay, transient) — during active drag
+2. **Path-found** (green) — highest permanent priority; overrides all others
+3. **Hint-marked** (yellow) — persistent from Hint button or Additional Word reveal
+4. **Additional-found** (gray) — found Additional Word tiles
+5. **Base tile** (neutral)
+
+**Non-negotiable rules:**
+- **MUST:** If a tile is both gray (additional-found) AND green (path-found), it renders as **green** (path takes priority).
+- **MUST:** If a tile is hint-marked (yellow) AND later becomes path-found (green), it renders as **green**.
+- **MUST:** Grid CSS and engine selectors MUST use this same priority order.
+- **MUST:** Hints persist indefinitely — no expiry, no removal except on puzzle reset.
 
 ### 2.3 Offline support
 - PWA-friendly (optional for v1): cache app shell and puzzle JSON.
@@ -170,7 +201,7 @@ export interface PuzzleConfig {
   selectionModel: SelectionModel;
   connectivityModel: ConnectivityModel;
   allowReverseSelection: boolean;
-  cluePersistMs: number;
+  // v1.1: cluePersistMs removed — hints now persist indefinitely
 }
 
 export interface StartEndMarker {
@@ -183,7 +214,9 @@ export interface WordDef {
   tokens: Token[];
   size: number; // must equal tokens.length
   placements: string[][]; // array of placements; placement is array of cellIds
-  clueCellId?: string; // only for Additional Words
+  hintCellId?: string; // only for Additional Words (v1.1: renamed from clueCellId)
+  /** @deprecated Use hintCellId instead. Supported temporarily for migration. Target removal: v1.2 */
+  clueCellId?: string;
 }
 
 export interface WaywordsPuzzle {
@@ -205,23 +238,29 @@ export interface WaywordsPuzzle {
 }
 ```
 
-### 5.5 Runtime state schema
+### 5.5 Runtime state schema (v1.1 — ACTUAL)
 
 ```ts
 export type GameStatus = 'IN_PROGRESS' | 'COMPLETED';
 
 export interface RuntimeState {
   status: GameStatus;
-  foundPathWords: Record<string, true>;       // wordId map
-  foundAdditionalWords: Record<string, true>; // wordId map
-  hintUsedCount: number;
-  hintMarkedCells: Record<string, true>;      // cellId map
-  clueMarkedCells: Record<string, true>;      // usually 0..1
-  lastClueExpiresAt?: number;
+  foundPathWords: Record<string, true>;       // wordId -> true
+  foundAdditionalWords: Record<string, true>; // wordId -> true
+  hintUsedFromButton: number;                 // v1.1: count of hints used from Hint button
+  hintRevealedFromBonus: number;              // v1.1: count of hints revealed from Additional Words
+  hintMarkedCells: Record<string, true>;      // cellId -> true — accumulates ALL hints (persistent)
   completedAt?: number;
   startedAt: number;
 }
 ```
+
+**v1.1 Changes:**
+- `hintUsedFromButton` replaces `hintUsedCount` — tracks button-initiated hints only
+- `hintRevealedFromBonus` added — tracks hints from Additional Word reveals
+- Removed: `clueMarkedCells`, `lastClueExpiresAt` — hints persist indefinitely (no expiry)
+
+**Analytics note:** Separate tracking enables future Netflix-style recaps ("You used 3 hints, bonus words revealed 2 more").
 
 **Note:** Keep state serializable for localStorage.
 
@@ -233,26 +272,30 @@ export interface RuntimeState {
 The engine must be deterministic and side-effect-free:
 - No timers; instead return `effects` and allow host to schedule.
 
-### 6.2 Actions
+### 6.2 Actions (v1.1 — ACTUAL)
 
 ```ts
 export type EngineAction =
   | { type: 'SELECT'; cellIds: string[] }     // finalized selection from UI
-  | { type: 'PRESS_HINT' }
-  | { type: 'TICK'; now: number }             // host-driven time progression
-  | { type: 'RESET' };                        // optional
+  | { type: 'PRESS_HINT' }                    // request hint for unfound path word
+  | { type: 'RESET' };                        // reset puzzle state
+  // v1.1: TICK removed — timer is UI-only, hints persist indefinitely
 ```
 
-### 6.3 Outputs
+**v1.1 Change:** `TICK` action removed. Timer display is now purely UI state — the engine does not track elapsed time or manage hint expiration.
+
+### 6.3 Outputs (v1.1 — ACTUAL)
 
 ```ts
+export type HintSource = 'BUTTON' | 'BONUS';
+
 export type EngineEvent =
   | { type: 'WORD_FOUND'; wordId: string; category: 'PATH' | 'ADDITIONAL' }
   | { type: 'ALREADY_FOUND'; wordId: string }
   | { type: 'INVALID_SELECTION' }
-  | { type: 'CLUE_APPLIED'; cellId: string }
-  | { type: 'HINT_APPLIED'; cellId: string }
+  | { type: 'HINT_APPLIED'; cellId: string; source: HintSource }  // v1.1: unified with source
   | { type: 'COMPLETED'; completedAt: number };
+  // v1.1: CLUE_APPLIED removed — merged into HINT_APPLIED with source: 'BONUS'
 
 export interface EngineEffects {
   // host may use for UI sounds, haptics, animations
@@ -265,7 +308,11 @@ export interface EngineResult {
 }
 ```
 
-### 6.4 Primary engine functions
+**v1.1 Changes:**
+- `HINT_APPLIED` now includes `source: HintSource` to distinguish button vs bonus word hints
+- `CLUE_APPLIED` removed — unified into `HINT_APPLIED` with `source: 'BONUS'`
+
+### 6.4 Primary engine functions (v1.1 — ACTUAL)
 
 ```ts
 export interface Engine {
@@ -274,21 +321,61 @@ export interface Engine {
   selectors: {
     // rendering helpers
     getPathCells(puzzle: WaywordsPuzzle, state: RuntimeState): Set<string>;
+    getAdditionalWordCells(puzzle: WaywordsPuzzle, state: RuntimeState): Set<string>; // v1.1: for gray rendering
+    getHintCells(state: RuntimeState): Set<string>;  // v1.1: for yellow rendering
     isConnected(puzzle: WaywordsPuzzle, state: RuntimeState): boolean;
     // optional: compute route overlay for completed state
-    getRouteOverlay(puzzle: WaywordsPuzzle, state: RuntimeState): Set<string>;
+    getRouteOverlay?(puzzle: WaywordsPuzzle, state: RuntimeState): Set<string>;
   };
 }
 ```
 
+**v1.1 Changes:**
+- `getAdditionalWordCells` added — returns cells belonging to found Additional Words (for gray rendering)
+- `getHintCells` added — returns accumulated hint-marked cells (for yellow rendering)
+- `getClueCells` removed — clue system replaced by persistent hints
+
 ---
 
-## 7) Core mechanics (authoritative rules)
+## 7) Core mechanics — Non-Negotiables (MUST rules)
+
+This section defines the authoritative game mechanics. These are acceptance criteria for any implementation.
+
+### 7.0 Mechanics Overview — MUST statements
+
+**A) Selection model:**
+- **MUST:** Words are selected as straight-line drags (`RAY_8DIR` — classic word-search).
+- **MUST:** Selection snaps to nearest of 8 directions (horizontal, vertical, diagonal).
+
+**B) Win condition:**
+- **MUST:** You win ONLY when START→END are connected using found PATH tiles (green).
+- **MUST:** Connectivity uses `ORTHO_4` (up/down/left/right neighbors only).
+
+**C) Path words:**
+- **MUST:** When found, their tiles become green and stay green.
+- **MUST:** Green tiles participate in connectivity check.
+
+**D) Additional/Bonus words:**
+- **MUST:** When found, their tiles become gray.
+- **MUST:** When found, they reveal ONE hint letter (yellow) "indicating where the path is".
+- **MUST:** The hint letter (`hintCellId`) MUST be an intersection cell — in BOTH the bonus word's placement AND a path word's placement.
+
+**E) Hints:**
+- **MUST:** Hints persist indefinitely (no expiry).
+- **MUST:** Hints from button AND hints from bonus words accumulate into the same hinted set.
+- **MUST:** Hint button reveals a hint letter that belongs to an unfound PATH word (not a bonus word).
+- **MUST:** Visually, all hints are yellow and identical.
+
+**F) Emoji tiles (deferred to v1.2):**
+- **MUST:** Tapping an emoji reveals its meaning (UI-only modal/sheet).
+- **MUST:** Emoji tap-to-reveal MUST NOT interfere with drag selection.
+- **Implementation note:** Use small movement threshold to distinguish tap from drag start.
+- **Status:** Deferred to v1.2 — current engine only supports LETTER and VOID cell types. No puzzles currently use EMOJI cells.
 
 ### 7.1 Selection validation (placement lookup)
 **Input:** `SELECT(cellIds[])`
 
-Engine must:
+Engine MUST:
 1. Create `key = cellIds.join('|')`
 2. Check key against a precomputed `placementKey → {wordId, category, placementIndex}` map.
 3. If no match → `INVALID_SELECTION`.
@@ -296,7 +383,7 @@ Engine must:
    - If already found → `ALREADY_FOUND`
    - Else mark found and apply effects.
 
-**Reverse selection:** if enabled, the engine should pre-index both forward and reversed placement keys.
+**Reverse selection:** if `allowReverseSelection` is enabled, the engine MUST pre-index both forward and reversed placement keys.
 
 ### 7.2 Path word found
 On new path word found:
@@ -305,31 +392,46 @@ On new path word found:
 - Recompute win condition:
   - If START cell connects to END cell through path tiles → complete.
 
-### 7.3 Additional word found + clue
+### 7.3 Additional word found + hint reveal (v1.1 updated)
+
 On new additional word found:
 - Add `wordId` to `foundAdditionalWords`.
-- Apply clue:
-  - Clear previous `clueMarkedCells`.
-  - Mark `clueCellId` as clue.
-  - Set `lastClueExpiresAt = now + cluePersistMs`.
+- Mark all placement tiles as **additional-found** (for gray rendering).
+- Apply hint reveal:
+  - Add `hintCellId` to `hintMarkedCells` (yellow highlight).
+  - **Persistence:** hint tiles persist indefinitely (no expiration).
+  - **Accumulation:** multiple Additional Words = multiple hint tiles.
 
-**Expiration:** when host sends `TICK(now)` and `now >= lastClueExpiresAt`, clear clue.
+**Key requirement:** The `hintCellId` must "indicate where the path is" — it should belong to at least one **unfound Path Word** placement. This is enforced by the validator (see Section 10.6.1).
 
-### 7.4 Hint
+### 7.4 Hint (v1.1 — ACTUAL)
+
 On `PRESS_HINT`:
-- Choose an unfound path word.
-- Choose one cell from one of its placements.
-- Mark that cell as hint (`hintMarkedCells`).
-- Increment `hintUsedCount`.
+1. Choose an unfound path word (first unfound, for determinism).
+2. Choose one cell from its placement.
+3. Mark that cell as hint (`hintMarkedCells`) — **yellow highlight**.
+4. Increment `hintUsedFromButton`.
+5. Emit `HINT_APPLIED { cellId, source: 'BUTTON' }`.
+
+**MUST rules:**
+- **MUST:** Hint-marked cells persist indefinitely until the puzzle ends or is reset.
+- **MUST:** Hints from Hint button and Additional Word reveals accumulate in the same `hintMarkedCells` set.
+- **MUST:** All hints render as identical yellow highlighting.
+- **MUST:** If path word becomes found, its cells turn green (overriding yellow).
 
 **Hint selection policy (default):**
-- Prefer a cell that is not already path-found, and not already hint/clue-marked.
-- If all are marked, choose any cell.
+- Prefer a cell that is not already path-found (green), and not already hint-marked (yellow).
+- If all cells of the chosen word are marked, choose the first cell anyway (fallback).
 
-### 7.5 Emoji tiles
+### 7.5 Emoji tiles (deferred to v1.2)
 Emoji tile meaning reveal is **UI-only**:
 - Puzzle JSON includes `meaning` string.
 - UI shows a popover/sheet when player taps emoji tile.
+
+**Status:** Deferred to v1.2. Current puzzles use only LETTER cells. Emoji support requires:
+- Engine: Add EMOJI cell type handling
+- UI: Tap-to-reveal gesture (distinguish from drag start)
+- Puzzles: Create puzzles with EMOJI cells
 
 ### 7.6 Win condition (connectivity)
 **Inputs:**
@@ -351,17 +453,43 @@ Upon completion:
 
 **Determinism:** BFS neighbor iteration order must be stable so overlay is consistent.
 
+### 7.8 Words List UI (v1.1)
+
+The Words button opens a modal/sheet showing all words:
+
+**Display rules:**
+- **Found words:** Show full token string (letters + emoji)
+- **Unfound words:** Show only **size** (e.g., "5 letters") and optionally placeholder characters
+
+**Sections:**
+- **Path Words:** Listed first (theme-related)
+- **Additional Words:** Listed second (decoys/bonus)
+
+**Example display:**
+```
+Path Words:
+  ✓ TRACK
+  ✓ RIVER
+  _ _ _ _ _ (5 letters)
+
+Additional Words:
+  ✓ OUR
+  _ _ _ (3 letters)
+```
+
 ---
 
 ## 8) Web UI requirements (mobile-first)
 
 ### 8.1 Rendering
 - Grid is rendered as CSS grid with fixed aspect ratio cells.
-- Tile layers:
+- Tile layers (v1.1 updated):
   1) base tile
-  2) path-found highlight (green)
-  3) hint/clue overlay (yellow)
-  4) route overlay (e.g., purple line) (optional)
+  2) additional-found highlight (gray) — v1.1
+  3) path-found highlight (green) — overrides gray
+  4) hint overlay (yellow) — persistent, from both Hint button and Additional Word reveals
+  5) selection preview (purple, transient)
+  6) route overlay (e.g., purple line) (optional, on completion)
 
 ### 8.2 Touch/drag input
 Use Pointer Events:
@@ -387,10 +515,11 @@ The UI must implement one selection model (config-driven):
   - start/end markers
   - grid
   - bottom bar: Hint, Words
-- **Words Modal**
+- **Words Modal** (v1.1 updated)
   - section: Path Words
   - section: Additional Words
-  - each row: displayed token string + size + found indicator
+  - **found words:** show full token string
+  - **unfound words:** show size only (e.g., "5 letters")
 - **Emoji Meaning Sheet**
   - meaning text + optional icon
 - **Completion Sheet**
@@ -404,7 +533,7 @@ The UI must implement one selection model (config-driven):
 
 ### 8.6 Visual metaphor skins (same mechanics, different story)
 
-The mechanics remain identical (find path words → connect START→END; additional words → reveal a clue cell; hints unlimited), but the **rendering layer** can present different metaphors.
+The mechanics remain identical (find path words → connect START→END; additional words → reveal a persistent hint cell; hints unlimited), but the **rendering layer** can present different metaphors.
 
 **Non-negotiable:** skins are **UI-only**. Puzzle JSON and engine logic remain unchanged.
 
@@ -512,7 +641,7 @@ To keep editing simple, support a lightweight authoring input that compiles to p
 - Validate constraints:
   - placements exist and match grid tokens
   - path connectivity from start to end when all path words found
-  - clueCellId belongs to at least one path word placement
+  - `hintCellId` belongs to at least one path word placement (v1.1: renamed from clueCellId)
 
 ### 10.5 Generator package (CLI stub)
 
@@ -526,11 +655,78 @@ To keep editing simple, support a lightweight authoring input that compiles to p
 - `waywords-compile <puzzle.yml> --out puzzle.json`
 - `waywords-generate <seed> --out puzzle.json` (stub)
 
-### 10.6 Validation checks (must ship early)
-Even before generation exists, ship validation to protect authored content:
-- Schema validation
-- Placement integrity validation
-- Connectivity validation
+### 10.6 Validation & Auditor — MUST Rules (v1.1)
+
+These are the "you can't ship a puzzle unless these hold" rules. The auditor (`npm run audit`) enforces all of these.
+
+#### 10.6.0 Quick reference — Auditor checks
+
+| Check | Severity | Description |
+|-------|----------|-------------|
+| Schema | ERROR | Valid JSON matching WaywordsPuzzle schema |
+| Single placement | ERROR | Each word MUST have exactly 1 placement |
+| Solvability | ERROR | START→END must be reachable via path words |
+| Start cell | ERROR | Start cell in path word placement, non-VOID |
+| End cell | ERROR | End cell in path word placement, non-VOID |
+| hintCellId intersection | ERROR | Must be in BOTH bonus word AND path word |
+| Placement uniqueness | ERROR | No duplicate placement keys |
+| Grid bounds | WARNING | All placements within grid bounds |
+
+### 10.6.1 Solvability invariants — MUST
+
+**MUST:** `start.adjacentCellId` and `end.adjacentCellId`:
+- Are in-bounds (exist in `grid.cells`)
+- Are non-VOID (type is `LETTER` or `EMOJI`)
+- Are included in at least one PATH word placement
+
+**MUST:** If all PATH words are considered found, START→END must be connected:
+- Walkable cells = union of all PATH word placements
+- BFS/DFS using `ORTHO_4` adjacency (up/down/left/right)
+- Puzzle is UNSOLVABLE if end cell is not reachable
+
+### 10.6.2 Bonus hint intersection rule — MUST (Netflix fidelity)
+
+This is the key rule that makes bonus word hints visually consistent with Netflix Waywords:
+
+**MUST:** For each Additional Word with `hintCellId`:
+1. `hintCellId` ∈ bonusWord.placement (cell is IN the bonus word)
+2. `hintCellId` ∈ union(all PATH word placements) (cell is also in a path word)
+3. `hintCellId` is non-VOID
+
+**Visual result:**
+- You find the bonus word → its letters go gray
+- One intersecting letter remains yellow (the hint)
+- Later, when you find the path word containing that cell, it turns green
+
+**Rationale:** Per Netflix Waywords rules, bonus word reveals "indicate where the path is" — meaning the hint cell must be part of a Path Word. The intersection requirement ensures visual consistency.
+
+### 10.6.3 Placement correctness invariants — MUST
+
+**MUST:** Every placement must match grid tokens exactly:
+- Each cellId in placement must exist in grid
+- Cell value must match corresponding token
+
+**MUST:** Duplicate placement keys are ERROR:
+- `placementKey = cellIds.join('|')`
+- No two words (across PATH and ADDITIONAL) may have identical placement keys
+- Cell intersections are allowed and expected, but identical placements are not
+
+### 10.6.4 Determinism constraint — Single placement per word
+
+**MUST:** Each word MUST have exactly 1 placement for v1.1.
+
+**Rationale:** If schema allowed multiple placements, engine would need to record which placement matched when found — adding complexity. Single placement keeps the auditor, engine, and tests simple and deterministic.
+
+**Validator output:**
+```
+ERROR: Word 'EXAMPLE' has 2 placements, expected 1
+```
+
+### 10.6.5 Deprecation warnings
+
+**SHOULD:** Validator warns when deprecated fields are used:
+- `clueCellId` → warn: "Use hintCellId instead (clueCellId deprecated, removal in v1.2)"
+- `cluePersistMs` in config → warn: "cluePersistMs deprecated, hints now persist indefinitely"
 
 ---
 
@@ -538,8 +734,9 @@ Even before generation exists, ship validation to protect authored content:
 
 ### 11.1 Unit tests (engine)
 - Selection match and reverse match
-- Additional word clue set/expire
-- Hint applies to unfound word
+- Additional word hint reveal (v1.1: persistent, no expiry)
+- Hint button applies to unfound word
+- Hint accumulation from both sources
 - Connectivity BFS correctness
 
 ### 11.2 Property-based tests (recommended)
@@ -583,10 +780,10 @@ Even before generation exists, ship validation to protect authored content:
 - Path word highlighting + win check
 - Circuit skin v1 applied via skin manifest
 
-### Sprint 2 — Hint/Words/Clues + polish
-- Additional words + clue marking + expiry via TICK
-- Hint system (unlimited)
-- Words list modal
+### Sprint 2 — Hint/Words + polish (v1.1 updated)
+- Additional words + persistent hint reveal (no expiry)
+- Hint system (unlimited, persistent)
+- Words list modal (show sizes for unfound)
 - Completion sheet + route overlay selector (SVG trace)
 
 ### Sprint 3 — AB + QA hardening
@@ -610,8 +807,9 @@ These defaults are chosen to minimize confusion, reduce accidental input, and ke
 3) **Hints:** unlimited per puzzle (tracked)
    - Rationale: keeps the experience approachable; difficulty is in discovery, not resource management.
 
-4) **Clue visuals:** distinct from Hint but in the same visual family
-   - Rationale: players can tell “I earned this clue” vs “I used a hint” at a glance.
+4) **Hint visuals:** (v1.1 updated) All hints are yellow and visually identical
+   - Both Hint button and Additional Word reveals produce yellow hints
+   - Rationale: simpler mental model; hints accumulate and persist uniformly
 
 ---
 
@@ -633,4 +831,59 @@ For `RAY_8DIR`, the adapter:
 - Emits all intermediate cellIds along that vector
 
 This keeps geometry out of the engine and enables future mobile/native UIs.
+
+---
+
+## 16) Migrations (v1.1)
+
+This section documents breaking changes and migration steps for puzzle authors and implementations.
+
+### 16.1 PR #2 Migration (2026-01-16)
+
+**Engine changes:**
+- Removed `TICK` action — timer is now UI-only state, not engine-driven
+- Removed `CLUE_APPLIED` event — merged into `HINT_APPLIED` with `source: 'BONUS'`
+- Added `HintSource` type: `'BUTTON' | 'BONUS'`
+- Changed `HINT_APPLIED` event to include `source` field
+- Renamed state field: `hintUsedCount` → `hintUsedFromButton`
+- Added state field: `hintRevealedFromBonus`
+- Removed state fields: `clueMarkedCells`, `lastClueExpiresAt`
+
+**Puzzle JSON changes:**
+- Removed `config.cluePersistMs` — hints now persist indefinitely
+- Renamed `hintCellId` (was `clueCellId`) — backwards compat supported during transition
+- Added validation: `hintCellId` must be intersection cell (in bonus word AND path word)
+- Added validation: each word must have exactly 1 placement
+
+**Puzzle file migrations performed:**
+- `easy-01.json`: Removed `cluePersistMs`
+- `easy-02.json`: Removed `cluePersistMs`
+- `medium-01.json`: Fixed end cell, renamed `clueCellId` → `hintCellId`, fixed intersection cells
+- `medium-02.json`: Removed `cluePersistMs`, renamed `clueCellId` → `hintCellId`, fixed intersection cells
+- `puzzles/sample.json`: Fixed end cell, added missing `DRY` path word for connectivity
+- Test fixtures: Updated to use `hintCellId` and new state shape
+
+### 16.2 Deprecation timeline
+
+| Field | Status | Target removal |
+|-------|--------|----------------|
+| `clueCellId` | DEPRECATED | v1.2 |
+| `cluePersistMs` | REMOVED | v1.1 (PR #2) |
+| `TICK` action | REMOVED | v1.1 (PR #2) |
+| `CLUE_APPLIED` event | REMOVED | v1.1 (PR #2) |
+| `hintUsedCount` | RENAMED | v1.1 → `hintUsedFromButton` |
+
+---
+
+## 17) Changelog
+
+### v1.1 (2026-01-16)
+- Netflix Waywords fidelity alignment
+- Persistent hints (no expiry)
+- Hint source tracking (button vs bonus)
+- Gray rendering for additional word tiles
+- hintCellId intersection rule
+- TICK action removed (timer is UI-only)
+- Single placement per word enforced
+- Auditor tool added (`npm run audit`)
 

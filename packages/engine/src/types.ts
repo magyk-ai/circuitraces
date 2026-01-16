@@ -18,7 +18,7 @@ export interface PuzzleConfig {
   selectionModel: SelectionModel;
   connectivityModel: ConnectivityModel;
   allowReverseSelection: boolean;
-  cluePersistMs: number; // how long clue highlighting persists (default: 3000ms)
+  // Note: cluePersistMs removed in v1.1 - hints now persist indefinitely
 }
 
 export interface StartEndMarker {
@@ -30,7 +30,9 @@ export interface WordDef {
   tokens: Token[];
   size: number;
   placements: string[][]; // array of placements; placement is array of cellIds
-  clueCellId?: string; // only for additional words: which cell reveals a clue
+  hintCellId?: string; // only for additional words: intersection cell that reveals hint (v1.1)
+  /** @deprecated Use hintCellId instead. Kept for backwards compatibility during migration. */
+  clueCellId?: string;
 }
 
 export interface WaywordsPuzzle {
@@ -56,10 +58,9 @@ export interface RuntimeState {
   status: GameStatus;
   foundPathWords: Record<string, true>; // wordId -> true
   foundAdditionalWords: Record<string, true>; // wordId -> true
-  hintUsedCount: number; // count of hints used
-  hintMarkedCells: Record<string, true>; // cellId -> true (cells marked by hints)
-  clueMarkedCells: Record<string, true>; // cellId -> true (0 or 1 cell marked by clue)
-  lastClueExpiresAt?: number; // timestamp when current clue expires
+  hintUsedFromButton: number; // count of hints used from button (v1.1)
+  hintRevealedFromBonus: number; // count of hints revealed from bonus words (v1.1)
+  hintMarkedCells: Record<string, true>; // cellId -> true (accumulates all hints, persistent)
   completedAt?: number;
   startedAt: number;
 }

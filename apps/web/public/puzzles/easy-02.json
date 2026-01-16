@@ -4,8 +4,7 @@
   "config": {
     "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
-    "allowReverseSelection": true,
-    "cluePersistMs": 3000
+    "allowReverseSelection": true
   },
   "grid": {
     "width": 4,

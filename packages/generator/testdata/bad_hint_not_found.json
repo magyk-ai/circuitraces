@@ -1,6 +1,6 @@
 {
-  "puzzleId": "easy-01",
-  "theme": "Short Path",
+  "puzzleId": "bad-hint-not-found",
+  "theme": "Test Hint Not Found",
   "config": {
     "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
@@ -13,11 +13,9 @@
       { "id": "r0c0", "x": 0, "y": 0, "type": "LETTER", "value": "C" },
       { "id": "r0c1", "x": 1, "y": 0, "type": "LETTER", "value": "A" },
       { "id": "r0c2", "x": 2, "y": 0, "type": "LETTER", "value": "T" },
-
       { "id": "r1c0", "x": 0, "y": 1, "type": "LETTER", "value": "U" },
       { "id": "r1c1", "x": 1, "y": 1, "type": "LETTER", "value": "P" },
-      { "id": "r1c2", "x": 2, "y": 1, "type": "LETTER", "value": "S" },
-
+      { "id": "r1c2", "x": 2, "y": 1, "type": "LETTER", "value": "O" },
       { "id": "r2c0", "x": 0, "y": 2, "type": "LETTER", "value": "B" },
       { "id": "r2c1", "x": 1, "y": 2, "type": "LETTER", "value": "O" },
       { "id": "r2c2", "x": 2, "y": 2, "type": "LETTER", "value": "X" }
@@ -29,35 +27,25 @@
     "path": [
       {
         "wordId": "CAT",
-        "tokens": [
-          { "t": "L", "v": "C" },
-          { "t": "L", "v": "A" },
-          { "t": "L", "v": "T" }
-        ],
+        "tokens": [{ "t": "L", "v": "C" }, { "t": "L", "v": "A" }, { "t": "L", "v": "T" }],
         "size": 3,
         "placements": [["r0c0", "r0c1", "r0c2"]]
       },
       {
-        "wordId": "TOP",
-        "tokens": [
-          { "t": "L", "v": "T" },
-          { "t": "L", "v": "O" },
-          { "t": "L", "v": "P" }
-        ],
+        "wordId": "TOX",
+        "tokens": [{ "t": "L", "v": "T" }, { "t": "L", "v": "O" }, { "t": "L", "v": "X" }],
         "size": 3,
         "placements": [["r0c2", "r1c2", "r2c2"]]
-      },
-      {
-        "wordId": "BOX",
-        "tokens": [
-          { "t": "L", "v": "B" },
-          { "t": "L", "v": "O" },
-          { "t": "L", "v": "X" }
-        ],
-        "size": 3,
-        "placements": [["r2c0", "r2c1", "r2c2"]]
       }
     ],
-    "additional": []
+    "additional": [
+      {
+        "wordId": "APO",
+        "tokens": [{ "t": "L", "v": "A" }, { "t": "L", "v": "P" }, { "t": "L", "v": "O" }],
+        "size": 3,
+        "placements": [["r0c1", "r1c1", "r1c2"]],
+        "hintCellId": "NONEXISTENT"
+      }
+    ]
   }
 }

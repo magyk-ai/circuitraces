@@ -2,7 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { WaywordsPuzzle, RuntimeState, EngineEvent } from '@circuitraces/engine';
 import { init, reduce, selectors } from '@circuitraces/engine';
 import { Grid } from './components/Grid';
+import { WordsList } from './components/WordsList';
 import './App.css';
+
+function formatTime(ms: number): string {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
 
 interface PuzzleMetadata {
   id: string;
@@ -25,6 +33,11 @@ export function App() {
   const [puzzle, setPuzzle] = useState<WaywordsPuzzle | null>(null);
   const [state, setState] = useState<RuntimeState | null>(null);
   const [events, setEvents] = useState<EngineEvent[]>([]);
+
+  // Timer + pause state (UI-only, not engine-driven)
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [showWordsList, setShowWordsList] = useState(false);
 
   // Load puzzle index on mount
   useEffect(() => {
@@ -106,19 +119,29 @@ export function App() {
     setTimeout(() => setEvents([]), 2000);
   }, [puzzle, state]);
 
-  // TICK timer for clue expiration
+  // Timer tick (UI-only)
   useEffect(() => {
-    if (!puzzle || !state || state.status === 'COMPLETED') return;
-
-    const interval = setInterval(() => {
-      const result = reduce(puzzle, state, { type: 'TICK', now: Date.now() });
-      if (result.state !== state) {
-        setState(result.state);
-      }
-    }, 100); // Tick every 100ms
-
+    if (isPaused || !state || state.status === 'COMPLETED') return;
+    const interval = setInterval(() => setElapsedMs(e => e + 100), 100);
     return () => clearInterval(interval);
-  }, [puzzle, state]);
+  }, [isPaused, state?.status]);
+
+  // Auto-pause on tab hidden
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden && state?.status !== 'COMPLETED') {
+        setIsPaused(true);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [state?.status]);
+
+  // Reset timer on puzzle switch
+  useEffect(() => {
+    setElapsedMs(0);
+    setIsPaused(false);
+  }, [selectedPuzzleId]);
 
   if (!puzzleIndex) {
     return (
@@ -139,6 +162,8 @@ export function App() {
   }
 
   const pathCells = selectors.getPathCells(puzzle, state);
+  const additionalCells = selectors.getAdditionalWordCells(puzzle, state);
+  const hintCells = selectors.getHintCells(state);
   const currentPuzzle = puzzleIndex.puzzles.find(p => p.id === selectedPuzzleId);
 
   return (
@@ -155,6 +180,15 @@ export function App() {
           )}
         </div>
         <div className="controls">
+          <div className="timer" data-testid="timer">{formatTime(elapsedMs)}</div>
+          <button
+            onClick={() => setIsPaused(p => !p)}
+            disabled={state.status === 'COMPLETED'}
+            className="pause-button"
+            data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
+          >
+            {isPaused ? '▶️' : '⏸️'}
+          </button>
           <select
             value={selectedPuzzleId}
             onChange={(e) => setSelectedPuzzleId(e.target.value)}
@@ -166,20 +200,44 @@ export function App() {
               </option>
             ))}
           </select>
-          <button onClick={handleHint} disabled={state.status === 'COMPLETED'}>
-            💡 Hint ({state.hintUsedCount})
+          <button onClick={() => setShowWordsList(true)} disabled={state.status === 'COMPLETED'} data-testid="btn-words">
+            📝 Words
+          </button>
+          <button onClick={handleHint} disabled={state.status === 'COMPLETED'} data-testid="btn-hint">
+            💡 Hint ({state.hintUsedFromButton})
           </button>
           <button onClick={handleReset}>Reset</button>
         </div>
       </header>
 
+      {/* Pause overlay */}
+      {isPaused && state.status !== 'COMPLETED' && (
+        <div className="pause-overlay" onClick={() => setIsPaused(false)}>
+          <div className="pause-content">
+            <div className="pause-icon">⏸️</div>
+            <div className="pause-text">Paused</div>
+            <div className="pause-hint">Tap to resume</div>
+          </div>
+        </div>
+      )}
+
       <Grid
         puzzle={puzzle}
         pathCells={pathCells}
-        hintCells={selectors.getHintCells(state)}
-        clueCells={selectors.getClueCells(state)}
+        additionalCells={additionalCells}
+        hintCells={hintCells}
         onSelection={handleSelection}
       />
+
+      {/* Words List Modal */}
+      {showWordsList && (
+        <WordsList
+          puzzle={puzzle}
+          foundPathWords={state.foundPathWords}
+          foundAdditionalWords={state.foundAdditionalWords}
+          onClose={() => setShowWordsList(false)}
+        />
+      )}
 
       {events.length > 0 && (
         <div className="feedback">
@@ -188,8 +246,7 @@ export function App() {
               {e.type === 'WORD_FOUND' && `Found: ${e.wordId} (${e.category})`}
               {e.type === 'INVALID_SELECTION' && 'Invalid selection'}
               {e.type === 'ALREADY_FOUND' && `Already found: ${e.wordId}`}
-              {e.type === 'HINT_APPLIED' && '💡 Hint applied!'}
-              {e.type === 'CLUE_APPLIED' && '🔍 Clue revealed!'}
+              {e.type === 'HINT_APPLIED' && `💡 Hint ${e.source === 'BONUS' ? '(from bonus)' : ''} applied!`}
               {e.type === 'COMPLETED' && '🎉 Completed!'}
             </div>
           ))}
@@ -200,7 +257,7 @@ export function App() {
         <div className="completion">
           <h2>Puzzle Complete!</h2>
           <p>Time: {Math.round((state.completedAt! - state.startedAt) / 1000)}s</p>
-          <p>Hints used: {state.hintUsedCount}</p>
+          <p>Hints: {state.hintUsedFromButton} from button, {state.hintRevealedFromBonus} from bonus words</p>
         </div>
       )}
     </div>

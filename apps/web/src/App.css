@@ -134,8 +134,55 @@ button:disabled {
   color: #ffc107;
 }
 
-.event.CLUE_APPLIED {
-  color: #9c27b0;
+/* v1.1: Timer display */
+.timer {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  background: #2a2a2a;
+  padding: 8px 16px;
+  border-radius: 4px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.pause-button {
+  font-size: 16px;
+  padding: 8px 12px;
+}
+
+/* v1.1: Pause overlay */
+.pause-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+  cursor: pointer;
+}
+
+.pause-content {
+  text-align: center;
+}
+
+.pause-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.pause-text {
+  font-size: 32px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.pause-hint {
+  font-size: 14px;
+  color: #888;
 }
 
 .completion {

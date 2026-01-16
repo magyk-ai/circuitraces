@@ -30,6 +30,10 @@ Circuit Races is a path-based word puzzle game built with an engine-first archit
 
 - **`GITHUB_PAGES_SETUP.md`** - Deployment setup guide
 
+## Non-Negotiable Merge Rules
+
+**Spec-first PRs:** Any PR that changes gameplay mechanics MUST update `spec-v1.0.md` in the same PR (or in an immediately preceding doc PR). No gameplay changes without spec updates.
+
 ## Quick Start
 
 ```bash

@@ -4,8 +4,7 @@
   "config": {
     "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
-    "allowReverseSelection": true,
-    "cluePersistMs": 3000
+    "allowReverseSelection": true
   },
   "grid": {
     "width": 5,
@@ -117,7 +116,7 @@
         ],
         "size": 3,
         "placements": [["r1c1", "r1c2", "r0c2"]],
-        "clueCellId": "r0c1"
+        "hintCellId": "r1c1"
       },
       {
         "wordId": "HUM",
@@ -128,7 +127,7 @@
         ],
         "size": 3,
         "placements": [["r1c0", "r1c2", "r2c0"]],
-        "clueCellId": "r1c1"
+        "hintCellId": "r1c0"
       },
       {
         "wordId": "RIM",
@@ -139,7 +138,7 @@
         ],
         "size": 3,
         "placements": [["r3c0", "r3c1", "r2c0"]],
-        "clueCellId": "r2c1"
+        "hintCellId": "r3c0"
       }
     ]
   }
