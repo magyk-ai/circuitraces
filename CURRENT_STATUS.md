@@ -26,6 +26,11 @@
 - ✅ Tests: All 46 passing (26 engine + 20 generator) + 5 E2E
 - ✅ Build: Successful
 
+#### Hotfix (2026-01-16)
+- **Deployment:** Fixed `daily/index.json` 404s on GitHub Pages (base path resolution)
+- **Playability:** Implemented `ADJACENT` selection model in UI to support snaking paths
+- **Content:** Updated all Week 1 puzzles to use `selectionModel: "ADJACENT"`
+
 ---
 
 ## Previous Changes (PR #5 - 2026-01-16)
