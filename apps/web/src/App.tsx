@@ -98,6 +98,9 @@ export function App() {
   // Load selected puzzle
   useEffect(() => {
     if (!puzzleIndex) return;
+    
+    // Prevent Legacy/Dev puzzle from overwriting Daily/Topic puzzle
+    if (view === 'daily' || (view === 'puzzle' && currentPuzzlePath)) return;
 
     const metadata = puzzleIndex.puzzles.find(p => p.id === selectedPuzzleId);
     if (!metadata) {
