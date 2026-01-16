@@ -6,6 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DAILY_DIR = path.resolve(__dirname, '../../../apps/web/public/daily');
 const args = process.argv.slice(2);
 const failOnError = args.includes('--failOnError');
+const profile = getArgValue('--profile') ?? 'EASY_DAILY_V1';
 
 interface DailyIndex {
   schedule: {
@@ -47,6 +48,20 @@ interface QaError {
   message: string;
 }
 
+type ContentProfileName = 'EASY_DAILY_V1';
+
+interface ContentProfile {
+  name: ContentProfileName;
+  minPathWords: number;
+  maxPathWords: number;
+  requireTopStart: boolean;
+  requireBottomEnd: boolean;
+  requireWordIntersectionConnectivity: boolean;
+  minIntersections: (pathWordCount: number) => number;
+  minCoverage: (width: number, height: number) => number;
+  minRouteLength: (height: number) => number;
+}
+
 async function main() {
   console.log("🔍 Starting Content QA Scan...");
 
@@ -76,7 +91,7 @@ async function main() {
         const content = await fs.readFile(puzzlePath, 'utf-8');
         const puzzle: PuzzleContent = JSON.parse(content);
 
-        const errors = evaluatePuzzle(puzzle);
+        const errors = evaluatePuzzle(puzzle, profile);
         totalErrors += errors.length;
 
         const pathWordCount = puzzle.words.path.length;
@@ -90,7 +105,10 @@ async function main() {
         maxPathLen = Math.max(maxPathLen, pathTotalLen);
 
         const status = errors.length > 0 ? `❌ ${errors.map(e => e.code).join(', ')}` : "✅ OK";
-        console.log(`  - [${topic.padEnd(20)}] Path: ${pathWordCount} words (${pathTotalLen} chars) | Bonus: ${bonusWordCount} | ${status}`);
+        const intersectionCount = getIntersectionCount(puzzle);
+        console.log(
+          `  - [${topic.padEnd(20)}] Path: ${pathWordCount} words (${pathTotalLen} chars) | Bonus: ${bonusWordCount} | Intersections: ${intersectionCount} | ${status}`
+        );
         for (const error of errors) {
           console.log(`      [${error.code}] ${error.message}`);
         }
@@ -117,12 +135,13 @@ async function main() {
   }
 }
 
-function evaluatePuzzle(puzzle: PuzzleContent): QaError[] {
+export function evaluatePuzzle(puzzle: PuzzleContent, profileName: string): QaError[] {
   const errors: QaError[] = [];
+  const profileConfig = getProfile(profileName);
   const cellById = new Map(puzzle.grid.cells.map(cell => [cell.id, cell]));
   const pathCells = new Set<string>();
-  for (const word of puzzle.words.path) {
-    const placement = word.placements?.[0] || [];
+  const pathPlacements = puzzle.words.path.map(word => word.placements?.[0] ?? []);
+  for (const placement of pathPlacements) {
     placement.forEach(cellId => pathCells.add(cellId));
   }
 
@@ -130,25 +149,25 @@ function evaluatePuzzle(puzzle: PuzzleContent): QaError[] {
   const endCell = cellById.get(puzzle.grid.end.adjacentCellId);
   if (!startCell) {
     errors.push({ code: 'ERR_QA_START_MISSING', message: `Start cell ${puzzle.grid.start.adjacentCellId} not found` });
-  } else if (startCell.y !== 0) {
+  } else if (profileConfig.requireTopStart && startCell.y !== 0) {
     errors.push({ code: 'ERR_QA_START_NOT_TOP_ROW', message: `Start tile is at y=${startCell.y}, expected 0` });
   }
 
   if (!endCell) {
     errors.push({ code: 'ERR_QA_END_MISSING', message: `End cell ${puzzle.grid.end.adjacentCellId} not found` });
-  } else if (endCell.y !== puzzle.grid.height - 1) {
+  } else if (profileConfig.requireBottomEnd && endCell.y !== puzzle.grid.height - 1) {
     errors.push({ code: 'ERR_QA_END_NOT_BOTTOM_ROW', message: `End tile is at y=${endCell.y}, expected ${puzzle.grid.height - 1}` });
   }
 
   const pathWordCount = puzzle.words.path.length;
-  if (pathWordCount < 4) {
-    errors.push({ code: 'ERR_QA_TOO_FEW_PATH_WORDS', message: `Only ${pathWordCount} path words (min 4)` });
+  if (pathWordCount < profileConfig.minPathWords) {
+    errors.push({ code: 'ERR_QA_TOO_FEW_PATH_WORDS', message: `Only ${pathWordCount} path words (min ${profileConfig.minPathWords})` });
   }
-  if (pathWordCount > 6) {
-    errors.push({ code: 'ERR_QA_TOO_MANY_PATH_WORDS', message: `Too many path words (${pathWordCount} > 6)` });
+  if (pathWordCount > profileConfig.maxPathWords) {
+    errors.push({ code: 'ERR_QA_TOO_MANY_PATH_WORDS', message: `Too many path words (${pathWordCount} > ${profileConfig.maxPathWords})` });
   }
 
-  const coverageThreshold = getCoverageThreshold(puzzle.grid.width, puzzle.grid.height);
+  const coverageThreshold = profileConfig.minCoverage(puzzle.grid.width, puzzle.grid.height);
   if (pathCells.size < coverageThreshold) {
     errors.push({
       code: 'ERR_QA_PATH_COVERAGE_TOO_LOW',
@@ -158,11 +177,35 @@ function evaluatePuzzle(puzzle: PuzzleContent): QaError[] {
 
   if (startCell && endCell) {
     const routeLength = shortestPathLength(puzzle.grid.cells, startCell.id, endCell.id, pathCells);
-    if (routeLength === null || routeLength < puzzle.grid.height - 1) {
+    const minRouteLength = profileConfig.minRouteLength(puzzle.grid.height);
+    if (routeLength === null || routeLength < minRouteLength) {
       errors.push({
         code: 'ERR_QA_ROUTE_TOO_SHORT',
-        message: `Route length ${routeLength ?? 'null'} shorter than ${puzzle.grid.height - 1}`
+        message: `Route length ${routeLength ?? 'null'} shorter than ${minRouteLength}`
       });
+    }
+  }
+
+  const intersectionCount = getIntersectionCount(puzzle);
+  const minIntersections = profileConfig.minIntersections(pathWordCount);
+  if (intersectionCount < minIntersections) {
+    errors.push({
+      code: 'ERR_QA_PATH_INTERSECTIONS_TOO_LOW',
+      message: `${intersectionCount} intersections (< ${minIntersections} required)`
+    });
+  }
+
+  if (profileConfig.requireWordIntersectionConnectivity && startCell && endCell) {
+    const wordConnectivity = buildWordIntersectionGraph(pathPlacements);
+    const startIndex = pathPlacements.findIndex(p => p.includes(startCell.id));
+    const endIndex = pathPlacements.findIndex(p => p.includes(endCell.id));
+    if (startIndex >= 0 && endIndex >= 0) {
+      if (!isWordGraphConnected(wordConnectivity, startIndex, endIndex)) {
+        errors.push({
+          code: 'ERR_QA_TOUCH_ONLY_CONNECTION',
+          message: `Path word graph is not connected by intersections from START to END`
+        });
+      }
     }
   }
 
@@ -212,6 +255,80 @@ function getCoverageThreshold(width: number, height: number): number {
   if (width === 6 && height === 6) return 14;
   if (width === 7 && height === 7) return 18;
   return Math.max(12, Math.floor((width * height) / 4));
+}
+
+function getProfile(profileName: string): ContentProfile {
+  if (profileName !== 'EASY_DAILY_V1') {
+    throw new Error(`Unknown content QA profile: ${profileName}`);
+  }
+  return {
+    name: 'EASY_DAILY_V1',
+    minPathWords: 4,
+    maxPathWords: 6,
+    requireTopStart: true,
+    requireBottomEnd: true,
+    requireWordIntersectionConnectivity: true,
+    minIntersections: (pathWordCount) => Math.max(pathWordCount - 1, 0),
+    minCoverage: getCoverageThreshold,
+    minRouteLength: (height) => height - 1,
+  };
+}
+
+function getIntersectionCount(puzzle: PuzzleContent): number {
+  const counts = new Map<string, number>();
+  for (const word of puzzle.words.path) {
+    const placement = word.placements?.[0] ?? [];
+    for (const cellId of placement) {
+      counts.set(cellId, (counts.get(cellId) ?? 0) + 1);
+    }
+  }
+  let intersectionCount = 0;
+  for (const count of counts.values()) {
+    if (count >= 2) intersectionCount += 1;
+  }
+  return intersectionCount;
+}
+
+function buildWordIntersectionGraph(pathPlacements: string[][]): boolean[][] {
+  const size = pathPlacements.length;
+  const graph: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+  for (let i = 0; i < size; i++) {
+    graph[i][i] = true;
+    const setA = new Set(pathPlacements[i]);
+    for (let j = i + 1; j < size; j++) {
+      const overlap = pathPlacements[j].some(cellId => setA.has(cellId));
+      if (overlap) {
+        graph[i][j] = true;
+        graph[j][i] = true;
+      }
+    }
+  }
+  return graph;
+}
+
+function isWordGraphConnected(graph: boolean[][], startIndex: number, endIndex: number): boolean {
+  const visited = new Set<number>();
+  const queue = [startIndex];
+  visited.add(startIndex);
+
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    if (current === endIndex) return true;
+    for (let i = 0; i < graph.length; i++) {
+      if (!graph[current][i]) continue;
+      if (visited.has(i)) continue;
+      visited.add(i);
+      queue.push(i);
+    }
+  }
+
+  return false;
+}
+
+function getArgValue(flag: string): string | undefined {
+  const index = args.indexOf(flag);
+  if (index === -1) return undefined;
+  return args[index + 1];
 }
 
 main().catch(err => {

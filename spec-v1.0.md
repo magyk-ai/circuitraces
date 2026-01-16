@@ -760,6 +760,9 @@ These rules complement the auditor and give Easy Dailies their vertical “START
 - Unique path coverage must be ≥ 14 cells on 6×6, ≥ 18 on 7×7 (fallback formula `max(12, floor(width * height / 4))` for other sizes).
 - BFS shortest path from START to END through path cells must be ≥ `height - 1`.
 - First path word must include START; final path word must end at END.
+- Every path word after the first must intersect the existing path set by **shared cellId** (adjacency-only is invalid).
+- PATH↔PATH intersections must satisfy: `intersectionCount >= pathWordCount - 1`.
+- The word-intersection graph must be connected from the START word to the END word (reject “touch-only” connectivity).
 
 **Selection / readability (MUST):**
 - `selectionModel = 'RAY_4DIR'`.
@@ -770,7 +773,7 @@ These rules complement the auditor and give Easy Dailies their vertical “START
 - 1–2 bonus words per Easy Daily.
 - Each bonus reveals a `hintCellId` that intersects a path placement.
 
-**Enforcement:** `packages/generator/src/content-qa.ts` analyzes every generated daily and emits `ERR_QA_START_NOT_TOP_ROW`, `ERR_QA_END_NOT_BOTTOM_ROW`, `ERR_QA_TOO_FEW_PATH_WORDS`, `ERR_QA_TOO_MANY_PATH_WORDS`, `ERR_QA_PATH_COVERAGE_TOO_LOW`, `ERR_QA_ROUTE_TOO_SHORT`, `ERR_QA_START_MISSING`, or `ERR_QA_END_MISSING` when these conditions fail. CI should run `npm run content:qa -- --failOnError` after regeneration so these content gates block publishing invalid dailies.
+**Enforcement:** `packages/generator/src/content-qa.ts` analyzes every generated daily and emits `ERR_QA_START_NOT_TOP_ROW`, `ERR_QA_END_NOT_BOTTOM_ROW`, `ERR_QA_TOO_FEW_PATH_WORDS`, `ERR_QA_TOO_MANY_PATH_WORDS`, `ERR_QA_PATH_COVERAGE_TOO_LOW`, `ERR_QA_ROUTE_TOO_SHORT`, `ERR_QA_PATH_INTERSECTIONS_TOO_LOW`, `ERR_QA_TOUCH_ONLY_CONNECTION`, `ERR_QA_START_MISSING`, or `ERR_QA_END_MISSING` when these conditions fail. CI should run `npm run content:qa -- --profile EASY_DAILY_V1 --failOnError` after regeneration so these content gates block publishing invalid dailies.
 
 ---
 
