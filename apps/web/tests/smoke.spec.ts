@@ -80,6 +80,56 @@ test.describe('Circuit Races - Smoke Tests', () => {
     await expect(pathCells).toHaveCount(5);
   });
 
+  test('start marker is pass-through so START tile drag works', async ({ page }) => {
+    await selectMediumPuzzle(page);
+
+    const startMarker = page.locator('[data-testid="start-marker"]');
+    await expect(startMarker).toBeVisible();
+    const pointerEvents = await startMarker.evaluate(
+      (el) => getComputedStyle(el).pointerEvents
+    );
+    expect(pointerEvents).toBe('none');
+
+    await dragSelect(
+      page,
+      '[data-testid="grid"]',
+      6,
+      6,
+      [
+        { row: 0, col: 0 },
+        { row: 0, col: 1 },
+        { row: 0, col: 2 },
+        { row: 0, col: 3 },
+        { row: 0, col: 4 }
+      ]
+    );
+
+    await page.waitForTimeout(300);
+    const pathCells = page.locator('.cell.path');
+    await expect(pathCells).toHaveCount(5);
+  });
+
+  test('reverse drag from END tile still finds a path word', async ({ page }) => {
+    await selectMediumPuzzle(page);
+
+    await dragSelect(
+      page,
+      '[data-testid="grid"]',
+      6,
+      6,
+      [
+        { row: 5, col: 3 },
+        { row: 5, col: 2 },
+        { row: 5, col: 1 },
+        { row: 5, col: 0 }
+      ]
+    );
+
+    await page.waitForTimeout(300);
+    const pathCells = page.locator('.cell.path');
+    await expect(pathCells).toHaveCount(4);
+  });
+
   /**
    * Test 2: Drag-select BONUS word → gray tiles + yellow hint
    */

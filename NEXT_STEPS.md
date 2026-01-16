@@ -1,9 +1,15 @@
 # Circuit Races - Next Steps
 
-**Last Updated:** 2026-01-16
-**Status:** PR #6 (Parallel Dailies & Content) Complete ✅, Ready for Beta Launch 🚀
+**Last Updated:** 2026-01-17
+**Status:** PR #7 (Start/End clarity + spec lock) Complete ✅, Release candidate ready 🚀
 
 ## Completed PRs
+
+### PR #7: Start/End clarity & spec lock ✅
+- Added explicit “Connect START tile → END tile” microcopy + non-blocking START/END markers that ring the actual `start.adjacentCellId` / `end.adjacentCellId`.
+- Playwright regression tests now drag from the START tile and from the END tile to catch overlay/pointer regressions.
+- Spec + docs now describe the START/END semantics, FORWARD_2DIR placement policy, and the four new auditor error codes.
+- The generator package exposes `npm run content:qa` so QA metrics can be rerun after each batch generation.
 
 ### PR #1: Puzzle Auditor ✅
 - Created `packages/generator/src/auditor.ts`
@@ -65,18 +71,18 @@
 
 ## Next Up: Release Candidate 1 (Beta)
 
-**Goal:** Deploy to production and verify live behavior.
+**Goal:** Ship the Start/End clarity + generator hygiene round and verify content + docs.
 
 ### Scope
-1. **Deployment Pipeline:** Vercel/Netlify configuration.
-2. **Smoke Testing:** Verify deep links in production environment.
-3. **Analytics:** Basic event tracking (optional).
-4. **Error Monitoring:** Sentry/LogRocket (optional).
+1. **Content regen:** rerun the batch generator for Week 1 (all topics) with the forward-only rules, then rerun `npm run audit` across `apps/web/public/daily/*.json` and any topic catalog puzzles (skip index files).
+2. **QA metrics:** run `npm run content:qa` after regeneration to confirm path/bonus counts stay within the easy-puzzle target (3–4 path words, 1 bonus).
+3. **Manual playtest:** follow the fidelity script (start/end visibility, disconnected words still IN_PROGRESS, hint/pause flow) before promoting to production.
+4. **Deployment checks:** smoke-test the production URL and daily/topic navigation when the new content is live.
 
 ### Validation
-- [ ] Production URL loads
-- [ ] All 7 topics playable
-- [ ] Share links work correctly
+- [ ] Daily & topic puzzles audit clean (`npm run audit` loops)
+- [ ] `npm run content:qa` outputs within expected ranges
+- [ ] Manual start-to-end playtest passes (START visible, connectivity required)
 
 ---
 

@@ -1,7 +1,25 @@
 # Circuit Races - Current Status
 
-**Last Updated:** 2026-01-16
-**Status:** Easy Puzzle Generator Fix Complete ✅
+**Last Updated:** 2026-01-17
+**Status:** Fidelity + spec lock polish ✅
+
+## Recent Changes (2026-01-17)
+
+### Start/End clarity + spec lock
+**Status:** ✅ Deployed and validated
+
+#### Key facts
+- UI now rings the exact `start.adjacentCellId` / `end.adjacentCellId`, adds the microcopy “Connect START tile → END tile”, and sets the markers to `pointer-events: none` so the tiles remain selectable.
+- Added Playwright smoke tests that drag from the START tile (via the pass-through marker) and drag from the END tile in reverse, preventing regressions where overlays block input.
+- Spec + status docs outline the START/END semantics, highlight the FORWARD_2DIR placement policy, and catalogue the new auditor error codes (`ERR_PLACEMENT_NOT_CONTIGUOUS`, `ERR_PLACEMENT_NOT_RAY`, `ERR_PLACEMENT_REVERSED`, `ERR_PLACEMENT_DIAGONAL`).
+- Generator tooling gained a `content:qa` script (`npm run content:qa`) that runs `tsc` + `/dist/content-qa.js` for quick quality metrics.
+
+#### Validation
+- ✅ `npm run lint`
+- ✅ `npm run test:e2e` (Playwright smoke suite)
+- ✅ `npm run content:qa` (49 puzzles, 3–4 path words / 1 bonus each, path lengths 11−21 chars)
+
+---
 
 ## Recent Changes (2026-01-16)
 

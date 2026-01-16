@@ -171,6 +171,8 @@ START and END are *markers* adjacent to specific cells:
 - `start.adjacentCellId`
 - `end.adjacentCellId`
 
+**MUST:** UI renders those adjacent cells clearly (e.g., with a ring highlight + external markers) and updates the objective microcopy to read *“Connect START tile → END tile”*. Any overlay targeting those cells (markers, rings, text) MUST set `pointer-events: none` so drag gestures land on the underlying tile.
+
 ### 5.3 Word placement model (authoritative)
 To keep runtime fast and deterministic, puzzle JSON includes explicit placements:
 - Each word has one or more `placements`, each a list of cellIds.
@@ -350,6 +352,7 @@ This section defines the authoritative game mechanics. These are acceptance crit
 **B) Win condition:**
 - **MUST:** You win ONLY when START→END are connected using found PATH tiles (green).
 - **MUST:** Connectivity uses `ORTHO_4` (up/down/left/right neighbors only).
+- **MUST:** The UI must keep the START and END tiles visible (marker + ring) and never intercept drag gestures on those tiles; microcopy should reinforce “Connect START tile → END tile”.
 
 **C) Path words:**
 - **MUST:** When found, their tiles become green and stay green.
@@ -671,6 +674,10 @@ These are the "you can't ship a puzzle unless these hold" rules. The auditor (`n
 | hintCellId intersection | ERROR | Must be in BOTH bonus word AND path word |
 | Placement uniqueness | ERROR | No duplicate placement keys |
 | Grid bounds | WARNING | All placements within grid bounds |
+| Placement contiguity | ERROR | `ERR_PLACEMENT_NOT_CONTIGUOUS`: each consecutive pair of cells in a placement must be orthogonally adjacent (Manhattan distance = 1). |
+| Placement ray | ERROR | `ERR_PLACEMENT_NOT_RAY`: placement must follow a straight ray (all steps share the same dx/dy), no bends allowed. |
+| Placement forward | ERROR | `ERR_PLACEMENT_REVERSED`: horizontal words must flow left-to-right and vertical words top-to-bottom; reversed rays trigger this error. |
+| Placement orthogonality | ERROR | `ERR_PLACEMENT_DIAGONAL`: ensures placements do not move diagonally (dx and dy cannot both be non-zero). |
 
 ### 10.6.1 Solvability invariants — MUST
 
@@ -727,6 +734,16 @@ ERROR: Word 'EXAMPLE' has 2 placements, expected 1
 **SHOULD:** Validator warns when deprecated fields are used:
 - `clueCellId` → warn: "Use hintCellId instead (clueCellId deprecated, removal in v1.2)"
 - `cluePersistMs` in config → warn: "cluePersistMs deprecated, hints now persist indefinitely"
+
+### 10.6.6 Forward-only geometry (easy puzzles) — MUST
+
+The Week 1 dailies and other "easy" puzzles use `selectionModel: 'RAY_4DIR'` and enforce a **FORWARD_2DIR** placement policy:
+1. **Orthogonal contiguity:** each step must move to a neighbor with Manhattan distance = 1 (`ERR_PLACEMENT_NOT_CONTIGUOUS`).
+2. **Straight ray:** all steps within a placement must share the same direction vector (`ERR_PLACEMENT_NOT_RAY`).
+3. **No diagonals:** horizontal (`dy=0`) or vertical (`dx=0`) only; any diagonal movement triggers `ERR_PLACEMENT_DIAGONAL`.
+4. **Forward direction:** horizontal rays must progress left-to-right (`dx=+1`), vertical rays top-to-bottom (`dy=+1`); reverse movement triggers `ERR_PLACEMENT_REVERSED`.
+
+Auditor coverage: the four geometry error codes (`ERR_PLACEMENT_NOT_CONTIGUOUS`, `ERR_PLACEMENT_NOT_RAY`, `ERR_PLACEMENT_DIAGONAL`, `ERR_PLACEMENT_REVERSED`) reject placements that break this policy before puzzles reach production. Even though the content is forward-facing, `allowReverseSelection: true` keeps the UI flexible so players can drag from either end of a word.
 
 ---
 
@@ -886,4 +903,3 @@ This section documents breaking changes and migration steps for puzzle authors a
 - TICK action removed (timer is UI-only)
 - Single placement per word enforced
 - Auditor tool added (`npm run audit`)
-

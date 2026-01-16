@@ -83,7 +83,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
     <div className="grid-container" style={gridContainerStyle}>
       {/* Objective microcopy */}
       <div className="objective-text" data-testid="objective">
-        Connect <span className="start-label">START</span> → <span className="end-label">END</span>
+        Connect <span className="start-label">START tile</span> → <span className="end-label">END tile</span>
       </div>
 
       {/* Start marker */}
