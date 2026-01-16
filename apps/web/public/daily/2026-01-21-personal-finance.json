@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-21-personal-finance",
   "theme": "Personal Finance Daily",
   "config": {
-    "selectionModel": "ADJACENT",
+    "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
@@ -15,211 +15,186 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "F"
+        "value": "R"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "E"
+        "value": "V"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "Y"
+        "value": "F"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "I"
+        "value": "P"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "A"
+        "value": "K"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "K"
+        "value": "D"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "K"
+        "value": "L"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "U"
+        "value": "E"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "I"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "M"
+        "value": "Y"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "D"
+        "value": "E"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "D"
+        "value": "O"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "B"
+        "value": "W"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "L"
+        "value": "W"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "F"
+        "value": "Q"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "X"
+        "value": "B"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "A"
+        "value": "W"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "A"
+        "value": "Q"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "D"
+        "value": "R"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "E"
+        "value": "R"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "Y"
+        "value": "T"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "T"
+        "value": "A"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "B"
+        "value": "X"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "B"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "S"
+        "value": "L"
       }
     ],
     "start": {
-      "adjacentCellId": "r2c2"
+      "adjacentCellId": "r1c4"
     },
     "end": {
-      "adjacentCellId": "r3c0"
+      "adjacentCellId": "r4c2"
     }
   },
   "words": {
     "path": [
-      {
-        "wordId": "BUY",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "B"
-          },
-          {
-            "t": "L",
-            "v": "U"
-          },
-          {
-            "t": "L",
-            "v": "Y"
-          }
-        ],
-        "size": 3,
-        "placements": [
-          [
-            "r2c2",
-            "r1c2",
-            "r0c2"
-          ]
-        ]
-      },
       {
         "wordId": "YIELD",
         "tokens": [
@@ -247,11 +222,11 @@
         "size": 5,
         "placements": [
           [
-            "r0c2",
-            "r0c3",
+            "r1c4",
             "r1c3",
-            "r2c3",
-            "r3c3"
+            "r1c2",
+            "r1c1",
+            "r1c0"
           ]
         ]
       },
@@ -278,10 +253,10 @@
         "size": 4,
         "placements": [
           [
-            "r3c3",
-            "r4c3",
-            "r4c2",
-            "r4c1"
+            "r1c0",
+            "r2c0",
+            "r3c0",
+            "r4c0"
           ]
         ]
       },
@@ -304,39 +279,39 @@
         "size": 3,
         "placements": [
           [
+            "r4c0",
             "r4c1",
-            "r3c1",
-            "r3c0"
+            "r4c2"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "ADD",
+        "wordId": "LOW",
         "tokens": [
           {
             "t": "L",
-            "v": "A"
+            "v": "L"
           },
           {
             "t": "L",
-            "v": "D"
+            "v": "O"
           },
           {
             "t": "L",
-            "v": "D"
+            "v": "W"
           }
         ],
         "size": 3,
         "placements": [
           [
-            "r3c1",
+            "r1c1",
             "r2c1",
-            "r2c0"
+            "r3c1"
           ]
         ],
-        "hintCellId": "r3c1"
+        "hintCellId": "r1c1"
       }
     ]
   }

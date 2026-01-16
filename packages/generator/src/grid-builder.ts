@@ -43,7 +43,11 @@ export class GridBuilder {
   }
 
   // Return ALL valid paths for a word starting at startCellId (or anywhere if null)
-  findAllPathOptions(word: string, startCellId?: string): string[][] {
+  findAllPathOptions(word: string, startCellId?: string, geometry: 'RAY' | 'SNAKE' = 'SNAKE'): string[][] {
+    if (geometry === 'RAY') {
+      return this.findAllRayPaths(word, startCellId);
+    }
+
     const candidates = startCellId 
       ? [this.getCellById(startCellId)!] 
       : this.getEmptyCells().sort(() => Math.random() - 0.5);
@@ -52,7 +56,6 @@ export class GridBuilder {
 
     for (const startCell of candidates) {
       // We always consume the first char at startCell.
-      // So we search for paths for the REST of the word (slice 1).
       const startIndex = 1;
       
       // If overlap, check consistency
@@ -64,11 +67,44 @@ export class GridBuilder {
       const paths = this.findAllPathsDFS(startCell, word.slice(startIndex), [startCell.id]);
       validPaths.push(...paths);
       
-      // Limit to 5000 options to prevent explosion
       if (validPaths.length > 5000) break;
     }
     
-    // Shuffle options for randomness
+    return validPaths.sort(() => Math.random() - 0.5);
+  }
+
+  private findAllRayPaths(word: string, startCellId?: string): string[][] {
+    const candidates = startCellId 
+      ? [this.getCellById(startCellId)!] 
+      : this.getEmptyCells().sort(() => Math.random() - 0.5);
+
+    const validPaths: string[][] = [];
+    // ORTHO RAYS ONLY (Horizontal/Vertical) to satisfy ORTHO_4 connectivity
+    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]]; 
+
+    for (const start of candidates) {
+      // Check start char overlap
+      if (start.value !== '' && start.value !== word[0]) continue;
+
+      // Try each direction
+      for (const [dx, dy] of dirs) {
+        let path: string[] = [start.id];
+        let valid = true;
+        
+        for (let i = 1; i < word.length; i++) {
+          const cx = start.x + (i * dx);
+          const cy = start.y + (i * dy);
+          const cell = this.getCell(cx, cy);
+          
+          if (!cell) { valid = false; break; } // Out of bounds
+          if (cell.value !== '' && cell.value !== word[i]) { valid = false; break; } // Overlap mismatch
+          
+          path.push(cell.id);
+        }
+
+        if (valid) validPaths.push(path);
+      }
+    }
     return validPaths.sort(() => Math.random() - 0.5);
   }
 
@@ -124,11 +160,8 @@ export class GridBuilder {
   }
 
   // Place bonus word (must intersect ONE path cell)
-  tryPlaceBonusWord(word: string, pathCellIds: Set<string>): { placement: string[], hintCellId: string } | null {
+  tryPlaceBonusWord(word: string, pathCellIds: Set<string>, geometry: 'RAY' | 'SNAKE' = 'SNAKE'): { placement: string[], hintCellId: string } | null {
     // Try every possible intersection point
-    // Pick a char in word, match with a char on grid
-    
-    // Indices of word: 0..len
     const indices = Array.from({length: word.length}, (_, i) => i).sort(() => Math.random() - 0.5);
 
     for (const charIdx of indices) {
@@ -140,40 +173,63 @@ export class GridBuilder {
         .sort(() => Math.random() - 0.5);
 
       for (const target of targetCells) {
-        // Try to verify word fits around this target
-        // We need to place:
-        // word[0...charIdx-1] BEFORE target
-        // word[charIdx+1...end] AFTER target
+        // If RAY, we must fit the WHOLE word as a Ray passing through target at charIdx.
+        // We can just call findAllRayPaths(word, undefined) BUT filter for those passing through target at charIdx?
+        // Or specific ray logic for bonus.
         
-        // This requires a "straight line" usually for bonus? 
-        // Or can bonus be snaked too? 
-        // "Easy" bonus usually straight or simple L?
-        // Let's support snake for flexibility, but prefer straight?
-        // Let's use same findPath logic but constrained to NOT use other Path cells (except intersection)
-        
-        const beforeStr = word.slice(0, charIdx).split('').reverse().join(''); // Reverse to walk back
-        const afterStr = word.slice(charIdx + 1);
+        if (geometry === 'RAY') {
+          // ORTHO RAYS ONLY
+          const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+          for (const [dx, dy] of dirs) {
+             // Calculate start pos if we pass through 'target' at 'charIdx'
+             // start = target - charIdx * dir
+             const startX = target.x - (charIdx * dx);
+             const startY = target.y - (charIdx * dy);
+             
+             // Verify full word placement
+             let path: string[] = [];
+             let valid = true;
+             
+             for (let i = 0; i < word.length; i++) {
+               const cx = startX + (i * dx);
+               const cy = startY + (i * dy);
+               const cell = this.getCell(cx, cy);
+               
+               if (!cell) { valid = false; break; }
+               // Check overlap:
+               // If cell is target, it matches (we checked).
+               // If cell is NOT target, it MUST NOT be in pathCellIds (can't double distinct intersection?)
+               // User said "Keep intersections rare except for bonus".
+               // Bonus MUST intersect path. But typically at one point?
+               // If it overlaps multiple, is that bad?
+               // Let's allow overlap if chars match.
+               
+               if (cell.value !== '' && cell.value !== word[i]) { valid = false; break; }
+               
+               path.push(cell.id);
+             }
 
-        // This is complex because we need TWO paths radiating from standard.
-        // Simplified: Just use findPath from target? No, target is middle.
-        
-        // Let's try to fit 'after' first
-        const afterPath = this.findFreePath(target, afterStr, [target.id], pathCellIds);
-        if (!afterPath) continue;
+             if (valid) {
+                this.commitPath(word, path);
+                return { placement: path, hintCellId: target.id };
+             }
+          }
+        } else {
+           // SNAKE Logic (Old)
+           const beforeStr = word.slice(0, charIdx).split('').reverse().join(''); // Reverse to walk back
+           const afterStr = word.slice(charIdx + 1);
 
-        // Then fit 'before'
-        // Note: visited includes target + after path
-        const visitedSoFar = new Set([...afterPath]); 
-        const beforePath = this.findFreePath(target, beforeStr, [target.id], pathCellIds, visitedSoFar);
+           const afterPath = this.findFreePath(target, afterStr, [target.id], pathCellIds);
+           if (!afterPath) continue;
 
-        if (beforePath) {
-          // Success!
-          // Reconstruct full path: reverse(before) + target + after
-          // beforePath includes target as first element.
-          const fullPath = [...beforePath.slice(1).reverse(), target.id, ...afterPath.slice(1)];
-          
-          this.commitPath(word, fullPath); // Commit
-          return { placement: fullPath, hintCellId: target.id };
+           const visitedSoFar = new Set([...afterPath]); 
+           const beforePath = this.findFreePath(target, beforeStr, [target.id], pathCellIds, visitedSoFar);
+
+           if (beforePath) {
+             const fullPath = [...beforePath.slice(1).reverse(), target.id, ...afterPath.slice(1)];
+             this.commitPath(word, fullPath); 
+             return { placement: fullPath, hintCellId: target.id };
+           }
         }
       }
     }

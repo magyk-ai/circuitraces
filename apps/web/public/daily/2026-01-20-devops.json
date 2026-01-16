@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-20-devops",
   "theme": "DevOps Daily",
   "config": {
-    "selectionModel": "ADJACENT",
+    "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
@@ -15,84 +15,84 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "W"
+        "value": "D"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "A"
+        "value": "O"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "R"
+        "value": "P"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "G"
+        "value": "E"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "W"
+        "value": "R"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "S"
+        "value": "H"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "C"
+        "value": "H"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "T"
+        "value": "D"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "P"
+        "value": "O"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "M"
+        "value": "O"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "R"
+        "value": "F"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "E"
+        "value": "Q"
       },
       {
         "id": "r2c2",
@@ -113,120 +113,115 @@
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "H"
+        "value": "R"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "R"
+        "value": "F"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "O"
+        "value": "S"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "P"
+        "value": "L"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "Q"
+        "value": "C"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "I"
+        "value": "R"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "O"
+        "value": "J"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "R"
+        "value": "C"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "O"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "T"
+        "value": "D"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "V"
+        "value": "E"
       }
     ],
     "start": {
-      "adjacentCellId": "r1c2"
+      "adjacentCellId": "r4c1"
     },
     "end": {
-      "adjacentCellId": "r3c1"
+      "adjacentCellId": "r0c1"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "TRACE",
+        "wordId": "CODE",
         "tokens": [
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "R"
-          },
-          {
-            "t": "L",
-            "v": "A"
-          },
           {
             "t": "L",
             "v": "C"
           },
           {
             "t": "L",
+            "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "D"
+          },
+          {
+            "t": "L",
             "v": "E"
           }
         ],
-        "size": 5,
+        "size": 4,
         "placements": [
           [
-            "r1c2",
-            "r0c2",
-            "r0c1",
-            "r1c1",
-            "r2c1"
+            "r4c1",
+            "r4c2",
+            "r4c3",
+            "r4c4"
           ]
         ]
       },
@@ -257,11 +252,11 @@
         "size": 5,
         "placements": [
           [
-            "r2c1",
-            "r2c0",
-            "r3c0",
-            "r4c0",
-            "r4c1"
+            "r4c4",
+            "r3c4",
+            "r2c4",
+            "r1c4",
+            "r0c4"
           ]
         ]
       },
@@ -288,40 +283,40 @@
         "size": 4,
         "placements": [
           [
-            "r4c1",
-            "r4c2",
-            "r3c2",
-            "r3c1"
+            "r0c4",
+            "r0c3",
+            "r0c2",
+            "r0c1"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "AWS",
+        "wordId": "UDP",
         "tokens": [
           {
             "t": "L",
-            "v": "A"
+            "v": "U"
           },
           {
             "t": "L",
-            "v": "W"
+            "v": "D"
           },
           {
             "t": "L",
-            "v": "S"
+            "v": "P"
           }
         ],
         "size": 3,
         "placements": [
           [
-            "r0c1",
-            "r0c0",
-            "r1c0"
+            "r2c2",
+            "r1c2",
+            "r0c2"
           ]
         ],
-        "hintCellId": "r0c1"
+        "hintCellId": "r0c2"
       }
     ]
   }

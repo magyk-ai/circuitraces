@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-21-finance-accounting",
   "theme": "Finance Daily",
   "config": {
-    "selectionModel": "ADJACENT",
+    "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
@@ -15,7 +15,7 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "T"
+        "value": "O"
       },
       {
         "id": "r0c1",
@@ -29,84 +29,84 @@
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "B"
+        "value": "T"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "E"
+        "value": "A"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "P"
+        "value": "R"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "D"
+        "value": "Y"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "S"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "Q"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "W"
+        "value": "Y"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "G"
+        "value": "A"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "A"
+        "value": "S"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "T"
+        "value": "N"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "H"
+        "value": "M"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "P"
+        "value": "E"
       },
       {
         "id": "r2c4",
@@ -120,84 +120,92 @@
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "X"
+        "value": "E"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "S"
+        "value": "N"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "S"
+        "value": "T"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "T"
+        "value": "R"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "R"
+        "value": "Y"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "A"
+        "value": "C"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "O"
+        "value": "S"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "L"
+        "value": "E"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "A"
+        "value": "B"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "I"
+        "value": "R"
       }
     ],
     "start": {
-      "adjacentCellId": "r3c3"
+      "adjacentCellId": "r3c0"
     },
     "end": {
-      "adjacentCellId": "r3c0"
+      "adjacentCellId": "r0c0"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "TRIAL",
+        "wordId": "ENTRY",
         "tokens": [
+          {
+            "t": "L",
+            "v": "E"
+          },
+          {
+            "t": "L",
+            "v": "N"
+          },
           {
             "t": "L",
             "v": "T"
@@ -208,7 +216,30 @@
           },
           {
             "t": "L",
-            "v": "I"
+            "v": "Y"
+          }
+        ],
+        "size": 5,
+        "placements": [
+          [
+            "r3c0",
+            "r3c1",
+            "r3c2",
+            "r3c3",
+            "r3c4"
+          ]
+        ]
+      },
+      {
+        "wordId": "YEAR",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "Y"
+          },
+          {
+            "t": "L",
+            "v": "E"
           },
           {
             "t": "L",
@@ -216,91 +247,25 @@
           },
           {
             "t": "L",
-            "v": "L"
-          }
-        ],
-        "size": 5,
-        "placements": [
-          [
-            "r3c3",
-            "r3c4",
-            "r4c4",
-            "r4c3",
-            "r4c2"
-          ]
-        ]
-      },
-      {
-        "wordId": "LOSS",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "L"
-          },
-          {
-            "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "S"
-          },
-          {
-            "t": "L",
-            "v": "S"
+            "v": "R"
           }
         ],
         "size": 4,
         "placements": [
           [
-            "r4c2",
-            "r4c1",
-            "r3c1",
-            "r3c2"
+            "r3c4",
+            "r2c4",
+            "r1c4",
+            "r0c4"
           ]
         ]
       },
       {
-        "wordId": "SHEET",
+        "wordId": "RATIO",
         "tokens": [
           {
             "t": "L",
-            "v": "S"
-          },
-          {
-            "t": "L",
-            "v": "H"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          }
-        ],
-        "size": 5,
-        "placements": [
-          [
-            "r3c2",
-            "r2c2",
-            "r1c2",
-            "r1c1",
-            "r2c1"
-          ]
-        ]
-      },
-      {
-        "wordId": "TAX",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "T"
+            "v": "R"
           },
           {
             "t": "L",
@@ -308,60 +273,55 @@
           },
           {
             "t": "L",
-            "v": "X"
+            "v": "T"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "O"
           }
         ],
-        "size": 3,
+        "size": 5,
         "placements": [
           [
-            "r2c1",
-            "r2c0",
-            "r3c0"
+            "r0c4",
+            "r0c3",
+            "r0c2",
+            "r0c1",
+            "r0c0"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "EBITDA",
+        "wordId": "SEC",
         "tokens": [
+          {
+            "t": "L",
+            "v": "S"
+          },
           {
             "t": "L",
             "v": "E"
           },
           {
             "t": "L",
-            "v": "B"
-          },
-          {
-            "t": "L",
-            "v": "I"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "D"
-          },
-          {
-            "t": "L",
-            "v": "A"
+            "v": "C"
           }
         ],
-        "size": 6,
+        "size": 3,
         "placements": [
           [
-            "r0c3",
-            "r0c2",
-            "r0c1",
-            "r0c0",
-            "r1c0",
-            "r2c0"
+            "r2c0",
+            "r3c0",
+            "r4c0"
           ]
         ],
-        "hintCellId": "r2c0"
+        "hintCellId": "r3c0"
       }
     ]
   }

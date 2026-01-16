@@ -19,7 +19,8 @@ export type AuditErrorCode =
   | 'ERR_HINT_NOT_IN_PATH'
   | 'ERR_DUP_PLACEMENT'
   | 'ERR_CELL_OUT_OF_BOUNDS'
-  | 'ERR_PLACEMENT_CELL_NOT_FOUND';
+  | 'ERR_PLACEMENT_CELL_NOT_FOUND'
+  | 'ERR_PLACEMENT_NOT_RAY';
 
 export interface AuditError {
   code: AuditErrorCode;
@@ -113,12 +114,68 @@ export function auditPuzzle(puzzle: WaywordsPuzzle): AuditResult {
   // 8. Placement uniqueness
   checkPlacementUniqueness(puzzle, errors);
 
+  // 9. Geometry validation (Guardrail for RAY_8DIR)
+  checkPlacementGeometry(puzzle, errors);
+
   return {
     valid: errors.length === 0,
     errors,
     warnings,
     connectivity
   };
+}
+
+/**
+ * Check that placements match the Selection Model geometry.
+ * If RAY_8DIR, all words must be straight lines.
+ */
+function checkPlacementGeometry(puzzle: WaywordsPuzzle, errors: AuditError[]): void {
+  const model = puzzle.config?.selectionModel || 'RAY_8DIR'; // Default
+
+  if (model !== 'RAY_8DIR') return; // ADJACENT allows any connected shape
+
+  const checkWord = (word: WordDef, category: 'path' | 'additional') => {
+    if (word.placements.length === 0) return;
+    const cells = word.placements[0];
+    if (cells.length < 2) return; // Single cell is always a ray
+
+    // Get coords
+    // We need to parse IDs "rYcX" or verify logic?
+    // Auditor parses grid cells at start.
+    // Let's resolve coords from puzzle.grid
+    const gridCells = new Map(puzzle.grid.cells.map(c => [c.id, c]));
+    
+    const c0 = gridCells.get(cells[0]);
+    const c1 = gridCells.get(cells[1]);
+    
+    if (!c0 || !c1) return; // Covered by other checks
+
+    const dx = c1.x - c0.x;
+    const dy = c1.y - c0.y;
+
+    // Check every subsequent segment
+    for (let i = 1; i < cells.length - 1; i++) {
+      const ca = gridCells.get(cells[i]);
+      const cb = gridCells.get(cells[i+1]);
+      if (!ca || !cb) continue;
+
+      const ndx = cb.x - ca.x;
+      const ndy = cb.y - ca.y;
+
+      if (ndx !== dx || ndy !== dy) {
+         errors.push({
+          code: 'ERR_PLACEMENT_NOT_RAY',
+          path: `words.${category}.${word.wordId}`,
+          message: `Word must be a straight ray (RAY_8DIR), but it bends at index ${i}`,
+          severity: 'error'
+        });
+        return; // Report once per word
+      }
+    }
+  };
+
+  puzzle.words.path.forEach(w => checkWord(w, 'path'));
+  (puzzle.words.additional || []).forEach(w => checkWord(w, 'additional'));
 }
 
 /**

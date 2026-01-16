@@ -26,10 +26,11 @@
 - ✅ Tests: All 46 passing (26 engine + 20 generator) + 5 E2E
 - ✅ Build: Successful
 
-#### Hotfix (2026-01-16)
-- **Deployment:** Fixed `daily/index.json` 404s on GitHub Pages (base path resolution)
-- **Playability:** Implemented `ADJACENT` selection model in UI to support snaking paths
-- **Content:** Updated all Week 1 puzzles to use `selectionModel: "ADJACENT"`
+#### Recent Changes
+- **Deployment Hotfix**: Updated `apps/web/src/App.tsx` and hooks to use `import.meta.env.BASE_URL`, fixing 404s on GitHub Pages.
+- **Content Regeneration (Week 1)**: Regenerated all 49 puzzles for Week 1 to strictly enforce `RAY_8DIR` (Straight Line) geometry. This replaces the complex snaking paths with "Easy" orthogonal word chains, matching the original spec.
+- **Generator Auditing**: Added `checkPlacementGeometry` to the Auditor to enforce `RAY_8DIR` compliance in future generation.
+- **UI Polish**: Updated Home Screen to use CSS Grid and Premium Dark Mode (Glassmorphism). to use `selectionModel: "ADJACENT"`
 
 ---
 

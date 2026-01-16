@@ -57,7 +57,8 @@ async function main() {
         topicTitle: topic.title,
         puzzleId,
         title: `${topic.title} Daily`, // Generic safe title
-        tags: []
+        tags: [],
+        selectionModel: 'RAY_8DIR' as const // STRICT SPEC COMPLIANCE
       };
 
       try {
@@ -91,7 +92,7 @@ async function main() {
   // Write index.json
   const index = {
     version: 2,
-    contentVersion: "2026.01.17",
+    contentVersion: "2026.01.17-v2",
     timezone: "UTC",
     defaultMode: "DAILY",
     schedule: scheduleEntries

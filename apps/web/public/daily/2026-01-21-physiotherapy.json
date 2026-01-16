@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-21-physiotherapy",
   "theme": "Physio Daily",
   "config": {
-    "selectionModel": "ADJACENT",
+    "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
@@ -15,168 +15,168 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "F"
+        "value": "I"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "C"
+        "value": "E"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "K"
+        "value": "J"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "N"
+        "value": "T"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "Y"
+        "value": "S"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "S"
+        "value": "P"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "N"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "R"
+        "value": "I"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "A"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "P"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "T"
+        "value": "V"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "N"
+        "value": "E"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "I"
+        "value": "P"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "X"
+        "value": "E"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "X"
+        "value": "I"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "V"
+        "value": "R"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "G"
+        "value": "C"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "A"
+        "value": "R"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "P"
+        "value": "H"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "T"
+        "value": "H"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "U"
+        "value": "C"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "K"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "D"
+        "value": "N"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "N"
+        "value": "E"
       },
       {
         "id": "r4c4",
@@ -187,14 +187,39 @@
       }
     ],
     "start": {
-      "adjacentCellId": "r3c3"
+      "adjacentCellId": "r3c4"
     },
     "end": {
-      "adjacentCellId": "r4c2"
+      "adjacentCellId": "r4c4"
     }
   },
   "words": {
     "path": [
+      {
+        "wordId": "HIP",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "H"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "P"
+          }
+        ],
+        "size": 3,
+        "placements": [
+          [
+            "r3c4",
+            "r2c4",
+            "r1c4"
+          ]
+        ]
+      },
       {
         "wordId": "PAIN",
         "tokens": [
@@ -218,10 +243,10 @@
         "size": 4,
         "placements": [
           [
-            "r3c3",
-            "r3c2",
-            "r2c2",
-            "r2c1"
+            "r1c4",
+            "r1c3",
+            "r1c2",
+            "r1c1"
           ]
         ]
       },
@@ -248,10 +273,10 @@
         "size": 4,
         "placements": [
           [
-            "r2c1",
             "r1c1",
-            "r0c1",
-            "r0c2"
+            "r2c1",
+            "r3c1",
+            "r4c1"
           ]
         ]
       },
@@ -278,61 +303,21 @@
         "size": 4,
         "placements": [
           [
-            "r0c2",
-            "r0c3",
-            "r1c3",
-            "r1c4"
-          ]
-        ]
-      },
-      {
-        "wordId": "EXTEND",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "X"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "N"
-          },
-          {
-            "t": "L",
-            "v": "D"
-          }
-        ],
-        "size": 6,
-        "placements": [
-          [
-            "r1c4",
-            "r2c4",
-            "r3c4",
-            "r4c4",
+            "r4c1",
+            "r4c2",
             "r4c3",
-            "r4c2"
+            "r4c4"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "REST",
+        "wordId": "HEAT",
         "tokens": [
           {
             "t": "L",
-            "v": "R"
+            "v": "H"
           },
           {
             "t": "L",
@@ -340,7 +325,7 @@
           },
           {
             "t": "L",
-            "v": "S"
+            "v": "A"
           },
           {
             "t": "L",
@@ -350,13 +335,13 @@
         "size": 4,
         "placements": [
           [
-            "r1c2",
-            "r1c1",
-            "r1c0",
-            "r2c0"
+            "r3c3",
+            "r2c3",
+            "r1c3",
+            "r0c3"
           ]
         ],
-        "hintCellId": "r1c1"
+        "hintCellId": "r1c3"
       }
     ]
   }

@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-21-cybersecurity",
   "theme": "Cybersecurity Daily",
   "config": {
-    "selectionModel": "ADJACENT",
+    "selectionModel": "RAY_8DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
@@ -15,42 +15,42 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "E"
+        "value": "V"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "O"
+        "value": "T"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "W"
+        "value": "E"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "H"
+        "value": "N"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "V"
+        "value": "J"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "L"
+        "value": "A"
       },
       {
         "id": "r1c1",
@@ -64,28 +64,28 @@
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "K"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "B"
+        "value": "E"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "I"
+        "value": "K"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "A"
+        "value": "U"
       },
       {
         "id": "r2c1",
@@ -99,63 +99,63 @@
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "2"
+        "value": "T"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "O"
+        "value": "K"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "M"
+        "value": "I"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "M"
+        "value": "L"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "K"
+        "value": "W"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "O"
+        "value": "N"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "T"
+        "value": "O"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "O"
+        "value": "C"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "N"
+        "value": "T"
       },
       {
         "id": "r4c1",
@@ -169,42 +169,46 @@
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "J"
+        "value": "S"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "T"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "K"
+        "value": "M"
       }
     ],
     "start": {
-      "adjacentCellId": "r2c0"
+      "adjacentCellId": "r0c0"
     },
     "end": {
-      "adjacentCellId": "r4c0"
+      "adjacentCellId": "r0c1"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "ALLOW",
+        "wordId": "VAULT",
         "tokens": [
+          {
+            "t": "L",
+            "v": "V"
+          },
           {
             "t": "L",
             "v": "A"
           },
           {
             "t": "L",
-            "v": "L"
+            "v": "U"
           },
           {
             "t": "L",
@@ -212,30 +216,26 @@
           },
           {
             "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "W"
+            "v": "T"
           }
         ],
         "size": 5,
         "placements": [
           [
-            "r2c0",
+            "r0c0",
             "r1c0",
-            "r1c1",
-            "r0c1",
-            "r0c2"
+            "r2c0",
+            "r3c0",
+            "r4c0"
           ]
         ]
       },
       {
-        "wordId": "WEB",
+        "wordId": "TEST",
         "tokens": [
           {
             "t": "L",
-            "v": "W"
+            "v": "T"
           },
           {
             "t": "L",
@@ -243,40 +243,20 @@
           },
           {
             "t": "L",
-            "v": "B"
-          }
-        ],
-        "size": 3,
-        "placements": [
-          [
-            "r0c2",
-            "r1c2",
-            "r1c3"
-          ]
-        ]
-      },
-      {
-        "wordId": "BOT",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "B"
-          },
-          {
-            "t": "L",
-            "v": "O"
+            "v": "S"
           },
           {
             "t": "L",
             "v": "T"
           }
         ],
-        "size": 3,
+        "size": 4,
         "placements": [
           [
-            "r1c3",
-            "r2c3",
-            "r3c3"
+            "r4c0",
+            "r4c1",
+            "r4c2",
+            "r4c3"
           ]
         ]
       },
@@ -307,41 +287,66 @@
         "size": 5,
         "placements": [
           [
+            "r4c3",
             "r3c3",
-            "r3c2",
-            "r3c1",
-            "r4c1",
-            "r4c0"
+            "r2c3",
+            "r1c3",
+            "r0c3"
+          ]
+        ]
+      },
+      {
+        "wordId": "NET",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "N"
+          },
+          {
+            "t": "L",
+            "v": "E"
+          },
+          {
+            "t": "L",
+            "v": "T"
+          }
+        ],
+        "size": 3,
+        "placements": [
+          [
+            "r0c3",
+            "r0c2",
+            "r0c1"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "2FA",
+        "wordId": "NOC",
         "tokens": [
           {
             "t": "L",
-            "v": "2"
+            "v": "N"
           },
           {
             "t": "L",
-            "v": "F"
+            "v": "O"
           },
           {
             "t": "L",
-            "v": "A"
+            "v": "C"
           }
         ],
         "size": 3,
         "placements": [
           [
-            "r2c2",
-            "r2c1",
-            "r2c0"
+            "r3c2",
+            "r3c3",
+            "r3c4"
           ]
         ],
-        "hintCellId": "r2c0"
+        "hintCellId": "r3c3"
       }
     ]
   }
