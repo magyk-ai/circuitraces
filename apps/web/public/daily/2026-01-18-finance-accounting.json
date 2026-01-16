@@ -2,139 +2,160 @@
   "puzzleId": "daily-2026-01-18-finance-accounting",
   "theme": "Finance Daily",
   "config": {
-    "selectionModel": "RAY_8DIR",
+    "selectionModel": "RAY_4DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
   "grid": {
-    "width": 5,
-    "height": 5,
+    "width": 6,
+    "height": 6,
     "cells": [
       {
         "id": "r0c0",
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "E"
+        "value": "F"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "X"
+        "value": "Y"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "O"
+        "value": "E"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "N"
+        "value": "A"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "W"
+        "value": "R"
+      },
+      {
+        "id": "r0c5",
+        "x": 5,
+        "y": 0,
+        "type": "LETTER",
+        "value": "M"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "N"
+        "value": "B"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "C"
+        "value": "I"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "F"
+        "value": "M"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "O"
+        "value": "S"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "Z"
+        "value": "O"
+      },
+      {
+        "id": "r1c5",
+        "x": 5,
+        "y": 1,
+        "type": "LETTER",
+        "value": "A"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "T"
+        "value": "F"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "L"
+        "value": "U"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "M"
+        "value": "O"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "C"
+        "value": "H"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "Y"
+        "value": "A"
+      },
+      {
+        "id": "r2c5",
+        "x": 5,
+        "y": 2,
+        "type": "LETTER",
+        "value": "R"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "R"
+        "value": "D"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "S"
+        "value": "K"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "D"
+        "value": "N"
       },
       {
         "id": "r3c3",
@@ -148,59 +169,119 @@
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "D"
+        "value": "G"
+      },
+      {
+        "id": "r3c5",
+        "x": 5,
+        "y": 3,
+        "type": "LETTER",
+        "value": "G"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "Y"
+        "value": "W"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "T"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "A"
+        "value": "T"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "R"
+        "value": "E"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "C"
+        "value": "A"
+      },
+      {
+        "id": "r4c5",
+        "x": 5,
+        "y": 4,
+        "type": "LETTER",
+        "value": "I"
+      },
+      {
+        "id": "r5c0",
+        "x": 0,
+        "y": 5,
+        "type": "LETTER",
+        "value": "Y"
+      },
+      {
+        "id": "r5c1",
+        "x": 1,
+        "y": 5,
+        "type": "LETTER",
+        "value": "T"
+      },
+      {
+        "id": "r5c2",
+        "x": 2,
+        "y": 5,
+        "type": "LETTER",
+        "value": "H"
+      },
+      {
+        "id": "r5c3",
+        "x": 3,
+        "y": 5,
+        "type": "LETTER",
+        "value": "T"
+      },
+      {
+        "id": "r5c4",
+        "x": 4,
+        "y": 5,
+        "type": "LETTER",
+        "value": "W"
+      },
+      {
+        "id": "r5c5",
+        "x": 5,
+        "y": 5,
+        "type": "LETTER",
+        "value": "N"
       }
     ],
     "start": {
-      "adjacentCellId": "r0c0"
+      "adjacentCellId": "r1c2"
     },
     "end": {
-      "adjacentCellId": "r0c3"
+      "adjacentCellId": "r5c3"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "ENTRY",
+        "wordId": "MONTH",
         "tokens": [
           {
             "t": "L",
-            "v": "E"
+            "v": "M"
+          },
+          {
+            "t": "L",
+            "v": "O"
           },
           {
             "t": "L",
@@ -212,21 +293,17 @@
           },
           {
             "t": "L",
-            "v": "R"
-          },
-          {
-            "t": "L",
-            "v": "Y"
+            "v": "H"
           }
         ],
         "size": 5,
         "placements": [
           [
-            "r0c0",
-            "r1c0",
-            "r2c0",
-            "r3c0",
-            "r4c0"
+            "r1c2",
+            "r2c2",
+            "r3c2",
+            "r4c2",
+            "r5c2"
           ]
         ]
       },
@@ -253,19 +330,63 @@
         "size": 4,
         "placements": [
           [
-            "r4c0",
-            "r4c1",
-            "r4c2",
-            "r4c3"
+            "r0c1",
+            "r0c2",
+            "r0c3",
+            "r0c4"
           ]
         ]
       },
       {
-        "wordId": "RECON",
+        "wordId": "MARGIN",
         "tokens": [
           {
             "t": "L",
+            "v": "M"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
             "v": "R"
+          },
+          {
+            "t": "L",
+            "v": "G"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "N"
+          }
+        ],
+        "size": 6,
+        "placements": [
+          [
+            "r0c5",
+            "r1c5",
+            "r2c5",
+            "r3c5",
+            "r4c5",
+            "r5c5"
+          ]
+        ]
+      },
+      {
+        "wordId": "SHEET",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "S"
+          },
+          {
+            "t": "L",
+            "v": "H"
           },
           {
             "t": "L",
@@ -273,55 +394,51 @@
           },
           {
             "t": "L",
-            "v": "C"
+            "v": "E"
           },
           {
             "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "N"
+            "v": "T"
           }
         ],
         "size": 5,
         "placements": [
           [
-            "r4c3",
-            "r3c3",
-            "r2c3",
             "r1c3",
-            "r0c3"
+            "r2c3",
+            "r3c3",
+            "r4c3",
+            "r5c3"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "CFO",
+        "wordId": "ROA",
         "tokens": [
           {
             "t": "L",
-            "v": "C"
-          },
-          {
-            "t": "L",
-            "v": "F"
+            "v": "R"
           },
           {
             "t": "L",
             "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "A"
           }
         ],
         "size": 3,
         "placements": [
           [
-            "r1c1",
-            "r1c2",
-            "r1c3"
+            "r0c4",
+            "r1c4",
+            "r2c4"
           ]
         ],
-        "hintCellId": "r1c3"
+        "hintCellId": "r0c4"
       }
     ]
   }

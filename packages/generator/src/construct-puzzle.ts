@@ -7,14 +7,14 @@ interface WordList {
   bonus: string[];
 }
 
-  interface GeneratorConfig {
+interface GeneratorConfig {
   date: string;
   topicId: string;
   topicTitle: string; // "DevOps" etc
   puzzleId: string;   // "daily-2026-01-18-devops"
   title: string;      // "Ship It"
   tags: string[];
-  selectionModel?: 'RAY_8DIR' | 'ADJACENT';
+  selectionModel?: 'RAY_8DIR' | 'RAY_4DIR' | 'ADJACENT';
 }
 
 export class PuzzleConstructor {
@@ -58,78 +58,69 @@ export class PuzzleConstructor {
   }
 
   private attemptConstruction(words: WordList, config: GeneratorConfig) {
-    const builder = new GridBuilder(5, 5);
-    const model = config.selectionModel || 'RAY_8DIR';
-    const geometry = model === 'RAY_8DIR' ? 'RAY' : 'SNAKE';
-    
-    // 1. Pick Path Words (3-4) using Chain Builder
-    let chainAttempt = 0;
-    let finalPathCandidates: string[] = [];
-    
-    while (chainAttempt < 100) {
-      chainAttempt++;
-      const pathCandidates: string[] = [];
-      const usedWords = new Set<string>();
-      let totalLength = 0;
-      
-      const startOptions = words.path.filter(w => w.length <= 6 && w.length >= 3);
-      if (startOptions.length === 0) throw new Error("No valid start words");
-      
-      let currentWord = startOptions[Math.floor(Math.random() * startOptions.length)];
-      pathCandidates.push(currentWord);
-      usedWords.add(currentWord);
-      totalLength += currentWord.length;
-      
-      while (pathCandidates.length < 4 && totalLength < 18) {
-        const lastChar = currentWord[currentWord.length - 1];
-        
-        const candidates = words.path.filter(w => 
-          !usedWords.has(w) && 
-          w[0] === lastChar && 
-          w.length <= 6 && w.length >= 3
-        );
-        
-        if (candidates.length === 0) break;
-        
-        const nextWord = candidates[Math.floor(Math.random() * candidates.length)];
-        
-        if (totalLength + nextWord.length > 22) { 
-           pathCandidates.push(nextWord);
-           totalLength += nextWord.length;
-           break;
-        }
-        
-        pathCandidates.push(nextWord);
-        usedWords.add(nextWord);
-        totalLength += nextWord.length;
-        currentWord = nextWord;
-      }
-      
-      if (pathCandidates.length >= 3 && totalLength <= 25) {
-        finalPathCandidates = pathCandidates;
-        break;
-      }
-    }
-    
-    if (finalPathCandidates.length < 3) {
-       throw new Error(`Could not build valid word chain after 100 attempts`);
-    }
+    // Grid escalation: try 6x6 first, then 7x7
+    const gridSizes: [number, number][] = [[6, 6], [7, 7]];
 
-    // 2. Recursive Backtracking for Path Placement
+    for (const [width, height] of gridSizes) {
+      try {
+        return this.tryConstruction(words, config, width, height);
+      } catch {
+        // Try next size
+      }
+    }
+    throw new Error("Could not place words even on 7x7 grid");
+  }
+
+  private tryConstruction(words: WordList, config: GeneratorConfig, width: number, height: number) {
+    const builder = new GridBuilder(width, height);
+    // Default to RAY_4DIR for easy, forward-only puzzles
+    const model = config.selectionModel || 'RAY_4DIR';
+    const geometry: 'RAY' | 'SNAKE' = model === 'ADJACENT' ? 'SNAKE' : 'RAY';
+
+    // 1. Pick 3-4 random path words (NO chain requirement)
+    const validWords = words.path.filter(w => w.length >= 3 && w.length <= 6);
+    if (validWords.length < 3) throw new Error("Not enough valid path words");
+
+    // Shuffle and pick 3-4 words
+    const shuffled = [...validWords].sort(() => Math.random() - 0.5);
+    const numWords = Math.random() < 0.5 ? 3 : 4;
+    const pathCandidates = shuffled.slice(0, Math.min(numWords, shuffled.length));
+
+    // 2. Place words with intersection-based connectivity
     const placedPathWords: any[] = [];
     const usedPathCells = new Set<string>();
+    const placedCellsByChar = new Map<string, string[]>(); // char -> cellIds
 
-    if (!this.recursivePathPlacement(builder, finalPathCandidates, 0, undefined, placedPathWords, usedPathCells, geometry)) {
-      throw new Error("Could not place path words (backtracking exhausted)");
+    // Place first word anywhere (forward direction only)
+    const firstWord = pathCandidates[0];
+    const firstOptions = builder.findAllPathOptions(firstWord, undefined, geometry);
+    if (firstOptions.length === 0) throw new Error(`Cannot place first word: ${firstWord}`);
+
+    const firstPath = firstOptions[0];
+    this.commitWordToGrid(builder, firstWord, firstPath);
+    placedPathWords.push(this.createWordObj(firstWord, firstPath));
+    firstPath.forEach(id => usedPathCells.add(id));
+    this.recordCellChars(builder, firstPath, placedCellsByChar);
+
+    // Place subsequent words with intersection at arbitrary index
+    for (let i = 1; i < pathCandidates.length; i++) {
+      const word = pathCandidates[i];
+      const placed = this.placeWordWithIntersection(builder, word, placedCellsByChar, usedPathCells, geometry);
+
+      if (!placed) throw new Error(`Cannot place word: ${word}`);
+
+      placedPathWords.push(this.createWordObj(word, placed));
+      placed.forEach(id => usedPathCells.add(id));
+      this.recordCellChars(builder, placed, placedCellsByChar);
     }
 
     // 3. Place Bonus Words (1-2)
     const bonusCandidates = [...words.bonus].sort(() => Math.random() - 0.5);
     const placedBonusWords: any[] = [];
-    
+
     for (const word of bonusCandidates) {
-      if (placedBonusWords.length >= 1) break; // Start with 1 bonus
-      
+      if (placedBonusWords.length >= 1) break;
+
       const res = builder.tryPlaceBonusWord(word, usedPathCells, geometry);
       if (res) {
         placedBonusWords.push({
@@ -141,25 +132,31 @@ export class PuzzleConstructor {
         });
       }
     }
-    
+
     if (placedBonusWords.length === 0) throw new Error("Could not place bonus word");
 
-    // 4. Fill Distractors
+    // 4. Verify connectivity (BFS from first word to all others)
+    if (!this.verifyConnectivity(builder, usedPathCells)) {
+      throw new Error("Path words are not connected");
+    }
+
+    // 5. Fill Distractors
     builder.fillDistractors();
 
-    // 5. Build Final Object
+    // 6. Build Final Object
     const gridObj = builder.exportGrid();
-    
+
     const startCellId = placedPathWords[0].placements[0][0];
-    const endCellId = placedPathWords[placedPathWords.length-1].placements[0][placedPathWords[placedPathWords.length-1].size - 1];
-    
+    const lastWord = placedPathWords[placedPathWords.length - 1];
+    const endCellId = lastWord.placements[0][lastWord.size - 1];
+
     const puzzle = {
       puzzleId: config.puzzleId,
       theme: config.title,
       config: {
         selectionModel: model,
         connectivityModel: "ORTHO_4",
-        allowReverseSelection: true
+        allowReverseSelection: true  // Players can swipe from either end
       },
       grid: {
         ...gridObj,
@@ -171,58 +168,158 @@ export class PuzzleConstructor {
         additional: placedBonusWords
       }
     };
-    
+
     return puzzle;
   }
 
-  // Recursive function to place words sequence
-  private recursivePathPlacement(
+  private commitWordToGrid(builder: GridBuilder, word: string, path: string[]) {
+    path.forEach((id, i) => {
+      const cell = builder.getCellById(id)!;
+      if (cell.value === '') cell.value = word[i];
+    });
+  }
+
+  private createWordObj(word: string, path: string[]) {
+    return {
+      wordId: word,
+      tokens: word.split('').map(c => ({ t: 'L', v: c })),
+      size: word.length,
+      placements: [path]
+    };
+  }
+
+  private recordCellChars(builder: GridBuilder, path: string[], map: Map<string, string[]>) {
+    for (const cellId of path) {
+      const cell = builder.getCellById(cellId)!;
+      const char = cell.value || '';
+      if (char === '') continue; // Skip empty cells
+      if (!map.has(char)) map.set(char, []);
+      map.get(char)!.push(cellId);
+    }
+  }
+
+  /**
+   * Place word intersecting with existing placed cells at ANY index k
+   * (Not just first letter - supports intersection anywhere in the word)
+   */
+  private placeWordWithIntersection(
     builder: GridBuilder,
-    words: string[],
-    index: number,
-    startCellId: string | undefined, // Last cell of prev word
-    results: any[],
+    word: string,
+    placedCellsByChar: Map<string, string[]>,
     usedCells: Set<string>,
     geometry: 'RAY' | 'SNAKE'
-  ): boolean {
-    if (index >= words.length) return true; // All placed!
+  ): string[] | null {
+    // For each letter in word at index k
+    const indices = Array.from({ length: word.length }, (_, i) => i).sort(() => Math.random() - 0.5);
 
-    const word = words[index];
-    const options = builder.findAllPathOptions(word, startCellId, geometry);
-    
-    for (const path of options) {
-      // Manual commit to grid cells
-      // Check if we overlap correctly (grid builder checks chars, but we must update state)
-      path.forEach((id, i) => {
-        const cell = builder.getCellById(id)!;
-        if (cell.value === '') cell.value = word[i];
-      });
+    for (const k of indices) {
+      const char = word[k];
+      const matchingCells = placedCellsByChar.get(char) || [];
 
-      // Recurse
-      const nextStart = path[path.length - 1];
-      const wordObj = {
-        wordId: word,
-        tokens: word.split('').map(c => ({ t: 'L', v: c })),
-        size: word.length,
-        placements: [path]
-      };
-      
-      results.push(wordObj);
-      path.forEach(id => usedCells.add(id));
+      // Shuffle matching cells
+      const shuffledCells = [...matchingCells].sort(() => Math.random() - 0.5);
 
-      if (this.recursivePathPlacement(builder, words, index + 1, nextStart, results, usedCells, geometry)) {
-        return true;
+      for (const intersectCellId of shuffledCells) {
+        const intersectCell = builder.getCellById(intersectCellId)!;
+
+        // Try both forward directions (→ and ↓)
+        const forwardDirs: [number, number][] = [[1, 0], [0, 1]];
+        for (const [dx, dy] of forwardDirs) {
+          // Compute start position: start = intersect - k * direction
+          const startX = intersectCell.x - (k * dx);
+          const startY = intersectCell.y - (k * dy);
+
+          const placement = this.tryPlaceRay(builder, word, startX, startY, dx, dy, usedCells, intersectCellId);
+          if (placement) {
+            this.commitWordToGrid(builder, word, placement);
+            return placement;
+          }
+        }
       }
-
-      // Backtrack
-      results.pop();
-      path.forEach(id => usedCells.delete(id)); 
-      
-      // Revert grid cells
-      const toClear = startCellId ? path.slice(1) : path;
-      builder.removePath(toClear);
     }
 
-    return false;
+    // If no intersection works, try placing anywhere
+    const options = builder.findAllPathOptions(word, undefined, geometry);
+    for (const path of options) {
+      // Check no overlap with existing cells (except shared chars)
+      let valid = true;
+      for (let i = 0; i < path.length; i++) {
+        const cell = builder.getCellById(path[i])!;
+        if (usedCells.has(path[i]) && cell.value !== word[i]) {
+          valid = false;
+          break;
+        }
+      }
+      if (valid) {
+        this.commitWordToGrid(builder, word, path);
+        return path;
+      }
+    }
+
+    return null;
   }
+
+  private tryPlaceRay(
+    builder: GridBuilder,
+    word: string,
+    startX: number,
+    startY: number,
+    dx: number,
+    dy: number,
+    usedCells: Set<string>,
+    intersectCellId: string
+  ): string[] | null {
+    const path: string[] = [];
+
+    for (let i = 0; i < word.length; i++) {
+      const cx = startX + (i * dx);
+      const cy = startY + (i * dy);
+      const cell = builder.getCell(cx, cy);
+
+      if (!cell) return null; // Out of bounds
+
+      // Check character compatibility
+      if (cell.value !== '' && cell.value !== word[i]) return null;
+
+      // Check overlap with existing cells (allow at intersection point)
+      if (usedCells.has(cell.id) && cell.id !== intersectCellId) {
+        // Only allow if character matches (genuine intersection)
+        if (cell.value !== word[i]) return null;
+      }
+
+      path.push(cell.id);
+    }
+
+    return path;
+  }
+
+  /**
+   * Verify all path word cells are connected via ORTHO_4 adjacency
+   */
+  private verifyConnectivity(builder: GridBuilder, usedCells: Set<string>): boolean {
+    if (usedCells.size === 0) return true;
+
+    const cellList = Array.from(usedCells);
+    const visited = new Set<string>();
+    const queue = [cellList[0]];
+    visited.add(cellList[0]);
+
+    while (queue.length > 0) {
+      const cellId = queue.shift()!;
+      const cell = builder.getCellById(cellId)!;
+
+      // Check ORTHO_4 neighbors
+      const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+      for (const [dx, dy] of dirs) {
+        const neighbor = builder.getCell(cell.x + dx, cell.y + dy);
+        if (neighbor && usedCells.has(neighbor.id) && !visited.has(neighbor.id)) {
+          visited.add(neighbor.id);
+          queue.push(neighbor.id);
+        }
+      }
+    }
+
+    return visited.size === usedCells.size;
+  }
+
 }

@@ -2,80 +2,94 @@
   "puzzleId": "daily-2026-01-21-cybersecurity",
   "theme": "Cybersecurity Daily",
   "config": {
-    "selectionModel": "RAY_8DIR",
+    "selectionModel": "RAY_4DIR",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
   "grid": {
-    "width": 5,
-    "height": 5,
+    "width": 6,
+    "height": 6,
     "cells": [
       {
         "id": "r0c0",
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "V"
+        "value": "S"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "T"
+        "value": "K"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "E"
+        "value": "C"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "N"
+        "value": "L"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "J"
+        "value": "Q"
+      },
+      {
+        "id": "r0c5",
+        "x": 5,
+        "y": 0,
+        "type": "LETTER",
+        "value": "F"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "A"
+        "value": "W"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "L"
+        "value": "B"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "K"
+        "value": "L"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "O"
       },
       {
         "id": "r1c4",
         "x": 4,
+        "y": 1,
+        "type": "LETTER",
+        "value": "C"
+      },
+      {
+        "id": "r1c5",
+        "x": 5,
         "y": 1,
         "type": "LETTER",
         "value": "K"
@@ -85,84 +99,98 @@
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "U"
+        "value": "H"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "F"
+        "value": "H"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "T"
+        "value": "C"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "K"
+        "value": "G"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "I"
+        "value": "Y"
+      },
+      {
+        "id": "r2c5",
+        "x": 5,
+        "y": 2,
+        "type": "LETTER",
+        "value": "T"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "L"
+        "value": "Y"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "W"
+        "value": "T"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "N"
+        "value": "I"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "O"
+        "value": "B"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "C"
+        "value": "K"
+      },
+      {
+        "id": "r3c5",
+        "x": 5,
+        "y": 3,
+        "type": "LETTER",
+        "value": "E"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "T"
+        "value": "P"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "A"
       },
       {
         "id": "r4c2",
@@ -176,21 +204,70 @@
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "T"
+        "value": "S"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "M"
+        "value": "F"
+      },
+      {
+        "id": "r4c5",
+        "x": 5,
+        "y": 4,
+        "type": "LETTER",
+        "value": "S"
+      },
+      {
+        "id": "r5c0",
+        "x": 0,
+        "y": 5,
+        "type": "LETTER",
+        "value": "C"
+      },
+      {
+        "id": "r5c1",
+        "x": 1,
+        "y": 5,
+        "type": "LETTER",
+        "value": "V"
+      },
+      {
+        "id": "r5c2",
+        "x": 2,
+        "y": 5,
+        "type": "LETTER",
+        "value": "A"
+      },
+      {
+        "id": "r5c3",
+        "x": 3,
+        "y": 5,
+        "type": "LETTER",
+        "value": "U"
+      },
+      {
+        "id": "r5c4",
+        "x": 4,
+        "y": 5,
+        "type": "LETTER",
+        "value": "L"
+      },
+      {
+        "id": "r5c5",
+        "x": 5,
+        "y": 5,
+        "type": "LETTER",
+        "value": "T"
       }
     ],
     "start": {
-      "adjacentCellId": "r0c0"
+      "adjacentCellId": "r5c1"
     },
     "end": {
-      "adjacentCellId": "r0c1"
+      "adjacentCellId": "r5c5"
     }
   },
   "words": {
@@ -222,11 +299,76 @@
         "size": 5,
         "placements": [
           [
-            "r0c0",
-            "r1c0",
-            "r2c0",
-            "r3c0",
-            "r4c0"
+            "r5c1",
+            "r5c2",
+            "r5c3",
+            "r5c4",
+            "r5c5"
+          ]
+        ]
+      },
+      {
+        "wordId": "PASS",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "P"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "S"
+          },
+          {
+            "t": "L",
+            "v": "S"
+          }
+        ],
+        "size": 4,
+        "placements": [
+          [
+            "r4c0",
+            "r4c1",
+            "r4c2",
+            "r4c3"
+          ]
+        ]
+      },
+      {
+        "wordId": "BLOCK",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "B"
+          },
+          {
+            "t": "L",
+            "v": "L"
+          },
+          {
+            "t": "L",
+            "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "C"
+          },
+          {
+            "t": "L",
+            "v": "K"
+          }
+        ],
+        "size": 5,
+        "placements": [
+          [
+            "r1c1",
+            "r1c2",
+            "r1c3",
+            "r1c4",
+            "r1c5"
           ]
         ]
       },
@@ -253,81 +395,21 @@
         "size": 4,
         "placements": [
           [
-            "r4c0",
-            "r4c1",
-            "r4c2",
-            "r4c3"
-          ]
-        ]
-      },
-      {
-        "wordId": "TOKEN",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "K"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "N"
-          }
-        ],
-        "size": 5,
-        "placements": [
-          [
-            "r4c3",
-            "r3c3",
-            "r2c3",
-            "r1c3",
-            "r0c3"
-          ]
-        ]
-      },
-      {
-        "wordId": "NET",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "N"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          }
-        ],
-        "size": 3,
-        "placements": [
-          [
-            "r0c3",
-            "r0c2",
-            "r0c1"
+            "r2c5",
+            "r3c5",
+            "r4c5",
+            "r5c5"
           ]
         ]
       }
     ],
     "additional": [
       {
-        "wordId": "NOC",
+        "wordId": "LOG",
         "tokens": [
           {
             "t": "L",
-            "v": "N"
+            "v": "L"
           },
           {
             "t": "L",
@@ -335,18 +417,18 @@
           },
           {
             "t": "L",
-            "v": "C"
+            "v": "G"
           }
         ],
         "size": 3,
         "placements": [
           [
-            "r3c2",
-            "r3c3",
-            "r3c4"
+            "r0c3",
+            "r1c3",
+            "r2c3"
           ]
         ],
-        "hintCellId": "r3c3"
+        "hintCellId": "r1c3"
       }
     ]
   }

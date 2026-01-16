@@ -58,7 +58,7 @@ async function main() {
         puzzleId,
         title: `${topic.title} Daily`, // Generic safe title
         tags: [],
-        selectionModel: 'RAY_8DIR' as const // STRICT SPEC COMPLIANCE
+        selectionModel: 'RAY_4DIR' as const // Forward-only placements (→ ↓)
       };
 
       try {
@@ -72,7 +72,7 @@ async function main() {
           id: puzzleId,
           title: config.title,
           difficulty: 'easy',
-          grid: { width: 5, height: 5 },
+          grid: { width: 6, height: 6 }, // Updated: 6x6 default grid
           estimatedMinutes: 3,
           puzzlePath: `/daily/${filename}`,
           tags: []

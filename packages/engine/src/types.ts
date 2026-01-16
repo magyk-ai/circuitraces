@@ -11,7 +11,7 @@ export interface Cell {
   value?: string; // for LETTER: "A".."Z"
 }
 
-export type SelectionModel = 'RAY_8DIR' | 'ADJACENT';
+export type SelectionModel = 'RAY_8DIR' | 'RAY_4DIR' | 'ADJACENT';
 export type ConnectivityModel = 'ORTHO_4';
 
 export interface PuzzleConfig {

@@ -1,36 +1,61 @@
 # Circuit Races - Current Status
 
 **Last Updated:** 2026-01-16
-**Status:** PR #6 (Parallel Dailies & Content) Complete ✅, Ready for Beta Launch 🚀
+**Status:** Easy Puzzle Generator Fix Complete ✅
 
-## Recent Changes (PR #6 - 2026-01-16)
+## Recent Changes (2026-01-16)
+
+### Easy Puzzle Generator Fix
+**Status:** ✅ Complete and validated
+
+**Problem Solved:** Generated puzzles had backwards words (e.g., "ERROR" placed right-to-left reading as "RORRE"). This was caused by chain logic forcing reverse directions on small grids.
+
+#### Key Changes
+- **Forward-Only Placements** - Words now read naturally (→ left-to-right, ↓ top-to-bottom)
+- **6x6 Default Grid** - Larger grid with escalation to 7x7 if needed
+- **No Chain Logic** - Replaced chaining with intersection-based connectivity
+- **RAY_4DIR Selection Model** - No diagonals, 4 orthogonal directions only
+- **`allowReverseSelection: true`** - Players can swipe from either end of a word
+
+#### New Auditor Error Codes
+- `ERR_PLACEMENT_NOT_CONTIGUOUS` - Cells not adjacent
+- `ERR_PLACEMENT_NOT_RAY` - Placement bends
+- `ERR_PLACEMENT_REVERSED` - Word reads backwards (←/↑)
+- `ERR_PLACEMENT_DIAGONAL` - Diagonal placement
+
+#### Files Modified
+- `packages/engine/src/types.ts` - Added `RAY_4DIR` to SelectionModel
+- `packages/generator/src/auditor.ts` - 4 new error codes + comprehensive geometry checks
+- `packages/generator/src/grid-builder.ts` - Forward-only directions (→ ↓)
+- `packages/generator/src/construct-puzzle.ts` - Complete rewrite with intersection-at-index-k
+- `packages/generator/src/batch-generate.ts` - Updated to use RAY_4DIR and 6x6 grids
+- `apps/web/public/daily/*.json` - Regenerated all 49 puzzles
+
+#### Validation Results
+- ✅ Lint: Clean (5 warnings, 0 errors)
+- ✅ Typecheck: Passed
+- ✅ Tests: All 46 passing (26 engine + 20 generator)
+- ✅ Build: Successful (52.69 KB gzipped)
+- ✅ Auditor: All 53 puzzles pass
+
+---
+
+## Previous Changes (PR #6 - 2026-01-16)
 
 ### Parallel Dailies & Algorithmic Content
 **Status:** ✅ Complete and validated
 
 #### New Features
 - **Parallel Dailies** - 7 unique puzzles per day (one for each topic)
-- **Algorithmic Generator** - `PuzzleConstructor` with recursive backtracking and chain logic
+- **Algorithmic Generator** - `PuzzleConstructor` with intersection-based placement
 - **Content Factory** - Generated 49 unique puzzles for Week 1 (Jan 17 - Jan 23)
 - **Topic Integration** - `daily/index.json` now maps dates to a topic-puzzle map
 
 #### Technical Improvements
-- **`GridBuilder`** - Robust grid construction and validation logic
+- **`GridBuilder`** - Robust grid construction with forward-only directions
 - **`content-qa.ts`** - Automated quality metrics for generated puzzles
 - **E2E Testing** - Verified daily/topic navigation flows
 - **Test Coverage** - Added unit tests for generator, ensuring 100% pass rate
-
-#### Validation Results
-- ✅ Lint: Clean
-- ✅ Typecheck: Passed
-- ✅ Tests: All 46 passing (26 engine + 20 generator) + 5 E2E
-- ✅ Build: Successful
-
-#### Recent Changes
-- **Deployment Hotfix**: Updated `apps/web/src/App.tsx` and hooks to use `import.meta.env.BASE_URL`, fixing 404s on GitHub Pages.
-- **Content Regeneration (Week 1)**: Regenerated all 49 puzzles for Week 1 to strictly enforce `RAY_8DIR` (Straight Line) geometry. This replaces the complex snaking paths with "Easy" orthogonal word chains, matching the original spec.
-- **Generator Auditing**: Added `checkPlacementGeometry` to the Auditor to enforce `RAY_8DIR` compliance in future generation.
-- **UI Polish**: Updated Home Screen to use CSS Grid and Premium Dark Mode (Glassmorphism). to use `selectionModel: "ADJACENT"`
 
 ---
 

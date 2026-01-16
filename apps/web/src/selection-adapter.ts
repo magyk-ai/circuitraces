@@ -9,11 +9,14 @@ export class SelectionAdapter {
   private readonly DEAD_ZONE_THRESHOLD = 0.3; // 30% of cell size in grid units
   private currentPath: string[] = [];
   private isAdjacentMode: boolean = false;
+  private isRay4Dir: boolean = false;
 
   constructor(puzzle: WaywordsPuzzle) {
     this.puzzle = puzzle;
     // Check config for ADJACENT mode (default to RAY_8DIR for backward compat)
+    // Check config models
     this.isAdjacentMode = puzzle.config?.selectionModel === 'ADJACENT';
+    this.isRay4Dir = puzzle.config?.selectionModel === 'RAY_4DIR';
     this.cellMap = new Map(puzzle.grid.cells.map(c => [c.id, c]));
   }
 

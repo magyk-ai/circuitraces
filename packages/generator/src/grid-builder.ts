@@ -74,31 +74,32 @@ export class GridBuilder {
   }
 
   private findAllRayPaths(word: string, startCellId?: string): string[][] {
-    const candidates = startCellId 
-      ? [this.getCellById(startCellId)!] 
+    const candidates = startCellId
+      ? [this.getCellById(startCellId)!]
       : this.getEmptyCells().sort(() => Math.random() - 0.5);
 
     const validPaths: string[][] = [];
-    // ORTHO RAYS ONLY (Horizontal/Vertical) to satisfy ORTHO_4 connectivity
-    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]]; 
+    // FORWARD-ONLY: right (→) and down (↓) to ensure words read naturally
+    // Removed: [0, -1] (up) and [-1, 0] (left) which cause backwards words
+    const forwardDirs = [[1, 0], [0, 1]];
 
     for (const start of candidates) {
       // Check start char overlap
       if (start.value !== '' && start.value !== word[0]) continue;
 
-      // Try each direction
-      for (const [dx, dy] of dirs) {
+      // Try each forward direction
+      for (const [dx, dy] of forwardDirs) {
         const path: string[] = [start.id];
         let valid = true;
-        
+
         for (let i = 1; i < word.length; i++) {
           const cx = start.x + (i * dx);
           const cy = start.y + (i * dy);
           const cell = this.getCell(cx, cy);
-          
+
           if (!cell) { valid = false; break; } // Out of bounds
           if (cell.value !== '' && cell.value !== word[i]) { valid = false; break; } // Overlap mismatch
-          
+
           path.push(cell.id);
         }
 
@@ -178,9 +179,9 @@ export class GridBuilder {
         // Or specific ray logic for bonus.
         
         if (geometry === 'RAY') {
-          // ORTHO RAYS ONLY
-          const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
-          for (const [dx, dy] of dirs) {
+          // FORWARD-ONLY: right (→) and down (↓)
+          const forwardDirs = [[1, 0], [0, 1]];
+          for (const [dx, dy] of forwardDirs) {
              // Calculate start pos if we pass through 'target' at 'charIdx'
              // start = target - charIdx * dir
              const startX = target.x - (charIdx * dx);

@@ -20,7 +20,10 @@ export type AuditErrorCode =
   | 'ERR_DUP_PLACEMENT'
   | 'ERR_CELL_OUT_OF_BOUNDS'
   | 'ERR_PLACEMENT_CELL_NOT_FOUND'
-  | 'ERR_PLACEMENT_NOT_RAY';
+  | 'ERR_PLACEMENT_NOT_RAY'
+  | 'ERR_PLACEMENT_NOT_CONTIGUOUS'
+  | 'ERR_PLACEMENT_REVERSED'
+  | 'ERR_PLACEMENT_DIAGONAL';
 
 export interface AuditError {
   code: AuditErrorCode;
@@ -127,49 +130,90 @@ export function auditPuzzle(puzzle: WaywordsPuzzle): AuditResult {
 
 /**
  * Check that placements match the Selection Model geometry.
- * If RAY_8DIR, all words must be straight lines.
+ * For RAY modes (RAY_8DIR, RAY_4DIR), all words must be straight lines.
+ * Additionally validates:
+ * - Contiguous: Manhattan distance = 1 for each step
+ * - Constant direction: All steps same dx,dy
+ * - No diagonal: Either dx=0 or dy=0 (for RAY_4DIR or FORWARD_2DIR content)
+ * - Forward-only: dx=+1 for horizontal, dy=+1 for vertical (for easy puzzles)
  */
 function checkPlacementGeometry(puzzle: WaywordsPuzzle, errors: AuditError[]): void {
-  const model = puzzle.config?.selectionModel || 'RAY_8DIR'; // Default
+  const modelRaw = puzzle.config?.selectionModel || 'RAY_8DIR'; // Default
+  // Use string type to avoid TypeScript narrowing issues
+  const model: string = modelRaw;
 
-  if (model !== 'RAY_8DIR') return; // ADJACENT allows any connected shape
+  if (model === 'ADJACENT') return; // ADJACENT allows any connected shape
+
+  const gridCells = new Map(puzzle.grid.cells.map(c => [c.id, c]));
 
   const checkWord = (word: WordDef, category: 'path' | 'additional') => {
     if (word.placements.length === 0) return;
     const cells = word.placements[0];
-    if (cells.length < 2) return; // Single cell is always a ray
+    if (cells.length < 2) return; // Single cell is always valid
 
-    // Get coords
-    // We need to parse IDs "rYcX" or verify logic?
-    // Auditor parses grid cells at start.
-    // Let's resolve coords from puzzle.grid
-    const gridCells = new Map(puzzle.grid.cells.map(c => [c.id, c]));
-    
-    const c0 = gridCells.get(cells[0]);
-    const c1 = gridCells.get(cells[1]);
-    
-    if (!c0 || !c1) return; // Covered by other checks
-
-    const dx = c1.x - c0.x;
-    const dy = c1.y - c0.y;
-
-    // Check every subsequent segment
-    for (let i = 1; i < cells.length - 1; i++) {
+    // Compute ALL step directions
+    const steps: Array<{dx: number, dy: number}> = [];
+    for (let i = 0; i < cells.length - 1; i++) {
       const ca = gridCells.get(cells[i]);
-      const cb = gridCells.get(cells[i+1]);
-      if (!ca || !cb) continue;
+      const cb = gridCells.get(cells[i + 1]);
+      if (!ca || !cb) continue; // Covered by ERR_PLACEMENT_CELL_NOT_FOUND
+      steps.push({ dx: cb.x - ca.x, dy: cb.y - ca.y });
+    }
 
-      const ndx = cb.x - ca.x;
-      const ndy = cb.y - ca.y;
+    if (steps.length === 0) return;
 
-      if (ndx !== dx || ndy !== dy) {
-         errors.push({
-          code: 'ERR_PLACEMENT_NOT_RAY',
+    // Check 1: Contiguous (Manhattan distance = 1 for each step)
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      const manhattan = Math.abs(step.dx) + Math.abs(step.dy);
+      if (manhattan !== 1) {
+        errors.push({
+          code: 'ERR_PLACEMENT_NOT_CONTIGUOUS',
           path: `words.${category}.${word.wordId}`,
-          message: `Word must be a straight ray (RAY_8DIR), but it bends at index ${i}`,
+          message: `Placement has non-adjacent cells at step ${i} (Manhattan distance ${manhattan})`,
           severity: 'error'
         });
         return; // Report once per word
+      }
+    }
+
+    // Check 2: Constant direction (all steps same dx,dy) - must be a ray
+    const firstStep = steps[0];
+    const isConstant = steps.every(s => s.dx === firstStep.dx && s.dy === firstStep.dy);
+    if (!isConstant) {
+      errors.push({
+        code: 'ERR_PLACEMENT_NOT_RAY',
+        path: `words.${category}.${word.wordId}`,
+        message: `Placement bends (not a straight ray)`,
+        severity: 'error'
+      });
+      return;
+    }
+
+    // For RAY_4DIR (and implicitly FORWARD_2DIR content), check no diagonals
+    if (model === 'RAY_4DIR') {
+      // Check 3: No diagonal
+      if (firstStep.dx !== 0 && firstStep.dy !== 0) {
+        errors.push({
+          code: 'ERR_PLACEMENT_DIAGONAL',
+          path: `words.${category}.${word.wordId}`,
+          message: `Placement is diagonal (not allowed in ${model})`,
+          severity: 'error'
+        });
+        return;
+      }
+
+      // Check 4: Forward-only (dx=+1 for horizontal, dy=+1 for vertical)
+      const isHorizontal = firstStep.dy === 0;
+      const isForward = isHorizontal ? firstStep.dx === 1 : firstStep.dy === 1;
+      if (!isForward) {
+        const direction = isHorizontal ? 'right-to-left' : 'bottom-to-top';
+        errors.push({
+          code: 'ERR_PLACEMENT_REVERSED',
+          path: `words.${category}.${word.wordId}`,
+          message: `Word reads ${direction} (reversed)`,
+          severity: 'error'
+        });
       }
     }
   };
