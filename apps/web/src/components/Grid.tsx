@@ -9,10 +9,11 @@ interface GridProps {
   additionalCells: Set<string>;
   hintCells: Set<string>;
   onSelection: (cellIds: string[]) => void;
+  isCompleted?: boolean;
 }
 
 // v1.1: Visual priority order: preview > path (green) > hint (yellow) > additional (gray)
-export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelection }: GridProps) {
+export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelection, isCompleted }: GridProps) {
   const [selecting, setSelecting] = useState(false);
   const [previewCells, setPreviewCells] = useState<string[]>([]);
   const adapterRef = useRef<SelectionAdapter | null>(null);
@@ -20,6 +21,15 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
   if (!adapterRef.current) {
     adapterRef.current = new SelectionAdapter(puzzle);
   }
+
+  // Get start/end cell positions for markers
+  const startCellId = puzzle.grid.start.adjacentCellId;
+  const endCellId = puzzle.grid.end.adjacentCellId;
+  const startCell = puzzle.grid.cells.find(c => c.id === startCellId);
+  const endCell = puzzle.grid.cells.find(c => c.id === endCellId);
+  const gridContainerStyle = {
+    '--grid-columns': puzzle.grid.width
+  } as React.CSSProperties;
 
   const handlePointerDown = (cellId: string, e: React.PointerEvent) => {
     e.preventDefault(); // Prevent text selection, long-press menu
@@ -70,48 +80,81 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
   };
 
   return (
-    <div
-      className="grid"
-      data-testid="grid"
-      style={{
-        gridTemplateColumns: `repeat(${puzzle.grid.width}, 1fr)`,
-        gridTemplateRows: `repeat(${puzzle.grid.height}, 1fr)`
-      }}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-    >
-      {puzzle.grid.cells.map(cell => {
-        if (cell.type === 'VOID') {
-          return <div key={cell.id} className="cell void" />;
-        }
+    <div className="grid-container" style={gridContainerStyle}>
+      {/* Objective microcopy */}
+      <div className="objective-text" data-testid="objective">
+        Connect <span className="start-label">START</span> → <span className="end-label">END</span>
+      </div>
 
-        const isPath = pathCells.has(cell.id);
-        const isPreview = previewCells.includes(cell.id);
-        const isHint = hintCells.has(cell.id);
-        const isAdditional = additionalCells.has(cell.id);
+      {/* Start marker */}
+      {startCell && (
+        <div
+          className={`start-marker ${isCompleted ? 'connected' : ''}`}
+          style={{ '--marker-col': startCell.x + 1 } as React.CSSProperties}
+          data-testid="start-marker"
+        >
+          ▼ START
+        </div>
+      )}
 
-        // v1.1: Priority order (highest to lowest):
-        // preview (purple) > path (green) > hint (yellow) > additional (gray) > base
-        // CSS handles priority via specificity, so we apply all applicable classes
-        const classes = ['cell'];
-        if (isPreview) classes.push('preview');
-        if (isPath) classes.push('path');
-        if (isHint && !isPath) classes.push('hint'); // Yellow only if not green
-        if (isAdditional && !isPath && !isHint) classes.push('additional'); // Gray only if not green or yellow
+      <div
+        className="grid"
+        data-testid="grid"
+        style={{
+          gridTemplateColumns: `repeat(${puzzle.grid.width}, 1fr)`,
+          gridTemplateRows: `repeat(${puzzle.grid.height}, 1fr)`
+        }}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
+        {puzzle.grid.cells.map(cell => {
+          if (cell.type === 'VOID') {
+            return <div key={cell.id} className="cell void" />;
+          }
 
-        return (
-          <div
-            key={cell.id}
-            data-cell-id={cell.id}
-            className={classes.join(' ')}
-            onPointerDown={(e) => handlePointerDown(cell.id, e)}
-            style={{ gridColumn: cell.x + 1, gridRow: cell.y + 1 }}
-          >
-            {cell.value}
-          </div>
-        );
-      })}
+          const isPath = pathCells.has(cell.id);
+          const isPreview = previewCells.includes(cell.id);
+          const isHint = hintCells.has(cell.id);
+          const isAdditional = additionalCells.has(cell.id);
+          const isStart = cell.id === startCellId;
+          const isEnd = cell.id === endCellId;
+
+          // v1.1: Priority order (highest to lowest):
+          // preview (purple) > path (green) > hint (yellow) > additional (gray) > base
+          // CSS handles priority via specificity, so we apply all applicable classes
+          const classes = ['cell'];
+          if (isPreview) classes.push('preview');
+          if (isPath) classes.push('path');
+          if (isHint && !isPath) classes.push('hint'); // Yellow only if not green
+          if (isAdditional && !isPath && !isHint) classes.push('additional'); // Gray only if not green or yellow
+          if (isStart) classes.push('start-cell');
+          if (isEnd) classes.push('end-cell');
+
+          return (
+            <div
+              key={cell.id}
+              data-cell-id={cell.id}
+              className={classes.join(' ')}
+              onPointerDown={(e) => handlePointerDown(cell.id, e)}
+              style={{ gridColumn: cell.x + 1, gridRow: cell.y + 1 }}
+            >
+              {cell.value}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* End marker */}
+      {endCell && (
+        <div
+          className={`end-marker ${isCompleted ? 'connected' : ''}`}
+          style={{ '--marker-col': endCell.x + 1 } as React.CSSProperties}
+          data-testid="end-marker"
+        >
+          END ▲
+        </div>
+      )}
     </div>
   );
 }

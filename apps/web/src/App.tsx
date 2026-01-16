@@ -380,6 +380,7 @@ export function App() {
         additionalCells={additionalCells}
         hintCells={hintCells}
         onSelection={handleSelection}
+        isCompleted={state.status === 'COMPLETED'}
       />
 
       {/* Words List Modal */}
