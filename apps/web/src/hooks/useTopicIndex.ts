@@ -15,7 +15,7 @@ export function useTopicIndex() {
       try {
         setLoading(true);
         const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-        const response = await fetch(`${baseUrl}/topics/index.json`);
+        const response = await fetch(`${baseUrl}/topics/index.json?v=${Date.now()}`);
         if (!response.ok) {
           throw new Error(`Failed to load topic index: ${response.statusText}`);
         }
@@ -54,7 +54,7 @@ export function useTopicCatalog(topicId: string | null) {
       try {
         setLoading(true);
         const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-        const response = await fetch(`${baseUrl}/topics/${topicId}/index.json`);
+        const response = await fetch(`${baseUrl}/topics/${topicId}/index.json?v=${Date.now()}`);
         if (!response.ok) {
           throw new Error(`Failed to load topic catalog: ${response.statusText}`);
         }

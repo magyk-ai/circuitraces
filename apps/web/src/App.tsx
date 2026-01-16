@@ -108,7 +108,7 @@ export function App() {
       return;
     }
 
-    fetch(resolveContentPath(metadata.path))
+    fetch(resolveContentPath(metadata.path) + '?v=' + Date.now())
       .then(res => {
         if (!res.ok) {
           throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
@@ -144,7 +144,7 @@ export function App() {
 
     if (!pathToLoad) return;
 
-    fetch(resolveContentPath(pathToLoad))
+    fetch(resolveContentPath(pathToLoad) + '?v=' + Date.now())
       .then(res => {
         if (!res.ok) {
           throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);

@@ -21,11 +21,11 @@ export function useDailyPuzzle(dateOverride?: string) {
       try {
         setLoading(true);
         const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, ''); // Remove trailing slash if present to avoid double slash
-        const response = await fetch(`${baseUrl}/daily/index.json`);
-        if (!response.ok) {
-          throw new Error(`Failed to load daily schedule: ${response.statusText}`);
+        const res = await fetch(`${baseUrl}/daily/index.json?v=${Date.now()}`);
+        if (!res.ok) {
+          throw new Error(`Failed to load daily schedule: ${res.statusText}`);
         }
-        const data: DailySchedule = await response.json();
+        const data: DailySchedule = await res.json();
         setSchedule(data);
 
         // Determine which puzzle to load
