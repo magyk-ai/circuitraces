@@ -49,7 +49,7 @@ export class PuzzleConstructor {
         console.log(`✅ Success (Attempt ${attempts}): ${outPath}`);
         return puzzle;
         
-      } catch (e) {
+      } catch {
         // Continue retry
         // console.log(`Attempt ${attempts} failed: ${(e as Error).message}`);
       }
@@ -65,7 +65,6 @@ export class PuzzleConstructor {
     // 1. Pick Path Words (3-4) using Chain Builder
     let chainAttempt = 0;
     let finalPathCandidates: string[] = [];
-    let finalTotalLength = 0;
     
     while (chainAttempt < 100) {
       chainAttempt++;
@@ -108,7 +107,6 @@ export class PuzzleConstructor {
       
       if (pathCandidates.length >= 3 && totalLength <= 25) {
         finalPathCandidates = pathCandidates;
-        finalTotalLength = totalLength;
         break;
       }
     }

@@ -88,7 +88,7 @@ export class GridBuilder {
 
       // Try each direction
       for (const [dx, dy] of dirs) {
-        let path: string[] = [start.id];
+        const path: string[] = [start.id];
         let valid = true;
         
         for (let i = 1; i < word.length; i++) {
@@ -187,7 +187,7 @@ export class GridBuilder {
              const startY = target.y - (charIdx * dy);
              
              // Verify full word placement
-             let path: string[] = [];
+             const path: string[] = [];
              let valid = true;
              
              for (let i = 0; i < word.length; i++) {

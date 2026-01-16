@@ -2,7 +2,7 @@
   "puzzleId": "valid-with-bonus",
   "theme": "Test Valid With Bonus",
   "config": {
-    "selectionModel": "RAY_8DIR",
+    "selectionModel": "ADJACENT",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },
