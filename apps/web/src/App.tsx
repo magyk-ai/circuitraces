@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import React, { useState, useEffect, useCallback } from 'react';
 import type { WaywordsPuzzle, RuntimeState, EngineEvent } from '@circuitraces/engine';
 import { init, reduce, selectors } from '@circuitraces/engine';
@@ -7,6 +8,14 @@ import { HomeScreen } from './components/HomeScreen';
 import { TopicBrowser } from './components/TopicBrowser';
 import { useDailyPuzzle } from './hooks/useDailyPuzzle';
 import './App.css';
+
+function resolveContentPath(path: string): string {
+  if (path.startsWith('/')) {
+    const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+    return `${baseUrl}${path}`;
+  }
+  return path;
+}
 
 function formatTime(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
@@ -96,7 +105,7 @@ export function App() {
       return;
     }
 
-    fetch(metadata.path)
+    fetch(resolveContentPath(metadata.path))
       .then(res => {
         if (!res.ok) {
           throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
@@ -132,7 +141,7 @@ export function App() {
 
     if (!pathToLoad) return;
 
-    fetch(pathToLoad)
+    fetch(resolveContentPath(pathToLoad))
       .then(res => {
         if (!res.ok) {
           throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
