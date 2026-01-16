@@ -17,6 +17,19 @@ interface GeneratorConfig {
   selectionModel?: 'RAY_8DIR' | 'RAY_4DIR' | 'ADJACENT';
 }
 
+interface TokenLetter {
+  t: 'L';
+  v: string;
+}
+
+interface WordPlacement {
+  wordId: string;
+  tokens: TokenLetter[];
+  size: number;
+  placements: string[][];
+  hintCellId?: string;
+}
+
 export class PuzzleConstructor {
   private wordlists: Record<string, WordList>;
 
@@ -87,7 +100,7 @@ export class PuzzleConstructor {
     const pathCandidates = shuffled.slice(0, Math.min(numWords, shuffled.length));
 
     // 2. Place words with intersection-based connectivity
-    const placedPathWords: any[] = [];
+    const placedPathWords: WordPlacement[] = [];
     const usedPathCells = new Set<string>();
     const placedCellsByChar = new Map<string, string[]>(); // char -> cellIds
 
@@ -116,7 +129,7 @@ export class PuzzleConstructor {
 
     // 3. Place Bonus Words (1-2)
     const bonusCandidates = [...words.bonus].sort(() => Math.random() - 0.5);
-    const placedBonusWords: any[] = [];
+    const placedBonusWords: WordPlacement[] = [];
 
     for (const word of bonusCandidates) {
       if (placedBonusWords.length >= 1) break;
@@ -179,7 +192,7 @@ export class PuzzleConstructor {
     });
   }
 
-  private createWordObj(word: string, path: string[]) {
+  private createWordObj(word: string, path: string[]): WordPlacement {
     return {
       wordId: word,
       tokens: word.split('').map(c => ({ t: 'L', v: c })),

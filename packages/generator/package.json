@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate": "node ./dist/cli.js",
-    "audit": "node ./dist/cli.js --audit"
+    "audit": "node ./dist/cli.js --audit",
+    "content:qa": "npm run build && node ./dist/content-qa.js"
   },
   "dependencies": {
     "@circuitraces/engine": "*"

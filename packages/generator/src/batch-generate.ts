@@ -32,15 +32,30 @@ const DATES = [
   '2026-01-23'
 ];
 
+interface DailyPuzzleMeta {
+  id: string;
+  title: string;
+  difficulty: 'easy';
+  grid: { width: number; height: number };
+  estimatedMinutes: number;
+  puzzlePath: string;
+  tags: string[];
+}
+
+interface DailyScheduleEntry {
+  date: string;
+  puzzles: Record<string, DailyPuzzleMeta>;
+}
+
 async function main() {
   const constructor = new PuzzleConstructor(WORDLISTS_PATH);
   await constructor.loadWordlists(WORDLISTS_PATH);
   
-  const scheduleEntries = [];
+  const scheduleEntries: DailyScheduleEntry[] = [];
 
   for (const date of DATES) {
     console.log(`\n📅 Generating date: ${date}`);
-    const puzzleMap: Record<string, any> = {};
+    const puzzleMap: Record<string, DailyPuzzleMeta> = {};
 
     for (const topic of TOPICS) {
       // Namespacing: daily-2026-01-18-devops.json

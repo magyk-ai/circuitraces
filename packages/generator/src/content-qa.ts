@@ -9,8 +9,23 @@ const DAILY_DIR = path.resolve(__dirname, '../../../apps/web/public/daily');
 interface DailyIndex {
   schedule: {
     date: string;
-    puzzles: Record<string, any>; // topicId -> puzzle metadata
+    puzzles: Record<string, DailyPuzzleMeta>; // topicId -> puzzle metadata
   }[];
+}
+
+interface DailyPuzzleMeta {
+  puzzlePath: string;
+}
+
+interface PuzzleWordEntry {
+  wordId: string;
+}
+
+interface PuzzleContent {
+  words: {
+    path: PuzzleWordEntry[];
+    additional: PuzzleWordEntry[];
+  };
 }
 
 async function main() {
@@ -48,12 +63,12 @@ async function main() {
       
       try {
         const content = await fs.readFile(puzzlePath, 'utf-8');
-        const puzzle = JSON.parse(content);
+        const puzzle: PuzzleContent = JSON.parse(content);
         
         // Metrics
         const pathWordCount = puzzle.words.path.length;
         const bonusWordCount = puzzle.words.additional.length;
-        const pathTotalLen = puzzle.words.path.reduce((acc: number, w: any) => acc + w.wordId.length, 0); // tokens are better but wordId length is proxy
+        const pathTotalLen = puzzle.words.path.reduce((acc, w) => acc + w.wordId.length, 0); // tokens are better but wordId length is proxy
 
         
         totalPuzzles++;
