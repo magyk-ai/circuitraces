@@ -2,6 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  color: #fff;
 }
 
 .home-screen.loading,
@@ -11,147 +12,181 @@
   justify-content: center;
   min-height: 50vh;
   font-size: 1.2rem;
-  color: var(--text-secondary, #666);
+  color: #aaa;
 }
 
 .home-header {
   text-align: center;
   margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #333;
 }
 
 .home-header h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin: 0 0 0.5rem 0;
-  color: var(--text-primary, #000);
+  background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .tagline {
-  color: var(--text-secondary, #666);
-  font-size: 1.1rem;
+  color: #888;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+/* Daily Section */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #fff;
+}
+
+.date-badge {
+  background: #333;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #aaa;
+  font-family: monospace;
+}
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
 }
 
 /* Daily card */
 .daily-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 3rem;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  min-height: 140px;
+  position: relative;
+  overflow: hidden;
 }
 
-.daily-header {
+.daily-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(74, 222, 128, 0.5); /* Green accent */
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1rem;
-  font-size: 0.9rem;
-  opacity: 0.9;
 }
 
-.daily-label {
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 600;
-}
-
-.daily-title {
+.topic-icon {
   font-size: 2rem;
-  margin: 0 0 1rem 0;
+  line-height: 1;
 }
 
-.daily-meta {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-}
-
-.daily-meta > span {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  text-transform: capitalize;
-}
-
-.play-button {
-  background: white;
-  color: #667eea;
-  border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 8px;
-  font-size: 1rem;
+.difficulty-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  text-transform: uppercase;
   font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.play-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.daily-card h3 {
+  font-size: 1.25rem;
+  margin: 0 0 auto 0;
+  color: #fff;
+  font-weight: 600;
 }
 
-/* Topics section */
+.card-meta {
+  margin-top: 1rem;
+  display: flex;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Topics Grid */
 .topics-section h2 {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: var(--text-primary, #000);
+  color: #fff;
 }
 
 .topics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
 .topic-tile {
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: #1a1a1a;
+  border: 1px solid #333;
   border-radius: 12px;
   padding: 1.5rem;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .topic-tile:hover {
   border-color: #667eea;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+  background: #222;
+  transform: translateY(-2px);
 }
 
-.topic-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+.topic-tile .topic-icon {
+  margin-bottom: 0.5rem;
 }
 
 .topic-tile h3 {
-  font-size: 1.2rem;
-  margin: 0 0 0.5rem 0;
-  color: var(--text-primary, #000);
+  font-size: 1.1rem;
+  margin: 0;
+  color: #fff;
 }
 
 .topic-tile p {
   margin: 0;
-  color: var(--text-secondary, #666);
+  color: #888;
   font-size: 0.9rem;
   line-height: 1.4;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .home-header h1 {
     font-size: 2rem;
   }
-
-  .daily-card {
-    padding: 1.5rem;
+  
+  .daily-grid {
+    grid-template-columns: 1fr;
   }
-
-  .daily-title {
-    font-size: 1.5rem;
-  }
-
+  
   .topics-grid {
     grid-template-columns: 1fr;
   }
