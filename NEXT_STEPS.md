@@ -1,7 +1,7 @@
 # Circuit Races - Next Steps
 
 **Last Updated:** 2026-01-16
-**Current Status:** PR #4 Complete, Ready for PR #5 (Daily Puzzle Infrastructure)
+**Current Status:** PR #5 (Daily Puzzle Infrastructure) Complete ✅, Ready for PR #6 (Content Production)
 
 ## Completed PRs
 
@@ -25,6 +25,23 @@
 - Added auditor validation rules
 - Added Migrations section (Section 16)
 - Added Changelog (Section 17)
+
+### PR #4: E2E Tests + Auditor Hardening ✅
+- 4 Playwright E2E smoke tests
+- 42 unit tests total (26 engine + 16 auditor)
+- Auditor with 14 stable error codes
+- Spec-lock invariant tests
+- CI integration for E2E tests
+
+### PR #5: Daily Puzzle Infrastructure ✅
+- Home screen with daily card + 7 topic tiles
+- Query param routing (no React Router)
+- Static daily schedule + topic catalogs
+- React hooks: useDailyPuzzle, useTopicIndex
+- Sample daily puzzle: "Product Signals" (PM themed)
+- Stable conventions: puzzleId, contentVersion, revision
+- Dev mode (?dev=1) for QA
+- All 42 tests passing, build successful
 
 ### PR #3: UI Fidelity ✅
 - Timer + pause UI with auto-pause on tab hidden

@@ -1,15 +1,68 @@
 # Circuit Races - Current Status
 
 **Last Updated:** 2026-01-16
-**Status:** PR #4 Complete, Ready for PR #5 (Daily Puzzle Infrastructure)
+**Status:** PR #5 (Daily Puzzle Infrastructure) Complete ✅, Ready for PR #6 (Content Production)
 
-## Recent Changes (PR #4 - 2026-01-16)
+## Recent Changes (PR #5 - 2026-01-16)
 
-### Vitest Test Suite
+### Daily Puzzle Infrastructure
+**Status:** ✅ Complete and validated
+
+#### New Features
+- **Home screen** with daily puzzle card + 7 topic tiles (vibrant gradient design)
+- **Query param routing** without React Router (`/?mode=daily`, `/?topic=...`, `/?dev=1`)
+- **UTC-based daily scheduling** with automatic fallback to latest puzzle
+- **Topic browser** with puzzle catalogs and difficulty badges
+- **Canonical share URLs** for puzzles (stable format for future "Copy link" feature)
+- **Dev mode** (`?dev=1`) reveals legacy puzzle selector for QA
+
+#### Static Content Files
+- `apps/web/public/daily/index.json` - Daily schedule with contentVersion tracking
+- `apps/web/public/daily/2026-01-17.json` - "Product Signals" puzzle (5×5, Product Management)
+- `apps/web/public/topics/index.json` - 7 topics: PM, DevOps, Personal Finance, Design, Cybersecurity, Finance & Accounting, Physiotherapy
+- `apps/web/public/topics/product-management/index.json` - PM catalog (points to daily puzzle)
+
+#### React Infrastructure
+- `apps/web/src/types/content.ts` - TypeScript types for catalogs
+- `apps/web/src/hooks/useDailyPuzzle.ts` - Daily puzzle loading with UTC resolution
+- `apps/web/src/hooks/useTopicIndex.ts` - Topic master + catalog loading
+- `apps/web/src/components/HomeScreen.tsx` + `.css` - Home view component
+- `apps/web/src/components/TopicBrowser.tsx` + `.css` - Topic browser component
+
+#### Modified
+- `apps/web/src/App.tsx` - Integrated view routing + navigation handlers
+- `AGENTS.md` - Created pointer to CLAUDE.md development playbook
+
+#### Conventions Enforced
+- ✅ Daily puzzles: `puzzleId = "daily-YYYY-MM-DD"`
+- ✅ Topic puzzles: `puzzleId` matches catalog entry `id`
+- ✅ `contentVersion` at index level for cache invalidation
+- ✅ `revision` per puzzle entry for individual changes
+
+#### Validation Results
+- ✅ Lint: Clean
+- ✅ Typecheck: Passed
+- ✅ Tests: All 42 passing (26 engine + 16 auditor)
+- ✅ Build: Successful (163KB gzipped)
+
+---
+
+## Previous Changes (PR #4 - 2026-01-16)
+
+### PR #4: Testing + Auditor Hardening ✅
 - **42 unit tests** (26 engine + 16 auditor)
 - **Auditor error codes** (14 stable codes for testable assertions)
 - **Fixture-driven tests** (12 bad puzzle fixtures)
 - **Spec-lock invariant tests** (6 tests for hint persistence, accumulation, determinism, connectivity)
+
+### PR #5: Daily Puzzle Infrastructure ✅
+- **Home screen** with daily card + 7 topic tiles
+- **Query param routing** (no React Router)
+- **Static content files** (daily + topic indexes)
+- **React hooks** (useDailyPuzzle, useTopicIndex)
+- **Sample daily puzzle** - "Product Signals" (Product Management themed)
+- **Stable conventions** (puzzleId, contentVersion, revision)
+- **Dev mode** for QA (`?dev=1`)
 
 ### Playwright E2E Smoke Tests
 - **4 minimal smoke tests** (UI wiring verification)
@@ -57,6 +110,22 @@
 - **Emoji tap-to-reveal** - Engine doesn't have EMOJI cell type yet (only LETTER | VOID)
 
 ## What Works Now
+
+### Daily Puzzle Infrastructure (v1.0)
+```typescript
+// Routes
+/ → Home screen (daily card + topics)
+/?mode=daily → Today's puzzle
+/?mode=daily&daily=YYYY-MM-DD → Specific daily (canonical)
+/?topic=TOPIC_ID → Topic browser
+/?topic=TOPIC_ID&puzzle=PUZZLE_ID → Specific puzzle (canonical)
+/?dev=1 → Show puzzle selector (QA mode)
+
+// Content Loading
+useDailyPuzzle(date?) → { todaysPuzzle, schedule, loading, error }
+useTopicIndex() → { index, loading, error }
+useTopicCatalog(topicId) → { catalog, loading, error }
+```
 
 ### Engine (v1.1)
 ```typescript
