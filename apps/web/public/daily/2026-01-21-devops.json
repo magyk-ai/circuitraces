@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-21-devops",
   "theme": "DevOps Daily",
   "config": {
-    "selectionModel": "RAY_8DIR",
+    "selectionModel": "ADJACENT",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },

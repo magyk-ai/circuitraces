@@ -192,7 +192,7 @@ export class PuzzleConstructor {
       puzzleId: config.puzzleId,
       theme: config.title,
       config: {
-        selectionModel: "RAY_8DIR",
+        selectionModel: "ADJACENT",
         connectivityModel: "ORTHO_4",
         allowReverseSelection: true
       },

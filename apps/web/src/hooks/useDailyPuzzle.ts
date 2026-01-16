@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { useState, useEffect } from 'react';
 import type { DailySchedule, DailyPuzzleEntry } from '../types/content';
 
@@ -19,7 +20,8 @@ export function useDailyPuzzle(dateOverride?: string) {
     const loadSchedule = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/daily/index.json');
+        const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, ''); // Remove trailing slash if present to avoid double slash
+        const response = await fetch(`${baseUrl}/daily/index.json`);
         if (!response.ok) {
           throw new Error(`Failed to load daily schedule: ${response.statusText}`);
         }

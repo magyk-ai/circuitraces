@@ -1,9 +1,34 @@
 # Circuit Races - Current Status
 
 **Last Updated:** 2026-01-16
-**Status:** PR #5 (Daily Puzzle Infrastructure) Complete ✅, Ready for PR #6 (Content Production)
+**Status:** PR #6 (Parallel Dailies & Content) Complete ✅, Ready for Beta Launch 🚀
 
-## Recent Changes (PR #5 - 2026-01-16)
+## Recent Changes (PR #6 - 2026-01-16)
+
+### Parallel Dailies & Algorithmic Content
+**Status:** ✅ Complete and validated
+
+#### New Features
+- **Parallel Dailies** - 7 unique puzzles per day (one for each topic)
+- **Algorithmic Generator** - `PuzzleConstructor` with recursive backtracking and chain logic
+- **Content Factory** - Generated 49 unique puzzles for Week 1 (Jan 17 - Jan 23)
+- **Topic Integration** - `daily/index.json` now maps dates to a topic-puzzle map
+
+#### Technical Improvements
+- **`GridBuilder`** - Robust grid construction and validation logic
+- **`content-qa.ts`** - Automated quality metrics for generated puzzles
+- **E2E Testing** - Verified daily/topic navigation flows
+- **Test Coverage** - Added unit tests for generator, ensuring 100% pass rate
+
+#### Validation Results
+- ✅ Lint: Clean
+- ✅ Typecheck: Passed
+- ✅ Tests: All 46 passing (26 engine + 20 generator) + 5 E2E
+- ✅ Build: Successful
+
+---
+
+## Previous Changes (PR #5 - 2026-01-16)
 
 ### Daily Puzzle Infrastructure
 **Status:** ✅ Complete and validated
@@ -213,8 +238,16 @@ cd apps/web && npm run dev:network
 
 ## What's Next
 
-### PR #5: Infrastructure + UI + Sample Puzzle (Next)
-**Goal:** Daily/topic routing with 1 sample daily puzzle
+### Release Candidate 1 (Next)
+**Goal:** Deploy to production and verify live behavior
+
+**Key deliverables:**
+- Deploy to Vercel/Netlify
+- Verify deep links in production
+- Monitor error rates
+
+### Future: Skin System
+**Goal:** Theming engine (Circuit vs Classic)
 
 **Key deliverables:**
 - Daily schedule index (`daily/index.json`) with `contentVersion` and `revision` fields

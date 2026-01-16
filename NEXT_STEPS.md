@@ -1,7 +1,7 @@
 # Circuit Races - Next Steps
 
 **Last Updated:** 2026-01-16
-**Current Status:** PR #5 (Daily Puzzle Infrastructure) Complete ✅, Ready for PR #6 (Content Production)
+**Status:** PR #6 (Parallel Dailies & Content) Complete ✅, Ready for Beta Launch 🚀
 
 ## Completed PRs
 
@@ -53,78 +53,30 @@
 
 ---
 
-## Next Up: PR #5 — Daily Puzzle Infrastructure
-
-**Goal:** Static daily/topic indexes + routing + home screen
-
-### Scope
-
-**Static files to create:**
-- `apps/web/public/daily/index.json` — Schedule with `contentVersion`, `revision` fields
-- `apps/web/public/daily/2026-01-17.json` — Sample daily puzzle (`puzzleId: "daily-2026-01-17"`)
-- `apps/web/public/topics/index.json` — Master topic list (7 topics)
-- `apps/web/public/topics/product-management/index.json` — PM catalog (1 entry pointing to daily)
-
-**New components:**
-- `apps/web/src/components/HomeScreen.tsx` — Daily card + topic grid
-- `apps/web/src/components/TopicBrowser.tsx` — Puzzle list for topic
-- `apps/web/src/hooks/useDailyPuzzle.ts` — Load daily index, resolve today (UTC)
-- `apps/web/src/hooks/useTopicIndex.ts` — Load topic catalog
-- `apps/web/src/types/content.ts` — TypeScript types (`DailySchedule`, `TopicCatalog`)
-
-**Routing (query params):**
-- `/` → Home screen
-- `?mode=daily` → Today's puzzle
-- `?mode=daily&daily=2026-01-17` → **Canonical daily share link**
-- `?topic=product-management` → Topic browser
-- `?topic=product-management&puzzle=pm-001` → **Canonical topic share link**
-- `?dev=1` → Show puzzle selector dropdown (hidden by default)
-
-**Key conventions enforced:**
-- All daily puzzles: `puzzleId = "daily-YYYY-MM-DD"`
-- All topic puzzles: `puzzleId` matches catalog entry `id`
-- `contentVersion` at index level for batch updates
-- `revision` per puzzle entry for individual changes
-
-### Acceptance Criteria
-- [ ] Home screen shows daily card + 7 topic tiles
-- [ ] `?mode=daily` loads today's puzzle (or latest fallback)
-- [ ] Canonical share URLs work correctly
-- [ ] `?dev=1` shows puzzle selector
-- [ ] All `puzzleId` values follow conventions
-- [ ] All existing tests pass (42 unit + 4 E2E)
+### PR #6: Parallel Dailies & Content ✅
+- 7 unique puzzles per day (Topic map in `daily/index.json`)
+- Algorithmic Generator (`construct-puzzle` + `GridBuilder`)
+- Content Factory (49 Generated Puzzles for Week 1)
+- UI Support for Parallel Dailies (Query params)
+- Automated Content QA Metrics
+- 100% Test Coverage (Unit + E2E)
 
 ---
 
-## Future: PR #6 — Content Production
+## Next Up: Release Candidate 1 (Beta)
 
-**Goal:** 7 daily puzzles + topic library baseline + QA metrics
+**Goal:** Deploy to production and verify live behavior.
 
 ### Scope
-
-**Content:**
-- 6 more daily puzzles (2026-01-18 through 2026-01-23)
-- Topic indexes for remaining 6 topics
-- At least 1 puzzle per topic (can reference daily files)
-
-**Content QA script:**
-- `packages/generator/src/content-qa.ts` — Report stats (not a generator)
-  - Grid size, PATH/BONUS counts, word lengths
-  - Non-hint intersection count
-  - BFS `pathLength` from auditor
-  - **Warning** if pathLength > 70% of PATH tiles
-- Add `npm run content-qa` command
-
-**LLM wordlist generation:**
-- Use enhanced prompt (ranked candidates: top 10 + 10 backups)
-- **MUST NOT** include morphological variants or substrings
-- Explicit avoid list reinforcement
+1. **Deployment Pipeline:** Vercel/Netlify configuration.
+2. **Smoke Testing:** Verify deep links in production environment.
+3. **Analytics:** Basic event tracking (optional).
+4. **Error Monitoring:** Sentry/LogRocket (optional).
 
 ### Validation
-- [ ] All puzzles pass `npm run audit`
-- [ ] All `puzzleId` values follow naming conventions
-- [ ] Content QA metrics run without warnings
-- [ ] Mobile playtest complete (solvability + feel)
+- [ ] Production URL loads
+- [ ] All 7 topics playable
+- [ ] Share links work correctly
 
 ---
 

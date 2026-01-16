@@ -7,9 +7,13 @@ export class SelectionAdapter {
   private currentDirection: [number, number] | null = null;
   private lockedDirection: [number, number] | null = null;
   private readonly DEAD_ZONE_THRESHOLD = 0.3; // 30% of cell size in grid units
+  private currentPath: string[] = [];
+  private isAdjacentMode: boolean = false;
 
   constructor(puzzle: WaywordsPuzzle) {
     this.puzzle = puzzle;
+    // Check config for ADJACENT mode (default to RAY_8DIR for backward compat)
+    this.isAdjacentMode = puzzle.config?.selectionModel === 'ADJACENT';
     this.cellMap = new Map(puzzle.grid.cells.map(c => [c.id, c]));
   }
 
@@ -17,6 +21,7 @@ export class SelectionAdapter {
     this.startCellId = cellId;
     this.currentDirection = null;
     this.lockedDirection = null;
+    this.currentPath = [cellId];
   }
 
   isActive(): boolean {
@@ -25,46 +30,91 @@ export class SelectionAdapter {
 
   update(cellId: string): string[] {
     if (!this.startCellId) return [];
-    if (cellId === this.startCellId) return [cellId];
+    
+    // RAY_8DIR Logic
+    if (!this.isAdjacentMode) {
+        if (cellId === this.startCellId) return [cellId];
 
-    const start = this.cellMap.get(this.startCellId);
-    const current = this.cellMap.get(cellId);
-    if (!start || !current) return [this.startCellId];
+        const start = this.cellMap.get(this.startCellId);
+        const current = this.cellMap.get(cellId);
+        if (!start || !current) return [this.startCellId];
 
-    // Calculate direction
-    const dx = current.x - start.x;
-    const dy = current.y - start.y;
-    const distance = Math.sqrt(dx*dx + dy*dy);
+        // Calculate direction
+        const dx = current.x - start.x;
+        const dy = current.y - start.y;
+        const distance = Math.sqrt(dx*dx + dy*dy);
 
-    // Dead zone: ignore small movements
-    if (distance < this.DEAD_ZONE_THRESHOLD) {
-      return [this.startCellId];
+        // Dead zone: ignore small movements
+        if (distance < this.DEAD_ZONE_THRESHOLD) {
+        return [this.startCellId];
+        }
+
+        // Snap to 8 directions
+        const newDir = this.snapTo8Dir(dx, dy);
+
+        // Direction locking: require significant angle change (45°)
+        if (this.lockedDirection) {
+        const angleDiff = this.angleBetween(this.lockedDirection, newDir);
+        if (angleDiff < Math.PI / 4) { // < 45 degrees
+            // Keep locked direction
+            return this.getCellsAlongRay(start, this.lockedDirection, current);
+        }
+        }
+
+        // Lock new direction
+        this.lockedDirection = newDir;
+        this.currentDirection = newDir;
+
+        // Get cells along ray
+        return this.getCellsAlongRay(start, newDir, current);
+    }
+    
+    // ADJACENT Logic
+    // If we have no path yet, start one
+    if (this.currentPath.length === 0) {
+        this.currentPath = [this.startCellId];
+    }
+    
+    const lastId = this.currentPath[this.currentPath.length - 1];
+    
+    // 1. Hovering over current tail -> no change
+    if (cellId === lastId) {
+        return [...this.currentPath];
     }
 
-    // Snap to 8 directions
-    const newDir = this.snapTo8Dir(dx, dy);
-
-    // Direction locking: require significant angle change (45°)
-    if (this.lockedDirection) {
-      const angleDiff = this.angleBetween(this.lockedDirection, newDir);
-      if (angleDiff < Math.PI / 4) { // < 45 degrees
-        // Keep locked direction
-        return this.getCellsAlongRay(start, this.lockedDirection, current);
-      }
+    // 2. Backtracking: Hovering over previous cell -> pop tail
+    if (this.currentPath.length > 1 && cellId === this.currentPath[this.currentPath.length - 2]) {
+        this.currentPath.pop();
+        return [...this.currentPath];
     }
-
-    // Lock new direction
-    this.lockedDirection = newDir;
-    this.currentDirection = newDir;
-
-    // Get cells along ray
-    return this.getCellsAlongRay(start, newDir, current);
+    
+    // 3. Advancing: Check if neighbor and not visited
+    // (Note: Circuit Races usually doesn't allow self-intersection in a single path selection, 
+    // unless "Allow Cycle" feature is on. Engine validates selection ultimately. 
+    // UI should probably prevent self-intersection for clarity).
+    if (!this.currentPath.includes(cellId)) {
+        const last = this.cellMap.get(lastId);
+        const curr = this.cellMap.get(cellId);
+        
+        if (last && curr) {
+            const dx = Math.abs(curr.x - last.x);
+            const dy = Math.abs(curr.y - last.y);
+            // Must be adjacent (ortho or diag)
+            if (dx <= 1 && dy <= 1) {
+                this.currentPath.push(cellId);
+            }
+        }
+    }
+    
+    return [...this.currentPath];
   }
 
   end(cellId: string): string[] {
     const result = this.update(cellId);
     this.startCellId = null;
     this.currentDirection = null;
+    this.lockedDirection = null;
+    this.currentPath = [];
     return result;
   }
 

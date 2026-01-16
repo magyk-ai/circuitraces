@@ -2,7 +2,7 @@
   "puzzleId": "daily-2026-01-18-design",
   "theme": "Design Daily",
   "config": {
-    "selectionModel": "RAY_8DIR",
+    "selectionModel": "ADJACENT",
     "connectivityModel": "ORTHO_4",
     "allowReverseSelection": true
   },

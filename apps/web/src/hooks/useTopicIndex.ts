@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { useState, useEffect } from 'react';
 import type { TopicMasterIndex, TopicCatalog } from '../types/content';
 
@@ -13,7 +14,8 @@ export function useTopicIndex() {
     const loadIndex = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/topics/index.json');
+        const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+        const response = await fetch(`${baseUrl}/topics/index.json`);
         if (!response.ok) {
           throw new Error(`Failed to load topic index: ${response.statusText}`);
         }
@@ -51,7 +53,8 @@ export function useTopicCatalog(topicId: string | null) {
     const loadCatalog = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/topics/${topicId}/index.json`);
+        const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+        const response = await fetch(`${baseUrl}/topics/${topicId}/index.json`);
         if (!response.ok) {
           throw new Error(`Failed to load topic catalog: ${response.statusText}`);
         }
