@@ -19,6 +19,13 @@
 - ✅ `npm run test:e2e` (Playwright smoke suite)
 - ✅ `npm run content:qa` (49 puzzles, 3–4 path words / 1 bonus each, path lengths 11−21 chars)
 
+### Content quality gates
+**Status:** ✅ Enforced via content QA
+
+- Easy dailies now require START on row `y=0`, END on `y=height-1`, 4–6 path words, at least 14 unique path cells on 6×6 (18 on 7×7), and BFS route length ≥ `height - 1`.
+- `packages/generator/src/content-qa.ts` emits specific `ERR_QA_*` codes when these rules break (`ERR_QA_START_NOT_TOP_ROW`, `ERR_QA_END_NOT_BOTTOM_ROW`, `ERR_QA_TOO_FEW_PATH_WORDS`, `ERR_QA_TOO_MANY_PATH_WORDS`, `ERR_QA_PATH_COVERAGE_TOO_LOW`, `ERR_QA_ROUTE_TOO_SHORT`, `ERR_QA_START_MISSING`, `ERR_QA_END_MISSING`).
+- CI should run `npm run content:qa -- --failOnError` immediately after content regeneration so generation tooling only ships puzzles that meet these gating rules.
+
 ---
 
 ## Recent Changes (2026-01-16)

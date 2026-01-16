@@ -75,13 +75,13 @@
 
 ### Scope
 1. **Content regen:** rerun the batch generator for Week 1 (all topics) with the forward-only rules, then rerun `npm run audit` across `apps/web/public/daily/*.json` and any topic catalog puzzles (skip index files).
-2. **QA metrics:** run `npm run content:qa` after regeneration to confirm path/bonus counts stay within the easy-puzzle target (3–4 path words, 1 bonus).
+2. **QA metrics:** run `npm run content:qa -- --failOnError` after regeneration so Easy Daily rules (start top row, end bottom row, 4–6 path words, coverage ≥ threshold, route ≥ height - 1) are treated as gates.
 3. **Manual playtest:** follow the fidelity script (start/end visibility, disconnected words still IN_PROGRESS, hint/pause flow) before promoting to production.
 4. **Deployment checks:** smoke-test the production URL and daily/topic navigation when the new content is live.
 
 ### Validation
 - [ ] Daily & topic puzzles audit clean (`npm run audit` loops)
-- [ ] `npm run content:qa` outputs within expected ranges
+- [ ] `npm run content:qa -- --failOnError` completes with zero errors
 - [ ] Manual start-to-end playtest passes (START visible, connectivity required)
 
 ---

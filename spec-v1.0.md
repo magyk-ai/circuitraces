@@ -447,6 +447,7 @@ Connectivity model (default): `ORTHO_4`.
 Algorithm:
 - BFS/DFS from startCellId through neighbors that are in walkableCells.
 - Win if endCellId reached.
+- **MUST:** Easy Daily puzzles place START on the top row (`y=0`) and END on the bottom row (`y=height - 1`) so the course visually flows top-to-bottom.
 
 ### 7.7 Route overlay (optional but recommended)
 Upon completion:
@@ -744,6 +745,32 @@ The Week 1 dailies and other "easy" puzzles use `selectionModel: 'RAY_4DIR'` and
 4. **Forward direction:** horizontal rays must progress left-to-right (`dx=+1`), vertical rays top-to-bottom (`dy=+1`); reverse movement triggers `ERR_PLACEMENT_REVERSED`.
 
 Auditor coverage: the four geometry error codes (`ERR_PLACEMENT_NOT_CONTIGUOUS`, `ERR_PLACEMENT_NOT_RAY`, `ERR_PLACEMENT_DIAGONAL`, `ERR_PLACEMENT_REVERSED`) reject placements that break this policy before puzzles reach production. Even though the content is forward-facing, `allowReverseSelection: true` keeps the UI flexible so players can drag from either end of a word.
+
+### 10.7 Content Rules v1 — Easy Daily
+
+These rules complement the auditor and give Easy Dailies their vertical “START→END” feel.
+
+**Board & markers (MUST):**
+- `START` (`grid.start.adjacentCellId`) must sit on `y=0`.
+- `END` (`grid.end.adjacentCellId`) must sit on `y=height - 1`.
+- Start/End Manhattan distance must be ≥ `height - 1` (vertical drop is the baseline; horizontal offset is encouraged).
+
+**Path words (MUST):**
+- 4–6 path words.
+- Unique path coverage must be ≥ 14 cells on 6×6, ≥ 18 on 7×7 (fallback formula `max(12, floor(width * height / 4))` for other sizes).
+- BFS shortest path from START to END through path cells must be ≥ `height - 1`.
+- First path word must include START; final path word must end at END.
+
+**Selection / readability (MUST):**
+- `selectionModel = 'RAY_4DIR'`.
+- Placements are forward-only (right/down).
+- `allowReverseSelection = true`.
+
+**Bonus words (SHOULD):**
+- 1–2 bonus words per Easy Daily.
+- Each bonus reveals a `hintCellId` that intersects a path placement.
+
+**Enforcement:** `packages/generator/src/content-qa.ts` analyzes every generated daily and emits `ERR_QA_START_NOT_TOP_ROW`, `ERR_QA_END_NOT_BOTTOM_ROW`, `ERR_QA_TOO_FEW_PATH_WORDS`, `ERR_QA_TOO_MANY_PATH_WORDS`, `ERR_QA_PATH_COVERAGE_TOO_LOW`, `ERR_QA_ROUTE_TOO_SHORT`, `ERR_QA_START_MISSING`, or `ERR_QA_END_MISSING` when these conditions fail. CI should run `npm run content:qa -- --failOnError` after regeneration so these content gates block publishing invalid dailies.
 
 ---
 

@@ -266,6 +266,22 @@ export class GridBuilder {
     });
   }
 
+  getCells(): Cell[] {
+    return [...this.cells];
+  }
+
+  getCellsInRow(y: number): Cell[] {
+    return this.cells.filter(c => c.y === y);
+  }
+
+  getWidth(): number {
+    return this.width;
+  }
+
+  getHeight(): number {
+    return this.height;
+  }
+
   exportGrid() {
     return {
       width: this.width,
