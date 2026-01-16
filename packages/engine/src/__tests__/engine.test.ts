@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { init, reduce, selectors } from '../engine.js';
-import { simplePuzzle } from './fixtures.js';
+import { simplePuzzle, disconnectedPuzzle } from './fixtures.js';
 
 describe('Engine - Selection & Validation', () => {
   it('should initialize with empty state', () => {
@@ -369,5 +369,48 @@ describe('Engine - Spec-lock Invariants (v1.1)', () => {
     // DOG cells: c6, c7, c8
     // c4 (1,1) is orthogonally adjacent to c7 (1,2) - so they connect!
     expect(selectors.isConnected(simplePuzzle, state)).toBe(true);
+  });
+
+  // CRITICAL SPEC-LOCK TEST: This ensures completion requires connectivity, not just finding words
+  it('SPEC-LOCK: all path words found but disconnected = NOT completed', () => {
+    let state = init(disconnectedPuzzle, 1000);
+
+    // Grid layout (4x4):
+    // A B C D
+    // E F G H
+    // I J K L
+    // M N O P
+    //
+    // ABC (c0->c1->c2) - top row, contains START (c0)
+    // MNO (c12->c13->c14) - bottom row, contains END (c14)
+    // These words are NOT orthogonally connected (2-row gap between them)
+
+    // Find ABC (contains start)
+    let result = reduce(disconnectedPuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c0', 'c1', 'c2']
+    });
+    state = result.state;
+
+    expect(state.foundPathWords['ABC']).toBe(true);
+    expect(state.status).toBe('IN_PROGRESS'); // Not completed yet
+
+    // Find MNO (contains end)
+    result = reduce(disconnectedPuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c12', 'c13', 'c14']
+    });
+    state = result.state;
+
+    expect(state.foundPathWords['MNO']).toBe(true);
+
+    // CRITICAL ASSERTION: Both path words found, but puzzle is NOT completed
+    // because there's no orthogonal connectivity between them
+    expect(state.status).toBe('IN_PROGRESS');
+    expect(selectors.isConnected(disconnectedPuzzle, state)).toBe(false);
+
+    // No COMPLETED event should have been emitted
+    const completedEvents = result.effects.events.filter(e => e.type === 'COMPLETED');
+    expect(completedEvents.length).toBe(0);
   });
 });

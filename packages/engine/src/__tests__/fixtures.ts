@@ -66,3 +66,66 @@ export const simplePuzzle: WaywordsPuzzle = {
     ]
   }
 };
+
+// 4x4 grid with DISCONNECTED path words (for testing connectivity rejection)
+// Grid layout:
+// A B C D
+// E F G H
+// I J K L
+// M N O P
+//
+// Path words:
+// - ABC (top row: c0->c1->c2) - contains START at c0
+// - MNO (bottom row: c12->c13->c14) - contains END at c14
+// These are NOT orthogonally connected - there's a gap!
+// Finding both words should NOT complete the puzzle.
+export const disconnectedPuzzle: WaywordsPuzzle = {
+  puzzleId: 'test-disconnected',
+  theme: 'Disconnected Test',
+  config: {
+    selectionModel: 'RAY_4DIR',
+    connectivityModel: 'ORTHO_4',
+    allowReverseSelection: true
+  },
+  grid: {
+    width: 4,
+    height: 4,
+    cells: [
+      { id: 'c0', x: 0, y: 0, type: 'LETTER', value: 'A' },
+      { id: 'c1', x: 1, y: 0, type: 'LETTER', value: 'B' },
+      { id: 'c2', x: 2, y: 0, type: 'LETTER', value: 'C' },
+      { id: 'c3', x: 3, y: 0, type: 'LETTER', value: 'D' },
+      { id: 'c4', x: 0, y: 1, type: 'LETTER', value: 'E' },
+      { id: 'c5', x: 1, y: 1, type: 'LETTER', value: 'F' },
+      { id: 'c6', x: 2, y: 1, type: 'LETTER', value: 'G' },
+      { id: 'c7', x: 3, y: 1, type: 'LETTER', value: 'H' },
+      { id: 'c8', x: 0, y: 2, type: 'LETTER', value: 'I' },
+      { id: 'c9', x: 1, y: 2, type: 'LETTER', value: 'J' },
+      { id: 'c10', x: 2, y: 2, type: 'LETTER', value: 'K' },
+      { id: 'c11', x: 3, y: 2, type: 'LETTER', value: 'L' },
+      { id: 'c12', x: 0, y: 3, type: 'LETTER', value: 'M' },
+      { id: 'c13', x: 1, y: 3, type: 'LETTER', value: 'N' },
+      { id: 'c14', x: 2, y: 3, type: 'LETTER', value: 'O' },
+      { id: 'c15', x: 3, y: 3, type: 'LETTER', value: 'P' }
+    ],
+    start: { adjacentCellId: 'c0' },
+    end: { adjacentCellId: 'c14' }
+  },
+  words: {
+    path: [
+      {
+        wordId: 'ABC',
+        tokens: [{ t: 'L', v: 'A' }, { t: 'L', v: 'B' }, { t: 'L', v: 'C' }],
+        size: 3,
+        placements: [['c0', 'c1', 'c2']]
+      },
+      {
+        wordId: 'MNO',
+        tokens: [{ t: 'L', v: 'M' }, { t: 'L', v: 'N' }, { t: 'L', v: 'O' }],
+        size: 3,
+        placements: [['c12', 'c13', 'c14']]
+      }
+    ],
+    additional: []
+  }
+};
