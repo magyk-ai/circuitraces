@@ -1,4 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Circuit Races E2E Smoke Tests (PR #4)
@@ -47,6 +49,12 @@ async function dragSelect(
 async function selectMediumPuzzle(page: Page) {
   // Already loaded via URL in beforeEach, just verify header
   await expect(page.locator('header h1')).toContainText('Hidden Words');
+}
+
+function loadDailyPuzzle(date: string, topic: string) {
+  const filePath = path.resolve(process.cwd(), 'public/daily', `${date}-${topic}.json`);
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  return JSON.parse(raw);
 }
 
 test.describe('Circuit Races - Smoke Tests', () => {
@@ -128,6 +136,35 @@ test.describe('Circuit Races - Smoke Tests', () => {
     await page.waitForTimeout(300);
     const pathCells = page.locator('.cell.path');
     await expect(pathCells).toHaveCount(4);
+  });
+
+  test('daily puzzle: can select a 4+ letter PATH word in RAY_4DIR', async ({ page }) => {
+    const puzzle = loadDailyPuzzle('2026-01-17', 'personal-finance');
+    const gridWidth = puzzle.grid.width;
+    const gridHeight = puzzle.grid.height;
+    const word = puzzle.words.path.find((entry: { size: number }) => entry.size >= 4);
+    if (!word) {
+      throw new Error('No 4+ letter PATH word found in daily puzzle');
+    }
+
+    const placement: string[] = word.placements[0];
+    const cellById = new Map(
+      puzzle.grid.cells.map((cell: { id: string; x: number; y: number }) => [cell.id, cell])
+    );
+    const cells = placement.map(cellId => {
+      const cell = cellById.get(cellId);
+      if (!cell) throw new Error(`Missing cell ${cellId} in daily puzzle grid`);
+      return { row: cell.y, col: cell.x };
+    });
+
+    await page.goto('/?mode=daily&daily=2026-01-17&topic=personal-finance');
+    await expect(page.locator('[data-testid="grid"]')).toBeVisible();
+
+    await dragSelect(page, '[data-testid="grid"]', gridWidth, gridHeight, cells);
+    await page.waitForTimeout(300);
+
+    const pathCells = page.locator('.cell.path');
+    await expect(pathCells).toHaveCount(word.size);
   });
 
   /**

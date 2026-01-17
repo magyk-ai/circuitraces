@@ -34,7 +34,7 @@ export class SelectionAdapter {
   update(cellId: string): string[] {
     if (!this.startCellId) return [];
     
-    // RAY_8DIR Logic
+    // RAY (4dir/8dir) Logic
     if (!this.isAdjacentMode) {
         if (cellId === this.startCellId) return [cellId];
 
@@ -50,6 +50,13 @@ export class SelectionAdapter {
         // Dead zone: ignore small movements
         if (distance < this.DEAD_ZONE_THRESHOLD) {
         return [this.startCellId];
+        }
+
+        if (this.isRay4Dir) {
+          const newDir = this.snapTo4Dir(dx, dy);
+          this.lockedDirection = newDir;
+          this.currentDirection = newDir;
+          return this.getCellsAlongRay(start, newDir, current);
         }
 
         // Snap to 8 directions
@@ -141,6 +148,19 @@ export class SelectionAdapter {
 
     const idx = (octant + 8) % 8;
     return dirs[idx];
+  }
+
+  private snapTo4Dir(dx: number, dy: number): [number, number] {
+    if (dx === 0 && dy === 0) return [0, 0];
+
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+
+    if (absX >= absY) {
+      return [dx >= 0 ? 1 : -1, 0];
+    }
+
+    return [0, dy >= 0 ? 1 : -1];
   }
 
   private angleBetween(dir1: [number, number], dir2: [number, number]): number {

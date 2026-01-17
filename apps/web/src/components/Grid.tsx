@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { WaywordsPuzzle } from '@circuitraces/engine';
 import { SelectionAdapter } from '../selection-adapter';
 import './Grid.css';
@@ -16,11 +16,13 @@ interface GridProps {
 export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelection, isCompleted }: GridProps) {
   const [selecting, setSelecting] = useState(false);
   const [previewCells, setPreviewCells] = useState<string[]>([]);
-  const adapterRef = useRef<SelectionAdapter | null>(null);
+  const adapterRef = useRef<SelectionAdapter>(new SelectionAdapter(puzzle));
 
-  if (!adapterRef.current) {
+  useEffect(() => {
     adapterRef.current = new SelectionAdapter(puzzle);
-  }
+    setSelecting(false);
+    setPreviewCells([]);
+  }, [puzzle]);
 
   // Get start/end cell positions for markers
   const startCellId = puzzle.grid.start.adjacentCellId;
@@ -41,7 +43,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
     }
 
     setSelecting(true);
-    adapterRef.current!.begin(cellId);
+    adapterRef.current.begin(cellId);
     setPreviewCells([cellId]);
   };
 
@@ -57,7 +59,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
 
     if (!cellId) return;
 
-    const cells = adapterRef.current!.update(cellId);
+    const cells = adapterRef.current.update(cellId);
     setPreviewCells(cells);
   };
 
