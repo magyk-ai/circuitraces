@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import type { WaywordsPuzzle } from '@circuitraces/engine';
 import { SelectionAdapter } from '../selection-adapter';
 import './Grid.css';
@@ -8,12 +8,14 @@ interface GridProps {
   pathCells: Set<string>;
   additionalCells: Set<string>;
   hintCells: Set<string>;
+  justFoundCells?: Set<string>;
+  connectedPathOrder?: string[];  // Ordered cellIds from START to END for celebration animation
   onSelection: (cellIds: string[]) => void;
   isCompleted?: boolean;
 }
 
 // v1.1: Visual priority order: preview > path (green) > hint (yellow) > additional (gray)
-export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelection, isCompleted }: GridProps) {
+export function Grid({ puzzle, pathCells, additionalCells, hintCells, justFoundCells, connectedPathOrder, onSelection, isCompleted }: GridProps) {
   const [selecting, setSelecting] = useState(false);
   const [previewCells, setPreviewCells] = useState<string[]>([]);
   const adapterRef = useRef<SelectionAdapter>(new SelectionAdapter(puzzle));
@@ -23,6 +25,15 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
     setSelecting(false);
     setPreviewCells([]);
   }, [puzzle]);
+
+  // Build a map of cellId -> index in connected path for animation timing
+  const pathOrderMap = useMemo(() => {
+    const map = new Map<string, number>();
+    connectedPathOrder?.forEach((cellId, index) => {
+      map.set(cellId, index);
+    });
+    return map;
+  }, [connectedPathOrder]);
 
   // Get start/end cell positions for markers
   const startCellId = puzzle.grid.start.adjacentCellId;
@@ -100,7 +111,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
       )}
 
       <div
-        className="grid"
+        className={`grid${isCompleted ? ' completed' : ''}`}
         data-testid="grid"
         style={{
           gridTemplateColumns: `repeat(${puzzle.grid.width}, 1fr)`,
@@ -110,7 +121,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {puzzle.grid.cells.map(cell => {
+        {puzzle.grid.cells.map((cell) => {
           if (cell.type === 'VOID') {
             return <div key={cell.id} className="cell void" />;
           }
@@ -119,6 +130,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
           const isPreview = previewCells.includes(cell.id);
           const isHint = hintCells.has(cell.id);
           const isAdditional = additionalCells.has(cell.id);
+          const isJustFound = justFoundCells?.has(cell.id) ?? false;
           const isStart = cell.id === startCellId;
           const isEnd = cell.id === endCellId;
 
@@ -128,10 +140,21 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
           const classes = ['cell'];
           if (isPreview) classes.push('preview');
           if (isPath) classes.push('path');
+          if (isJustFound) classes.push('just-found');
           if (isHint && !isPath) classes.push('hint'); // Yellow only if not green
           if (isAdditional && !isPath && !isHint) classes.push('additional'); // Gray only if not green or yellow
           if (isStart) classes.push('start-cell');
           if (isEnd) classes.push('end-cell');
+
+          // For completed state, use path order for staggered animation (traces from START to END)
+          const pathIndex = pathOrderMap.get(cell.id);
+          const cellStyle: React.CSSProperties = {
+            gridColumn: cell.x + 1,
+            gridRow: cell.y + 1,
+            ...(isCompleted && isPath && pathIndex !== undefined
+              ? { '--cell-index': pathIndex } as React.CSSProperties
+              : {})
+          };
 
           return (
             <div
@@ -139,7 +162,7 @@ export function Grid({ puzzle, pathCells, additionalCells, hintCells, onSelectio
               data-cell-id={cell.id}
               className={classes.join(' ')}
               onPointerDown={(e) => handlePointerDown(cell.id, e)}
-              style={{ gridColumn: cell.x + 1, gridRow: cell.y + 1 }}
+              style={cellStyle}
             >
               {cell.value}
             </div>

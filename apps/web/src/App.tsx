@@ -48,22 +48,39 @@ export function App() {
   // Navigation state
   const [currentTopic, setCurrentTopic] = useState<string | null>(topicId);
   const [currentPuzzlePath, setCurrentPuzzlePath] = useState<string | null>(null);
+  const [navigatedFromTopic, setNavigatedFromTopic] = useState(false);
 
   // Daily puzzle loading
   const { todaysEntry } = useDailyPuzzle(dailyDate || undefined);
 
-  // Topic catalog loading for direct puzzle links
-  const { catalog: directCatalog } = useTopicCatalog(view === 'puzzle' && !currentPuzzlePath ? currentTopic : null);
+  // Current puzzle ID for navigation
+  const [currentPuzzleId, setCurrentPuzzleId] = useState<string | null>(puzzleIdParam);
+
+  // Topic catalog loading - needed for puzzle view to find next puzzle
+  const { catalog: topicCatalog } = useTopicCatalog(
+    (view === 'puzzle' || (view === 'daily' && navigatedFromTopic)) ? currentTopic : null
+  );
 
   // Resolve puzzle path from catalog if missing (direct link case)
   useEffect(() => {
-    if (view === 'puzzle' && !currentPuzzlePath && directCatalog && puzzleIdParam) {
-      const p = directCatalog.puzzles.find(p => p.id === puzzleIdParam);
+    if (view === 'puzzle' && !currentPuzzlePath && topicCatalog && puzzleIdParam) {
+      const p = topicCatalog.puzzles.find(p => p.id === puzzleIdParam);
       if (p) {
         setCurrentPuzzlePath(p.puzzlePath);
+        setCurrentPuzzleId(puzzleIdParam);
       }
     }
-  }, [view, currentPuzzlePath, directCatalog, puzzleIdParam]);
+  }, [view, currentPuzzlePath, topicCatalog, puzzleIdParam]);
+
+  // Find next puzzle in topic catalog
+  const getNextPuzzle = useCallback(() => {
+    if (!topicCatalog || !currentPuzzleId) return null;
+    const currentIndex = topicCatalog.puzzles.findIndex(p => p.id === currentPuzzleId);
+    if (currentIndex === -1 || currentIndex >= topicCatalog.puzzles.length - 1) return null;
+    return topicCatalog.puzzles[currentIndex + 1];
+  }, [topicCatalog, currentPuzzleId]);
+
+  const nextPuzzle = getNextPuzzle();
 
   const [puzzle, setPuzzle] = useState<WaywordsPuzzle | null>(null);
   const [state, setState] = useState<RuntimeState | null>(null);
@@ -73,6 +90,7 @@ export function App() {
   const [elapsedMs, setElapsedMs] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [showWordsList, setShowWordsList] = useState(false);
+  const [justFoundCells, setJustFoundCells] = useState<Set<string>>(new Set());
 
 
 
@@ -119,22 +137,23 @@ export function App() {
     setState(result.state);
     setEvents(result.effects.events);
 
-    // Haptic feedback on word found
+    // Haptic feedback and animation on word found
     result.effects.events.forEach(event => {
-      if (event.type === 'WORD_FOUND' && 'vibrate' in navigator) {
-        navigator.vibrate(10); // 10ms pulse
+      if (event.type === 'WORD_FOUND') {
+        // Haptic feedback
+        if ('vibrate' in navigator) {
+          navigator.vibrate(10); // 10ms pulse
+        }
+        // Set just-found cells for animation
+        setJustFoundCells(new Set(cellIds));
+        // Clear after animation completes
+        setTimeout(() => setJustFoundCells(new Set()), 600);
       }
     });
 
     // Clear events after display
     setTimeout(() => setEvents([]), 2000);
   }, [puzzle, state]);
-
-  const handleReset = useCallback(() => {
-    if (!puzzle) return;
-    setState(init(puzzle, Date.now()));
-    setEvents([]);
-  }, [puzzle]);
 
   const handleHint = useCallback(() => {
     if (!puzzle || !state) return;
@@ -176,6 +195,7 @@ export function App() {
     const date = todaysEntry.date;
     window.history.pushState({}, '', `?mode=daily&daily=${date}&topic=${topicId}`);
     setCurrentTopic(topicId);
+    setNavigatedFromTopic(false);
     setView('daily');
   }, [todaysEntry]);
 
@@ -183,21 +203,57 @@ export function App() {
     window.history.pushState({}, '', `?topic=${topicId}`);
     setCurrentTopic(topicId);
     setView('topic');
+    setNavigatedFromTopic(false); // Reset when entering topic list
   }, []);
 
   const handleSelectPuzzle = useCallback((puzzlePath: string, puzzleId: string) => {
     window.history.pushState({}, '', `?topic=${currentTopic}&puzzle=${puzzleId}`);
     setCurrentPuzzlePath(puzzlePath);
+    setCurrentPuzzleId(puzzleId);
     setView('puzzle');
+    setNavigatedFromTopic(true); // Mark as coming from topic library
   }, [currentTopic]);
 
-  const handleBackToHome = useCallback(() => {
+  // Navigate to next puzzle in topic
+  const handleNextPuzzle = useCallback(() => {
+    if (!nextPuzzle || !currentTopic) return;
+    window.history.pushState({}, '', `?topic=${currentTopic}&puzzle=${nextPuzzle.id}`);
+    setCurrentPuzzlePath(nextPuzzle.puzzlePath);
+    setCurrentPuzzleId(nextPuzzle.id);
+    setPuzzle(null);
+    setState(null);
+  }, [nextPuzzle, currentTopic]);
+
+  // Navigate to home
+  const handleGoHome = useCallback(() => {
     const baseUrl = import.meta.env.BASE_URL;
     window.history.pushState({}, '', baseUrl);
     setView('home');
     setCurrentTopic(null);
     setCurrentPuzzlePath(null);
+    setCurrentPuzzleId(null);
+    setNavigatedFromTopic(false);
   }, []);
+
+  const handleBack = useCallback(() => {
+    const baseUrl = import.meta.env.BASE_URL;
+    
+    // Only go back to topic IF we explicitly navigated from the topic browser
+    if (view === 'puzzle' && navigatedFromTopic && currentTopic) {
+      window.history.pushState({}, '', `?topic=${currentTopic}`);
+      setView('topic');
+      setCurrentPuzzlePath(null);
+      setNavigatedFromTopic(false);
+      return;
+    }
+
+    // Default: back to home
+    window.history.pushState({}, '', baseUrl);
+    setView('home');
+    setCurrentTopic(null);
+    setCurrentPuzzlePath(null);
+    setNavigatedFromTopic(false);
+  }, [view, navigatedFromTopic, currentTopic]);
 
   // Handle browser back button
   useEffect(() => {
@@ -224,118 +280,141 @@ export function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Render home or topic browser if not in puzzle view
-  if (view === 'home') {
-    return <HomeScreen
-      todaysEntry={todaysEntry}
-      onPlayDaily={handlePlayDaily}
-      onSelectTopic={handleSelectTopic}
-    />;
-  }
-
-  if (view === 'topic' && currentTopic) {
-    return <TopicBrowser
-      topicId={currentTopic}
-      onSelectPuzzle={handleSelectPuzzle}
-      onBack={handleBackToHome}
-    />;
-  }
-
-  if (!puzzle || !state) {
-    return (
-      <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
-        <h2>Loading puzzle...</h2>
-        <p>If this takes too long, check the browser console for errors.</p>
-      </div>
-    );
-  }
-
-  const pathCells = selectors.getPathCells(puzzle, state);
-  const additionalCells = selectors.getAdditionalWordCells(puzzle, state);
-  const hintCells = selectors.getHintCells(state);
+  // Render logic
   return (
     <div className="app">
-      <button onClick={handleBackToHome} className="home-icon" aria-label="Back to home">
-        ←
-      </button>
-
-      <header>
-        <div className="header-left">
-          <h1>{puzzle.theme}</h1>
-          <div className="puzzle-meta">
-            <span className="grid-size">{puzzle.grid.width}×{puzzle.grid.height}</span>
-          </div>
-        </div>
-        <div className="controls">
-          <div className="timer hidden" data-testid="timer">{formatTime(elapsedMs)}</div>
-          <button
-            onClick={() => setIsPaused(p => !p)}
-            disabled={state.status === 'COMPLETED'}
-            className="pause-button"
-            data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
-          >
-            {isPaused ? '▶️' : '⏸️'}
-          </button>
-          <button onClick={() => setShowWordsList(true)} disabled={state.status === 'COMPLETED'} data-testid="btn-words">
-            📝 Words
-          </button>
-          <button onClick={handleHint} disabled={state.status === 'COMPLETED'} data-testid="btn-hint">
-            💡 Hint ({state.hintUsedFromButton})
-          </button>
-          <button onClick={handleReset}>Reset</button>
-        </div>
-      </header>
-
-      {/* Pause overlay */}
-      {isPaused && state.status !== 'COMPLETED' && (
-        <div className="pause-overlay" onClick={() => setIsPaused(false)}>
-          <div className="pause-content">
-            <div className="pause-icon">⏸️</div>
-            <div className="pause-text">Paused</div>
-            <div className="pause-hint">Tap to resume</div>
-          </div>
-        </div>
+      {view !== 'home' && (
+        <button onClick={handleBack} className="home-icon" aria-label="Back">
+          ←
+        </button>
       )}
 
-      <Grid
-        puzzle={puzzle}
-        pathCells={pathCells}
-        additionalCells={additionalCells}
-        hintCells={hintCells}
-        onSelection={handleSelection}
-        isCompleted={state.status === 'COMPLETED'}
-      />
-
-      {/* Words List Modal */}
-      {showWordsList && (
-        <WordsList
-          puzzle={puzzle}
-          foundPathWords={state.foundPathWords}
-          foundAdditionalWords={state.foundAdditionalWords}
-          onClose={() => setShowWordsList(false)}
+      {view === 'home' && (
+        <HomeScreen
+          todaysEntry={todaysEntry}
+          onPlayDaily={handlePlayDaily}
+          onSelectTopic={handleSelectTopic}
         />
       )}
 
-      {events.length > 0 && (
-        <div className="feedback">
-          {events.map((e, i) => (
-            <div key={i} className={`event ${e.type}`}>
-              {e.type === 'WORD_FOUND' && `Found: ${e.wordId} (${e.category})`}
-              {e.type === 'INVALID_SELECTION' && 'Invalid selection'}
-              {e.type === 'ALREADY_FOUND' && `Already found: ${e.wordId}`}
-              {e.type === 'HINT_APPLIED' && `💡 Hint ${e.source === 'BONUS' ? '(from bonus)' : ''} applied!`}
-              {e.type === 'COMPLETED' && '🎉 Completed!'}
-            </div>
-          ))}
-        </div>
+      {view === 'topic' && currentTopic && (
+        <TopicBrowser
+          topicId={currentTopic}
+          onSelectPuzzle={handleSelectPuzzle}
+          onBack={handleBack}
+        />
       )}
 
-      {state.status === 'COMPLETED' && (
-        <div className="completion">
-          <h2>Puzzle Complete!</h2>
-          <p>Time: {Math.round((state.completedAt! - state.startedAt) / 1000)}s</p>
-          <p>Hints: {state.hintUsedFromButton} from button, {state.hintRevealedFromBonus} from bonus words</p>
-        </div>
+      {(view === 'puzzle' || view === 'daily') && (
+        <>
+          {!puzzle || !state ? (
+            <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
+              <h2>Loading puzzle...</h2>
+              <p>If this takes too long, check the browser console for errors.</p>
+            </div>
+          ) : (
+            <>
+              <header>
+                <div className="header-left">
+                  <h1>{puzzle.theme}</h1>
+                  <div className="puzzle-meta">
+                    <span className="grid-size">{puzzle.grid.width}×{puzzle.grid.height}</span>
+                  </div>
+                </div>
+                <div className="controls">
+                  <div className="timer hidden" data-testid="timer">{formatTime(elapsedMs)}</div>
+                  <button
+                    onClick={() => setIsPaused(p => !p)}
+                    disabled={state.status === 'COMPLETED'}
+                    data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
+                  >
+                    {isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                  </button>
+                  <button onClick={() => setShowWordsList(true)} disabled={state.status === 'COMPLETED'} data-testid="btn-words">
+                    📝 Words
+                  </button>
+                  <button onClick={handleHint} disabled={state.status === 'COMPLETED'} data-testid="btn-hint">
+                    💡 Hint ({state.hintUsedFromButton})
+                  </button>
+                </div>
+              </header>
+
+              {/* Pause overlay */}
+              {isPaused && state.status !== 'COMPLETED' && (
+                <div className="pause-overlay" onClick={() => setIsPaused(false)}>
+                  <div className="pause-content">
+                    <div className="pause-icon">⏸️</div>
+                    <div className="pause-text">Paused</div>
+                    <div className="pause-hint">Tap to resume</div>
+                  </div>
+                </div>
+              )}
+
+              <Grid
+                puzzle={puzzle}
+                pathCells={selectors.getPathCells(puzzle, state)}
+                additionalCells={selectors.getAdditionalWordCells(puzzle, state)}
+                hintCells={selectors.getHintCells(state)}
+                justFoundCells={justFoundCells}
+                connectedPathOrder={state.status === 'COMPLETED'
+                  ? selectors.getConnectedPathOrder(puzzle, state)
+                  : undefined}
+                onSelection={handleSelection}
+                isCompleted={state.status === 'COMPLETED'}
+              />
+
+              {/* Words List Modal */}
+              {showWordsList && (
+                <WordsList
+                  puzzle={puzzle}
+                  foundPathWords={state.foundPathWords}
+                  foundAdditionalWords={state.foundAdditionalWords}
+                  onClose={() => setShowWordsList(false)}
+                />
+              )}
+
+              {events.length > 0 && (
+                <div className="feedback">
+                  {events.map((e, i) => (
+                    <div key={i} className={`event ${e.type}`}>
+                      {e.type === 'WORD_FOUND' && `Found: ${e.wordId} (${e.category})`}
+                      {e.type === 'INVALID_SELECTION' && 'Invalid selection'}
+                      {e.type === 'ALREADY_FOUND' && `Already found: ${e.wordId}`}
+                      {e.type === 'HINT_APPLIED' && `💡 Hint ${e.source === 'BONUS' ? '(from bonus)' : ''} applied!`}
+                      {e.type === 'COMPLETED' && '🎉 Completed!'}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {state.status === 'COMPLETED' && (
+                <div className="completion">
+                  <h2>Puzzle Complete!</h2>
+                  <div className="completion-stats">
+                    <p>Time: {Math.round((state.completedAt! - state.startedAt) / 1000)}s</p>
+                    <p>Hints: {state.hintUsedFromButton} from button, {state.hintRevealedFromBonus} from bonus</p>
+                  </div>
+                  <div className="completion-actions">
+                    {view === 'puzzle' && navigatedFromTopic && nextPuzzle ? (
+                      <button className="primary-btn" onClick={handleNextPuzzle}>
+                        Next Puzzle →
+                      </button>
+                    ) : (
+                      <button className="primary-btn" onClick={handleGoHome}>
+                        Home
+                      </button>
+                    )}
+                    {view === 'puzzle' && navigatedFromTopic && (
+                      <button onClick={handleBack}>
+                        Back to Topic
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </>
       )}
     </div>
   );

@@ -8,7 +8,7 @@ import type {
   EngineEvent
 } from './actions.js';
 import { PlacementIndex } from './placement-index.js';
-import { isConnected, getPathCells } from './connectivity.js';
+import { isConnected, getPathCells, getConnectedPathOrder } from './connectivity.js';
 
 export function init(puzzle: WaywordsPuzzle, now: number): RuntimeState {
   return {
@@ -173,6 +173,7 @@ export const selectors = {
   getPathCells,
   getAdditionalWordCells,
   isConnected,
+  getConnectedPathOrder,
   getHintCells: (state: RuntimeState): Set<string> => {
     return new Set(Object.keys(state.hintMarkedCells));
   }

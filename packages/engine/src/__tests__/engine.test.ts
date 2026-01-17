@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { init, reduce, selectors } from '../engine.js';
-import { simplePuzzle, disconnectedPuzzle } from './fixtures.js';
+import { simplePuzzle, disconnectedPuzzle, noReverseConfigPuzzle } from './fixtures.js';
 
 describe('Engine - Selection & Validation', () => {
   it('should initialize with empty state', () => {
@@ -68,10 +68,123 @@ describe('Engine - Selection & Validation', () => {
   });
 });
 
+describe('Engine - Reverse Selection', () => {
+  it('should accept reverse selection even when config.allowReverseSelection is false', () => {
+    // noReverseConfigPuzzle has allowReverseSelection: false
+    // but we should still be able to select CAT by dragging right-to-left (T->A->C)
+    const state = init(noReverseConfigPuzzle, 1000);
+    const result = reduce(noReverseConfigPuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c2', 'c1', 'c0'] // T->A->C (reverse of C->A->T placement)
+    });
+
+    expect(result.state.foundPathWords['CAT']).toBe(true);
+    expect(result.effects.events).toContainEqual({
+      type: 'WORD_FOUND',
+      wordId: 'CAT',
+      category: 'PATH'
+    });
+  });
+
+  it('should accept forward selection normally', () => {
+    const state = init(noReverseConfigPuzzle, 1000);
+    const result = reduce(noReverseConfigPuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c0', 'c1', 'c2'] // C->A->T (forward)
+    });
+
+    expect(result.state.foundPathWords['CAT']).toBe(true);
+  });
+
+  it('should work with RAY_8DIR puzzle in reverse', () => {
+    // simplePuzzle has allowReverseSelection: true and RAY_8DIR
+    // This test ensures existing behavior still works
+    const state = init(simplePuzzle, 1000);
+    const result = reduce(simplePuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c4', 'c1', 'c0'] // R->A->C (reverse of CAR: C->A->R)
+    });
+
+    expect(result.state.foundPathWords['CAR']).toBe(true);
+  });
+
+  it('should find word via reverse selection and contribute to win condition', () => {
+    let state = init(noReverseConfigPuzzle, 1000);
+
+    // Find CAT in reverse (T->A->C)
+    let result = reduce(noReverseConfigPuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c2', 'c1', 'c0']
+    });
+    state = result.state;
+    expect(state.foundPathWords['CAT']).toBe(true);
+
+    // Find DOG in reverse (G->O->D)
+    result = reduce(noReverseConfigPuzzle, state, {
+      type: 'SELECT',
+      cellIds: ['c8', 'c7', 'c6']
+    });
+    state = result.state;
+    expect(state.foundPathWords['DOG']).toBe(true);
+
+    // Note: CAT and DOG are disconnected in this puzzle (no middle connector)
+    // so the puzzle won't complete, but both words should be found
+    expect(Object.keys(state.foundPathWords).length).toBe(2);
+  });
+});
+
 describe('Engine - Connectivity & Win', () => {
   it('should not be connected initially', () => {
     const state = init(simplePuzzle, 1000);
     expect(selectors.isConnected(simplePuzzle, state)).toBe(false);
+  });
+
+  it('should return ordered path from START to END when connected', () => {
+    let state = init(simplePuzzle, 1000);
+
+    // Find all path words to complete the puzzle
+    // CAR (c0->c1->c4)
+    state = reduce(simplePuzzle, state, { type: 'SELECT', cellIds: ['c0', 'c1', 'c4'] }).state;
+    // ROD (c4->c7->c6)
+    state = reduce(simplePuzzle, state, { type: 'SELECT', cellIds: ['c4', 'c7', 'c6'] }).state;
+    // DOG (c6->c7->c8)
+    state = reduce(simplePuzzle, state, { type: 'SELECT', cellIds: ['c6', 'c7', 'c8'] }).state;
+
+    const pathOrder = selectors.getConnectedPathOrder(simplePuzzle, state);
+
+    // Path should start at START cell (c0) and end at END cell (c8)
+    expect(pathOrder[0]).toBe('c0');
+    expect(pathOrder[pathOrder.length - 1]).toBe('c8');
+    expect(pathOrder.length).toBeGreaterThan(0);
+
+    // Each cell in the path should be orthogonally adjacent to the next
+    // This validates the BFS path is correct
+    for (let i = 0; i < pathOrder.length - 1; i++) {
+      const current = simplePuzzle.grid.cells.find(c => c.id === pathOrder[i])!;
+      const next = simplePuzzle.grid.cells.find(c => c.id === pathOrder[i + 1])!;
+      const dx = Math.abs(current.x - next.x);
+      const dy = Math.abs(current.y - next.y);
+      // ORTHO_4 adjacency: exactly one of dx or dy is 1, the other is 0
+      expect(dx + dy).toBe(1);
+    }
+  });
+
+  it('should return empty path when not connected', () => {
+    let state = init(disconnectedPuzzle, 1000);
+
+    // Find both path words but they're not connected
+    state = reduce(disconnectedPuzzle, state, { type: 'SELECT', cellIds: ['c0', 'c1', 'c2'] }).state; // ABC
+    state = reduce(disconnectedPuzzle, state, { type: 'SELECT', cellIds: ['c12', 'c13', 'c14'] }).state; // MNO
+
+    const pathOrder = selectors.getConnectedPathOrder(disconnectedPuzzle, state);
+    expect(pathOrder).toEqual([]);
+  });
+
+  it('should return empty path when start cell not in found path', () => {
+    const state = init(simplePuzzle, 1000);
+    // No words found, so start cell is not in path cells
+    const pathOrder = selectors.getConnectedPathOrder(simplePuzzle, state);
+    expect(pathOrder).toEqual([]);
   });
 
   it('should not be connected with partial path', () => {
