@@ -211,6 +211,12 @@ export class PuzzleConstructor {
       throw new Error("Path words are not connected");
     }
 
+    // Ensure all words are critical (no optional branches or bypasses)
+    // This characterizes "dead-end" words as non-critical.
+    if (!this.verifyAllWordsCritical(builder, placedPathWords, startCell.id, endCell.id, usedPathCells)) {
+      throw new Error("Branching layout detected: some path words are non-critical");
+    }
+
     const coverageThreshold = this.getCoverageThreshold(width, height);
     if (usedPathCells.size < coverageThreshold) {
       throw new Error(`Path coverage too low (${usedPathCells.size}/${coverageThreshold})`);
@@ -465,6 +471,73 @@ export class PuzzleConstructor {
     }
 
     return visited.size === usedCells.size;
+  }
+
+  /**
+   * Verify every path word is critical for START-END connectivity.
+   * A word is critical if removing its unique cells (those not shared with other path words)
+   * breaks all orthogonal paths from START to END.
+   * This prevents "branching" layouts with non-critical words that can be bypassed.
+   */
+  private verifyAllWordsCritical(
+    builder: GridBuilder,
+    pathWords: WordPlacement[],
+    startId: string,
+    endId: string,
+    allPathCells: Set<string>
+  ): boolean {
+    for (const word of pathWords) {
+      const placement = new Set(word.placements[0]);
+
+      // Determine which cells would remain if we "removed" this word.
+      // We only remove cells that are UNIQUE to this word.
+      const allowedCells = new Set<string>();
+      for (const cellId of allPathCells) {
+        const isShared = pathWords.some(w => w !== word && w.placements[0].includes(cellId));
+        if (isShared) {
+          allowedCells.add(cellId);
+        } else if (!placement.has(cellId)) {
+          allowedCells.add(cellId);
+        }
+      }
+
+      // Check if START and END are still connected using the remaining cells
+      if (this.isStartEndConnected(builder, startId, endId, allowedCells)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private isStartEndConnected(
+    builder: GridBuilder,
+    startId: string,
+    endId: string,
+    allowedCells: Set<string>
+  ): boolean {
+    if (!allowedCells.has(startId) || !allowedCells.has(endId)) return false;
+
+    const visited = new Set<string>();
+    const queue = [startId];
+    visited.add(startId);
+
+    while (queue.length > 0) {
+      const cellId = queue.shift()!;
+      if (cellId === endId) return true;
+
+      const cell = builder.getCellById(cellId)!;
+      const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+      for (const [dx, dy] of dirs) {
+        const nx = cell.x + dx;
+        const ny = cell.y + dy;
+        const neighbor = builder.getCell(nx, ny);
+        if (neighbor && allowedCells.has(neighbor.id) && !visited.has(neighbor.id)) {
+          visited.add(neighbor.id);
+          queue.push(neighbor.id);
+        }
+      }
+    }
+    return false;
   }
 
   private getCoverageThreshold(width: number, height: number): number {

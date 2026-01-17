@@ -92,7 +92,11 @@ function handleSelect(
   }
 
   // Check win condition (path words only)
-  if (category === 'PATH' && isConnected(puzzle, newState)) {
+  // Puzzle is completed when:
+  // 1. All path words have been found
+  // 2. The found words form a connected path from START to END
+  const allPathWordsFound = puzzle.words.path.every(w => newState.foundPathWords[w.wordId]);
+  if (category === 'PATH' && allPathWordsFound && isConnected(puzzle, newState)) {
     const completedAt = Date.now();
     newState.status = 'COMPLETED';
     newState.completedAt = completedAt;

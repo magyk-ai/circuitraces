@@ -25,7 +25,8 @@ export type AuditErrorCode =
   | 'ERR_PLACEMENT_REVERSED'
   | 'ERR_PLACEMENT_DIAGONAL'
   | 'ERR_PARALLEL_ADJACENCY'
-  | 'ERR_SAME_DIRECTION_INTERSECTION';
+  | 'ERR_SAME_DIRECTION_INTERSECTION'
+  | 'ERR_NON_CRITICAL_PATH_WORD';
 
 export interface AuditError {
   code: AuditErrorCode;
@@ -127,6 +128,9 @@ export function auditPuzzle(puzzle: WaywordsPuzzle): AuditResult {
 
   // 11. Intersection direction check (intersecting words must have different directions)
   checkIntersectionDirections(puzzle, cellMap, errors);
+
+  // 12. Criticality check (all path words must be required for connectivity)
+  checkCriticalPathWords(puzzle, cellMap, posMap, allPathWordCells, errors);
 
   return {
     valid: errors.length === 0,
@@ -355,6 +359,81 @@ function checkConnectivity(
     pathLength,
     unreachablePathWords
   };
+}
+
+/**
+ * Check that every path word is required (critical) to connect START to END.
+ * If a path word can be removed (along with its unique cells) and a path still exists,
+ * it is considered a non-critical "dead end" or "optional branch".
+ */
+function checkCriticalPathWords(
+  puzzle: WaywordsPuzzle,
+  cellMap: Map<string, Cell>,
+  posMap: Map<string, Cell>,
+  allPathWordCells: Set<string>,
+  errors: AuditError[]
+): void {
+  const startId = puzzle.grid.start.adjacentCellId;
+  const endId = puzzle.grid.end.adjacentCellId;
+
+  for (const word of puzzle.words.path) {
+    if (word.placements.length === 0) continue;
+    const placement = new Set(word.placements[0]);
+
+    // Determine cells remaining if this word is "removed"
+    const allowedCells = new Set<string>();
+    for (const cellId of allPathWordCells) {
+      const isShared = puzzle.words.path.some(w => w !== word && w.placements[0].includes(cellId));
+      if (isShared) {
+        allowedCells.add(cellId);
+      } else if (!placement.has(cellId)) {
+        allowedCells.add(cellId);
+      }
+    }
+
+    // BFS to see if start and end are still connected
+    if (isStartEndConnected(startId, endId, allowedCells, cellMap, posMap)) {
+      errors.push({
+        code: 'ERR_NON_CRITICAL_PATH_WORD',
+        path: `words.path.${word.wordId}`,
+        message: `Path word "${word.wordId}" is non-critical (it can be bypassed or is a dead end branch)`,
+        severity: 'error'
+      });
+    }
+  }
+}
+
+function isStartEndConnected(
+  startId: string,
+  endId: string,
+  allowedCells: Set<string>,
+  cellMap: Map<string, Cell>,
+  posMap: Map<string, Cell>
+): boolean {
+  if (!allowedCells.has(startId) || !allowedCells.has(endId)) return false;
+
+  const queue: string[] = [startId];
+  const visited = new Set<string>([startId]);
+
+  while (queue.length > 0) {
+    const cellId = queue.shift()!;
+    if (cellId === endId) return true;
+
+    const cell = cellMap.get(cellId);
+    if (!cell) continue;
+
+    const neighbors = getOrtho4Neighbors(cell, posMap);
+    for (const neighbor of neighbors) {
+      if (neighbor.type === 'VOID') continue;
+      if (!allowedCells.has(neighbor.id)) continue;
+      if (visited.has(neighbor.id)) continue;
+
+      visited.add(neighbor.id);
+      queue.push(neighbor.id);
+    }
+  }
+
+  return false;
 }
 
 /**
