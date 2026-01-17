@@ -30,6 +30,10 @@ Circuit Races is a path-based word puzzle game built with an engine-first archit
 
 - **`GITHUB_PAGES_SETUP.md`** - Deployment setup guide
 
+- **`FORMAT_SPEC.md`** - Puzzle JSON and wordlist JSON schemas
+
+- **`CONTENT_AUTHORING_GUIDE.md`** - How to create wordlists for puzzle generation
+
 ## Non-Negotiable Merge Rules
 
 **Spec-first PRs:** Any PR that changes gameplay mechanics MUST update `spec-v1.0.md` in the same PR (or in an immediately preceding doc PR). No gameplay changes without spec updates.
@@ -73,10 +77,17 @@ npm run validate puzzles/sample.json  # Validate puzzle JSON
 │   │   │   └── __tests__/         # Unit tests
 │   │   └── package.json
 │   │
-│   └── generator/       # Puzzle validation CLI
+│   └── generator/       # Puzzle generation & validation tools
 │       ├── src/
 │       │   ├── validator.ts       # Schema + placement validation
+│       │   ├── auditor.ts         # Deep puzzle validation (connectivity, geometry)
+│       │   ├── construct-puzzle.ts # Puzzle generation algorithm
+│       │   ├── batch-generate.ts  # Daily puzzle batch generator
+│       │   ├── content-qa.ts      # Content quality assurance checks
+│       │   ├── wordlist-stats.ts  # Wordlist analysis & histograms
 │       │   └── cli.ts             # circuitraces-validate command
+│       ├── wordlists/
+│       │   └── week1.json         # Topic wordlists (7 topics, ~490 words)
 │       └── package.json
 │
 ├── apps/
@@ -151,17 +162,61 @@ npm run dev
 cd apps/web && npm run preview
 ```
 
-### Validation
+### Validation & Content Tools
 
 ```bash
 # Validate a puzzle JSON file
 npm run validate puzzles/sample.json
 # Output: ✓ Puzzle is valid
 
-# Direct validation
-cd packages/generator && npm run build
-node dist/cli.js ../../puzzles/sample.json
+# Deep audit with geometry & connectivity checks
+cd packages/generator
+npm run audit ../../puzzles/sample.json
 ```
+
+## Generator CLI Tools
+
+The `packages/generator` package includes several CLI tools for content creation and debugging:
+
+```bash
+cd packages/generator
+
+# Generate all daily puzzles (7 days × 7 topics = 49 puzzles)
+npm run generate
+
+# Run content QA on all generated puzzles
+npm run content:qa
+
+# View wordlist statistics and length histograms
+npm run wordlist:stats
+
+# Validate a single puzzle
+npm run validate <path-to-puzzle.json>
+
+# Deep audit a puzzle (geometry, connectivity, hints)
+npm run audit <path-to-puzzle.json>
+```
+
+### Wordlist Stats Output Example
+```
+📊 Wordlist Statistics
+Source: wordlists/week1.json
+Topics: 7
+
+📁 DEVOPS
+  Path Words: 50 total, 48 usable (3-7 chars)
+  Length Distribution:
+   3 chars │██████░░░░░░░░░░░░░░░░░░░░░░░░│   4
+   4 chars │██████████████████████████████│  20
+   5 chars │████████████████████████░░░░░░│  16
+   ...
+```
+
+### Content QA Checks
+- `ERR_QA_START_NOT_TOP_ROW` - START must be on top row
+- `ERR_QA_END_NOT_BOTTOM_ROW` - END must be on bottom row
+- `ERR_QA_PATH_INTERSECTIONS_TOO_LOW` - Words must intersect sufficiently
+- `ERR_QA_PARALLEL_ADJACENCY` - Non-intersecting words must not touch
 
 ## Key Architecture Decisions
 
@@ -276,6 +331,10 @@ See `spec-v1.0.md` section "Next Steps (Post-MVP)" for roadmap:
 
 ## Resources
 
-- **Spec:** `spec-v1.0.md` (complete game mechanics)
+- **Spec:** `spec-v1.0.md` (complete game mechanics and generation constraints)
+- **Format Spec:** `FORMAT_SPEC.md` (puzzle.json and wordlist.json schemas)
+- **Content Guide:** `CONTENT_AUTHORING_GUIDE.md` (how to create wordlists)
 - **Tests:** `packages/engine/src/__tests__/` (engine correctness)
 - **Sample puzzle:** `puzzles/sample.json` (reference implementation)
+- **Daily puzzles:** `apps/web/public/daily/` (generated content)
+- **Wordlists:** `packages/generator/wordlists/week1.json` (source words by topic)

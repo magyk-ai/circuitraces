@@ -209,6 +209,15 @@ export function evaluatePuzzle(puzzle: PuzzleContent, profileName: string): QaEr
     }
   }
 
+  // Check for parallel adjacency (words touching without intersecting)
+  const adjacencyPairs = checkParallelAdjacency(puzzle, cellById);
+  for (const pair of adjacencyPairs) {
+    errors.push({
+      code: 'ERR_QA_PARALLEL_ADJACENCY',
+      message: `Words "${pair[0]}" and "${pair[1]}" touch orthogonally without intersecting`
+    });
+  }
+
   return errors;
 }
 
@@ -254,6 +263,7 @@ function shortestPathLength(
 function getCoverageThreshold(width: number, height: number): number {
   if (width === 6 && height === 6) return 14;
   if (width === 7 && height === 7) return 18;
+  if (width === 8 && height === 8) return 22;
   return Math.max(12, Math.floor((width * height) / 4));
 }
 
@@ -329,6 +339,78 @@ function getArgValue(flag: string): string | undefined {
   const index = args.indexOf(flag);
   if (index === -1) return undefined;
   return args[index + 1];
+}
+
+/**
+ * Check for parallel adjacency - words that touch orthogonally without intersecting.
+ * Returns array of [wordA, wordB] pairs.
+ *
+ * Two words have parallel adjacency if:
+ * 1. They do NOT share any cells (no intersection), AND
+ * 2. A cell from one word is orthogonally adjacent to a cell from the other word
+ */
+function checkParallelAdjacency(
+  puzzle: PuzzleContent,
+  cellById: Map<string, PuzzleContent['grid']['cells'][number]>
+): [string, string][] {
+  const pathWords = puzzle.words.path;
+  if (pathWords.length < 2) return [];
+
+  // Build position map for O(1) neighbor lookup
+  const posMap = new Map<string, PuzzleContent['grid']['cells'][number]>();
+  for (const cell of puzzle.grid.cells) {
+    posMap.set(`${cell.x},${cell.y}`, cell);
+  }
+
+  const adjacencyPairs = new Set<string>();
+
+  // For each pair of words, check if they have parallel adjacency
+  for (let i = 0; i < pathWords.length; i++) {
+    for (let j = i + 1; j < pathWords.length; j++) {
+      const wordA = pathWords[i];
+      const wordB = pathWords[j];
+      const placementA = new Set(wordA.placements?.[0] ?? []);
+      const placementB = new Set(wordB.placements?.[0] ?? []);
+
+      if (placementA.size === 0 || placementB.size === 0) continue;
+
+      // Check if words intersect (share any cell)
+      let intersects = false;
+      for (const cellId of placementA) {
+        if (placementB.has(cellId)) {
+          intersects = true;
+          break;
+        }
+      }
+
+      // If words intersect, adjacency is expected and allowed
+      if (intersects) continue;
+
+      // Words don't intersect - check if they're adjacent
+      let hasAdjacency = false;
+      for (const cellId of placementA) {
+        const cell = cellById.get(cellId);
+        if (!cell) continue;
+
+        const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+        for (const [dx, dy] of dirs) {
+          const neighbor = posMap.get(`${cell.x + dx},${cell.y + dy}`);
+          if (neighbor && placementB.has(neighbor.id)) {
+            hasAdjacency = true;
+            break;
+          }
+        }
+        if (hasAdjacency) break;
+      }
+
+      if (hasAdjacency) {
+        const pairKey = [wordA.wordId, wordB.wordId].sort().join('|');
+        adjacencyPairs.add(pairKey);
+      }
+    }
+  }
+
+  return Array.from(adjacencyPairs).map(key => key.split('|') as [string, string]);
 }
 
 main().catch(err => {

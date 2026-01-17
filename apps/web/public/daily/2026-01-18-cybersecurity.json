@@ -7,197 +7,218 @@
     "allowReverseSelection": true
   },
   "grid": {
-    "width": 7,
-    "height": 7,
+    "width": 8,
+    "height": 8,
     "cells": [
       {
         "id": "r0c0",
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "M"
+        "value": "X"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "V"
+        "value": "2"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "M"
+        "value": "F"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "B"
+        "value": "A"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "D"
+        "value": "L"
       },
       {
         "id": "r0c5",
         "x": 5,
         "y": 0,
         "type": "LETTER",
-        "value": "V"
+        "value": "E"
       },
       {
         "id": "r0c6",
         "x": 6,
         "y": 0,
         "type": "LETTER",
-        "value": "Q"
+        "value": "R"
+      },
+      {
+        "id": "r0c7",
+        "x": 7,
+        "y": 0,
+        "type": "LETTER",
+        "value": "T"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "M"
+        "value": "E"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "D"
+        "value": "T"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "A"
+        "value": "M"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "R"
+        "value": "G"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "K"
+        "value": "M"
       },
       {
         "id": "r1c5",
         "x": 5,
         "y": 1,
         "type": "LETTER",
-        "value": "Z"
+        "value": "Q"
       },
       {
         "id": "r1c6",
         "x": 6,
         "y": 1,
         "type": "LETTER",
-        "value": "N"
+        "value": "G"
+      },
+      {
+        "id": "r1c7",
+        "x": 7,
+        "y": 1,
+        "type": "LETTER",
+        "value": "R"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "P"
+        "value": "J"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "M"
+        "value": "A"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "K"
+        "value": "T"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "E"
+        "value": "J"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "Y"
+        "value": "H"
       },
       {
         "id": "r2c5",
         "x": 5,
         "y": 2,
         "type": "LETTER",
-        "value": "D"
+        "value": "F"
       },
       {
         "id": "r2c6",
         "x": 6,
         "y": 2,
         "type": "LETTER",
-        "value": "V"
+        "value": "X"
+      },
+      {
+        "id": "r2c7",
+        "x": 7,
+        "y": 2,
+        "type": "LETTER",
+        "value": "O"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "B"
+        "value": "W"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "S"
+        "value": "L"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "C"
+        "value": "Z"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "A"
+        "value": "J"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "N"
+        "value": "R"
       },
       {
         "id": "r3c5",
         "x": 5,
         "y": 3,
         "type": "LETTER",
-        "value": "Z"
+        "value": "J"
       },
       {
         "id": "r3c6",
@@ -207,137 +228,158 @@
         "value": "I"
       },
       {
+        "id": "r3c7",
+        "x": 7,
+        "y": 3,
+        "type": "LETTER",
+        "value": "J"
+      },
+      {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "Q"
+        "value": "C"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "V"
+        "value": "N"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "D"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "C"
+        "value": "A"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "T"
+        "value": "Q"
       },
       {
         "id": "r4c5",
         "x": 5,
         "y": 4,
         "type": "LETTER",
-        "value": "O"
+        "value": "T"
       },
       {
         "id": "r4c6",
         "x": 6,
         "y": 4,
         "type": "LETTER",
-        "value": "R"
+        "value": "Y"
+      },
+      {
+        "id": "r4c7",
+        "x": 7,
+        "y": 4,
+        "type": "LETTER",
+        "value": "A"
       },
       {
         "id": "r5c0",
         "x": 0,
         "y": 5,
         "type": "LETTER",
-        "value": "K"
+        "value": "F"
       },
       {
         "id": "r5c1",
         "x": 1,
         "y": 5,
         "type": "LETTER",
-        "value": "Q"
+        "value": "S"
       },
       {
         "id": "r5c2",
         "x": 2,
         "y": 5,
         "type": "LETTER",
-        "value": "B"
+        "value": "E"
       },
       {
         "id": "r5c3",
         "x": 3,
         "y": 5,
         "type": "LETTER",
-        "value": "H"
+        "value": "S"
       },
       {
         "id": "r5c4",
         "x": 4,
         "y": 5,
         "type": "LETTER",
-        "value": "Z"
+        "value": "S"
       },
       {
         "id": "r5c5",
         "x": 5,
         "y": 5,
         "type": "LETTER",
-        "value": "J"
+        "value": "I"
       },
       {
         "id": "r5c6",
         "x": 6,
         "y": 5,
         "type": "LETTER",
-        "value": "U"
+        "value": "O"
+      },
+      {
+        "id": "r5c7",
+        "x": 7,
+        "y": 5,
+        "type": "LETTER",
+        "value": "N"
       },
       {
         "id": "r6c0",
         "x": 0,
         "y": 6,
         "type": "LETTER",
-        "value": "I"
+        "value": "V"
       },
       {
         "id": "r6c1",
         "x": 1,
         "y": 6,
         "type": "LETTER",
-        "value": "Z"
+        "value": "O"
       },
       {
         "id": "r6c2",
         "x": 2,
         "y": 6,
         "type": "LETTER",
-        "value": "U"
+        "value": "N"
       },
       {
         "id": "r6c3",
         "x": 3,
         "y": 6,
         "type": "LETTER",
-        "value": "N"
+        "value": "F"
       },
       {
         "id": "r6c4",
         "x": 4,
         "y": 6,
         "type": "LETTER",
-        "value": "T"
+        "value": "W"
       },
       {
         "id": "r6c5",
@@ -351,28 +393,91 @@
         "x": 6,
         "y": 6,
         "type": "LETTER",
-        "value": "S"
+        "value": "W"
+      },
+      {
+        "id": "r6c7",
+        "x": 7,
+        "y": 6,
+        "type": "LETTER",
+        "value": "A"
+      },
+      {
+        "id": "r7c0",
+        "x": 0,
+        "y": 7,
+        "type": "LETTER",
+        "value": "P"
+      },
+      {
+        "id": "r7c1",
+        "x": 1,
+        "y": 7,
+        "type": "LETTER",
+        "value": "A"
+      },
+      {
+        "id": "r7c2",
+        "x": 2,
+        "y": 7,
+        "type": "LETTER",
+        "value": "Y"
+      },
+      {
+        "id": "r7c3",
+        "x": 3,
+        "y": 7,
+        "type": "LETTER",
+        "value": "L"
+      },
+      {
+        "id": "r7c4",
+        "x": 4,
+        "y": 7,
+        "type": "LETTER",
+        "value": "O"
+      },
+      {
+        "id": "r7c5",
+        "x": 5,
+        "y": 7,
+        "type": "LETTER",
+        "value": "A"
+      },
+      {
+        "id": "r7c6",
+        "x": 6,
+        "y": 7,
+        "type": "LETTER",
+        "value": "D"
+      },
+      {
+        "id": "r7c7",
+        "x": 7,
+        "y": 7,
+        "type": "LETTER",
+        "value": "K"
       }
     ],
     "start": {
       "adjacentCellId": "r0c3"
     },
     "end": {
-      "adjacentCellId": "r6c6"
+      "adjacentCellId": "r7c6"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "BREACH",
+        "wordId": "ALERT",
         "tokens": [
           {
             "t": "L",
-            "v": "B"
+            "v": "A"
           },
           {
             "t": "L",
-            "v": "R"
+            "v": "L"
           },
           {
             "t": "L",
@@ -380,39 +485,42 @@
           },
           {
             "t": "L",
-            "v": "A"
+            "v": "R"
           },
           {
             "t": "L",
-            "v": "C"
-          },
-          {
-            "t": "L",
-            "v": "H"
+            "v": "T"
           }
         ],
-        "size": 6,
+        "size": 5,
         "placements": [
           [
             "r0c3",
-            "r1c3",
-            "r2c3",
-            "r3c3",
-            "r4c3",
-            "r5c3"
+            "r0c4",
+            "r0c5",
+            "r0c6",
+            "r0c7"
           ]
         ]
       },
       {
-        "wordId": "SCAN",
+        "wordId": "TROJAN",
         "tokens": [
           {
             "t": "L",
-            "v": "S"
+            "v": "T"
           },
           {
             "t": "L",
-            "v": "C"
+            "v": "R"
+          },
+          {
+            "t": "L",
+            "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "J"
           },
           {
             "t": "L",
@@ -423,92 +531,24 @@
             "v": "N"
           }
         ],
-        "size": 4,
-        "placements": [
-          [
-            "r3c1",
-            "r3c2",
-            "r3c3",
-            "r3c4"
-          ]
-        ]
-      },
-      {
-        "wordId": "DARK",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "D"
-          },
-          {
-            "t": "L",
-            "v": "A"
-          },
-          {
-            "t": "L",
-            "v": "R"
-          },
-          {
-            "t": "L",
-            "v": "K"
-          }
-        ],
-        "size": 4,
-        "placements": [
-          [
-            "r1c1",
-            "r1c2",
-            "r1c3",
-            "r1c4"
-          ]
-        ]
-      },
-      {
-        "wordId": "VECTOR",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "V"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "C"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "R"
-          }
-        ],
         "size": 6,
         "placements": [
           [
-            "r4c1",
-            "r4c2",
-            "r4c3",
-            "r4c4",
-            "r4c5",
-            "r4c6"
+            "r0c7",
+            "r1c7",
+            "r2c7",
+            "r3c7",
+            "r4c7",
+            "r5c7"
           ]
         ]
       },
       {
-        "wordId": "KEY",
+        "wordId": "SESSION",
         "tokens": [
           {
             "t": "L",
-            "v": "K"
+            "v": "S"
           },
           {
             "t": "L",
@@ -516,24 +556,11 @@
           },
           {
             "t": "L",
-            "v": "Y"
-          }
-        ],
-        "size": 3,
-        "placements": [
-          [
-            "r2c2",
-            "r2c3",
-            "r2c4"
-          ]
-        ]
-      },
-      {
-        "wordId": "VIRUS",
-        "tokens": [
+            "v": "S"
+          },
           {
             "t": "L",
-            "v": "V"
+            "v": "S"
           },
           {
             "t": "L",
@@ -541,36 +568,70 @@
           },
           {
             "t": "L",
-            "v": "R"
+            "v": "O"
           },
           {
             "t": "L",
-            "v": "U"
-          },
-          {
-            "t": "L",
-            "v": "S"
+            "v": "N"
           }
         ],
-        "size": 5,
+        "size": 7,
         "placements": [
           [
-            "r2c6",
-            "r3c6",
-            "r4c6",
+            "r5c1",
+            "r5c2",
+            "r5c3",
+            "r5c4",
+            "r5c5",
             "r5c6",
-            "r6c6"
+            "r5c7"
           ]
         ]
-      }
-    ],
-    "additional": [
+      },
       {
-        "wordId": "TLS",
+        "wordId": "DENY",
         "tokens": [
           {
             "t": "L",
-            "v": "T"
+            "v": "D"
+          },
+          {
+            "t": "L",
+            "v": "E"
+          },
+          {
+            "t": "L",
+            "v": "N"
+          },
+          {
+            "t": "L",
+            "v": "Y"
+          }
+        ],
+        "size": 4,
+        "placements": [
+          [
+            "r4c2",
+            "r5c2",
+            "r6c2",
+            "r7c2"
+          ]
+        ]
+      },
+      {
+        "wordId": "PAYLOAD",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "P"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "Y"
           },
           {
             "t": "L",
@@ -578,18 +639,57 @@
           },
           {
             "t": "L",
-            "v": "S"
+            "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "D"
+          }
+        ],
+        "size": 7,
+        "placements": [
+          [
+            "r7c0",
+            "r7c1",
+            "r7c2",
+            "r7c3",
+            "r7c4",
+            "r7c5",
+            "r7c6"
+          ]
+        ]
+      }
+    ],
+    "additional": [
+      {
+        "wordId": "2FA",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "2"
+          },
+          {
+            "t": "L",
+            "v": "F"
+          },
+          {
+            "t": "L",
+            "v": "A"
           }
         ],
         "size": 3,
         "placements": [
           [
-            "r6c4",
-            "r6c5",
-            "r6c6"
+            "r0c1",
+            "r0c2",
+            "r0c3"
           ]
         ],
-        "hintCellId": "r6c6"
+        "hintCellId": "r0c3"
       }
     ]
   }

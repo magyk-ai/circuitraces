@@ -746,23 +746,26 @@ The Week 1 dailies and other "easy" puzzles use `selectionModel: 'RAY_4DIR'` and
 
 Auditor coverage: the four geometry error codes (`ERR_PLACEMENT_NOT_CONTIGUOUS`, `ERR_PLACEMENT_NOT_RAY`, `ERR_PLACEMENT_DIAGONAL`, `ERR_PLACEMENT_REVERSED`) reject placements that break this policy before puzzles reach production. Even though the content is forward-facing, `allowReverseSelection: true` keeps the UI flexible so players can drag from either end of a word.
 
-### 10.7 Content Rules v1 — Easy Daily
+### 10.7 Content Rules v1 — Easy Daily (EASY_DAILY_V1 Profile)
 
-These rules complement the auditor and give Easy Dailies their vertical “START→END” feel.
+These rules complement the auditor and give Easy Dailies their vertical "START→END" feel.
 
 **Board & markers (MUST):**
 - `START` (`grid.start.adjacentCellId`) must sit on `y=0`.
 - `END` (`grid.end.adjacentCellId`) must sit on `y=height - 1`.
 - Start/End Manhattan distance must be ≥ `height - 1` (vertical drop is the baseline; horizontal offset is encouraged).
+- Default grid size: 7×7 (fallback to 8×8 after repeated generation failures).
 
 **Path words (MUST):**
-- 4–6 path words.
-- Unique path coverage must be ≥ 14 cells on 6×6, ≥ 18 on 7×7 (fallback formula `max(12, floor(width * height / 4))` for other sizes).
+- 4–6 path words per puzzle.
+- Word length: 3–7 characters.
+- Unique path coverage must be ≥ 18 cells on 7×7, ≥ 22 on 8×8 (fallback formula `max(12, floor(width * height / 4))` for other sizes).
 - BFS shortest path from START to END through path cells must be ≥ `height - 1`.
 - First path word must include START; final path word must end at END.
 - Every path word after the first must intersect the existing path set by **shared cellId** (adjacency-only is invalid).
 - PATH↔PATH intersections must satisfy: `intersectionCount >= pathWordCount - 1`.
-- The word-intersection graph must be connected from the START word to the END word (reject “touch-only” connectivity).
+- The word-intersection graph must be connected from the START word to the END word (reject "touch-only" connectivity).
+- **Parallel adjacency disallowed (MUST):** Two path words that do NOT share any cells (no intersection) must NOT have orthogonally adjacent cells. This prevents visual confusion where words run parallel/adjacent without intersecting. Error code: `ERR_PARALLEL_ADJACENCY` / `ERR_QA_PARALLEL_ADJACENCY`.
 
 **Selection / readability (MUST):**
 - `selectionModel = 'RAY_4DIR'`.
@@ -773,7 +776,15 @@ These rules complement the auditor and give Easy Dailies their vertical “START
 - 1–2 bonus words per Easy Daily.
 - Each bonus reveals a `hintCellId` that intersects a path placement.
 
-**Enforcement:** `packages/generator/src/content-qa.ts` analyzes every generated daily and emits `ERR_QA_START_NOT_TOP_ROW`, `ERR_QA_END_NOT_BOTTOM_ROW`, `ERR_QA_TOO_FEW_PATH_WORDS`, `ERR_QA_TOO_MANY_PATH_WORDS`, `ERR_QA_PATH_COVERAGE_TOO_LOW`, `ERR_QA_ROUTE_TOO_SHORT`, `ERR_QA_PATH_INTERSECTIONS_TOO_LOW`, `ERR_QA_TOUCH_ONLY_CONNECTION`, `ERR_QA_START_MISSING`, or `ERR_QA_END_MISSING` when these conditions fail. CI should run `npm run content:qa -- --profile EASY_DAILY_V1 --failOnError` after regeneration so these content gates block publishing invalid dailies.
+**Enforcement:** `packages/generator/src/content-qa.ts` analyzes every generated daily and emits `ERR_QA_START_NOT_TOP_ROW`, `ERR_QA_END_NOT_BOTTOM_ROW`, `ERR_QA_TOO_FEW_PATH_WORDS`, `ERR_QA_TOO_MANY_PATH_WORDS`, `ERR_QA_PATH_COVERAGE_TOO_LOW`, `ERR_QA_ROUTE_TOO_SHORT`, `ERR_QA_PATH_INTERSECTIONS_TOO_LOW`, `ERR_QA_TOUCH_ONLY_CONNECTION`, `ERR_QA_PARALLEL_ADJACENCY`, `ERR_QA_START_MISSING`, or `ERR_QA_END_MISSING` when these conditions fail. CI should run `npm run content:qa -- --profile EASY_DAILY_V1 --failOnError` after regeneration so these content gates block publishing invalid dailies.
+
+### 10.8 Data Format Reference
+
+See `FORMAT_SPEC.md` for detailed JSON schemas:
+- Puzzle JSON (`WaywordsPuzzle`) — grid, cells, words, placements
+- Wordlist JSON — topic-based word pools for generation
+
+See `CONTENT_AUTHORING_GUIDE.md` for wordlist creation guidelines.
 
 ---
 

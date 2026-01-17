@@ -23,7 +23,8 @@ export type AuditErrorCode =
   | 'ERR_PLACEMENT_NOT_RAY'
   | 'ERR_PLACEMENT_NOT_CONTIGUOUS'
   | 'ERR_PLACEMENT_REVERSED'
-  | 'ERR_PLACEMENT_DIAGONAL';
+  | 'ERR_PLACEMENT_DIAGONAL'
+  | 'ERR_PARALLEL_ADJACENCY';
 
 export interface AuditError {
   code: AuditErrorCode;
@@ -119,6 +120,9 @@ export function auditPuzzle(puzzle: WaywordsPuzzle): AuditResult {
 
   // 9. Geometry validation (Guardrail for RAY_8DIR)
   checkPlacementGeometry(puzzle, errors);
+
+  // 10. Parallel adjacency check (words touching without intersecting)
+  checkParallelAdjacency(puzzle, cellMap, errors);
 
   return {
     valid: errors.length === 0,
@@ -549,5 +553,98 @@ function checkGridBounds(puzzle: WaywordsPuzzle, errors: AuditError[]): void {
         severity: 'error'
       });
     }
+  }
+}
+
+/**
+ * Check for "parallel adjacency" - path words that touch orthogonally without intersecting.
+ * This creates visual confusion when two highlighted words run parallel/adjacent.
+ *
+ * Two words have parallel adjacency if:
+ * 1. They do NOT share any cells (no intersection), AND
+ * 2. A cell from one word is orthogonally adjacent to a cell from the other word
+ */
+function checkParallelAdjacency(
+  puzzle: WaywordsPuzzle,
+  cellMap: Map<string, Cell>,
+  errors: AuditError[]
+): void {
+  const pathWords = puzzle.words.path;
+  if (pathWords.length < 2) return;
+
+  // Build map of cellId to the words that contain it
+  const cellToWords = new Map<string, Set<string>>();
+  for (const word of pathWords) {
+    if (word.placements.length === 0) continue;
+    for (const cellId of word.placements[0]) {
+      if (!cellToWords.has(cellId)) {
+        cellToWords.set(cellId, new Set());
+      }
+      cellToWords.get(cellId)!.add(word.wordId);
+    }
+  }
+
+  // Build position map for O(1) neighbor lookup
+  const posMap = new Map<string, Cell>();
+  for (const cell of puzzle.grid.cells) {
+    posMap.set(`${cell.x},${cell.y}`, cell);
+  }
+
+  // For each pair of words, check if they have parallel adjacency
+  const adjacencyPairs = new Set<string>();
+  for (let i = 0; i < pathWords.length; i++) {
+    for (let j = i + 1; j < pathWords.length; j++) {
+      const wordA = pathWords[i];
+      const wordB = pathWords[j];
+      if (wordA.placements.length === 0 || wordB.placements.length === 0) continue;
+
+      const placementA = new Set(wordA.placements[0]);
+      const placementB = new Set(wordB.placements[0]);
+
+      // Check if words intersect (share any cell)
+      let intersects = false;
+      for (const cellId of placementA) {
+        if (placementB.has(cellId)) {
+          intersects = true;
+          break;
+        }
+      }
+
+      // If words intersect, adjacency is expected and allowed
+      if (intersects) continue;
+
+      // Words don't intersect - check if they're adjacent
+      let hasAdjacency = false;
+      for (const cellId of placementA) {
+        const cell = cellMap.get(cellId);
+        if (!cell) continue;
+
+        const directions = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+        for (const [dx, dy] of directions) {
+          const neighbor = posMap.get(`${cell.x + dx},${cell.y + dy}`);
+          if (neighbor && placementB.has(neighbor.id)) {
+            hasAdjacency = true;
+            break;
+          }
+        }
+        if (hasAdjacency) break;
+      }
+
+      if (hasAdjacency) {
+        const pairKey = [wordA.wordId, wordB.wordId].sort().join('|');
+        adjacencyPairs.add(pairKey);
+      }
+    }
+  }
+
+  // Report each unique pair once
+  for (const pairKey of adjacencyPairs) {
+    const [wordA, wordB] = pairKey.split('|');
+    errors.push({
+      code: 'ERR_PARALLEL_ADJACENCY',
+      path: `words.path`,
+      message: `Words "${wordA}" and "${wordB}" touch orthogonally without intersecting (parallel adjacency)`,
+      severity: 'error'
+    });
   }
 }

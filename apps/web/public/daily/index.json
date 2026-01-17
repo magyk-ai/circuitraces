@@ -286,18 +286,6 @@
           "puzzlePath": "/daily/2026-01-20-product-management.json",
           "tags": []
         },
-        "devops": {
-          "id": "daily-2026-01-20-devops",
-          "title": "DevOps Daily",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-20-devops.json",
-          "tags": []
-        },
         "personal-finance": {
           "id": "daily-2026-01-20-personal-finance",
           "title": "Personal Finance Daily",
@@ -474,18 +462,6 @@
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-22-devops.json",
-          "tags": []
-        },
-        "personal-finance": {
-          "id": "daily-2026-01-22-personal-finance",
-          "title": "Personal Finance Daily",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-22-personal-finance.json",
           "tags": []
         },
         "design": {

@@ -50,9 +50,9 @@ export class PuzzleConstructor {
 
     console.log(`Generating ${config.puzzleId} (${config.topicId})...`);
 
-    // Retry loop
-    const maxAttempts = 200;
-    const escalateAfter = 20;
+    // Retry loop - increased to handle parallel adjacency constraint
+    const maxAttempts = 500;
+    const escalateAfter = 50;
     let attempts = 0;
     while (attempts < maxAttempts) {
       attempts++;
@@ -75,8 +75,8 @@ export class PuzzleConstructor {
   }
 
   private attemptConstruction(words: WordList, config: GeneratorConfig, preferLargerGrid: boolean) {
-    // Grid escalation: try 6x6 first, then 7x7; prefer 7x7 after repeated failures.
-    const gridSizes: [number, number][] = preferLargerGrid ? [[7, 7], [6, 6]] : [[6, 6], [7, 7]];
+    // Grid escalation: try 7x7 first, then 8x8; prefer 8x8 after repeated failures.
+    const gridSizes: [number, number][] = preferLargerGrid ? [[8, 8], [7, 7]] : [[7, 7], [8, 8]];
 
     for (const [width, height] of gridSizes) {
       try {
@@ -85,7 +85,7 @@ export class PuzzleConstructor {
         // Try next size
       }
     }
-    throw new Error("Could not place words even on 7x7 grid");
+    throw new Error("Could not place words even on 8x8 grid");
   }
 
   private tryConstruction(words: WordList, config: GeneratorConfig, width: number, height: number) {
@@ -157,6 +157,11 @@ export class PuzzleConstructor {
     const intersectionCount = this.getIntersectionCount(placedPathWords);
     if (intersectionCount < numWords - 1) {
       throw new Error(`Path intersections too low (${intersectionCount}/${numWords - 1})`);
+    }
+
+    // Reject puzzles with parallel adjacency (non-intersecting words that touch)
+    if (this.hasParallelAdjacency(builder, placedPathWords)) {
+      throw new Error('Parallel adjacency detected (non-intersecting touching words)');
     }
 
     // 6. Place Bonus Word (1)
@@ -430,6 +435,7 @@ export class PuzzleConstructor {
   private getCoverageThreshold(width: number, height: number): number {
     if (width === 6 && height === 6) return 14;
     if (width === 7 && height === 7) return 18;
+    if (width === 8 && height === 8) return 22;
     return Math.max(12, Math.floor((width * height) / 4));
   }
 
@@ -484,5 +490,59 @@ export class PuzzleConstructor {
       if (count >= 2) intersections += 1;
     }
     return intersections;
+  }
+
+  /**
+   * Check for "parallel adjacency" - words that touch orthogonally without intersecting.
+   * This creates visual confusion when two highlighted words run parallel/adjacent.
+   * Returns true if any such adjacency is found (meaning the puzzle should be rejected).
+   *
+   * Two words have parallel adjacency if:
+   * 1. They do NOT share any cells (no intersection), AND
+   * 2. A cell from one word is orthogonally adjacent to a cell from the other word
+   */
+  private hasParallelAdjacency(builder: GridBuilder, pathWords: WordPlacement[]): boolean {
+    if (pathWords.length < 2) return false;
+
+    // For each pair of words, check if they have parallel adjacency
+    for (let i = 0; i < pathWords.length; i++) {
+      for (let j = i + 1; j < pathWords.length; j++) {
+        const wordA = pathWords[i];
+        const wordB = pathWords[j];
+        const placementA = new Set(wordA.placements?.[0] ?? []);
+        const placementB = new Set(wordB.placements?.[0] ?? []);
+
+        if (placementA.size === 0 || placementB.size === 0) continue;
+
+        // Check if words intersect (share any cell)
+        let intersects = false;
+        for (const cellId of placementA) {
+          if (placementB.has(cellId)) {
+            intersects = true;
+            break;
+          }
+        }
+
+        // If words intersect, adjacency is expected and allowed
+        if (intersects) continue;
+
+        // Words don't intersect - check if they're adjacent
+        for (const cellId of placementA) {
+          const cell = builder.getCellById(cellId);
+          if (!cell) continue;
+
+          const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+          for (const [dx, dy] of dirs) {
+            const neighbor = builder.getCell(cell.x + dx, cell.y + dy);
+            if (neighbor && placementB.has(neighbor.id)) {
+              // Found parallel adjacency
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 }

@@ -11,7 +11,9 @@
     "test:watch": "vitest",
     "validate": "node ./dist/cli.js",
     "audit": "node ./dist/cli.js --audit",
-    "content:qa": "npm run build && node ./dist/content-qa.js"
+    "content:qa": "npm run build && node ./dist/content-qa.js",
+    "wordlist:stats": "npm run build && node ./dist/wordlist-stats.js",
+    "generate": "npm run build && node ./dist/batch-generate.js"
   },
   "dependencies": {
     "@circuitraces/engine": "*"
