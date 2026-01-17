@@ -373,11 +373,10 @@ export function App() {
                 />
               )}
 
-              {events.length > 0 && (
+              {events.filter(e => e.type !== 'WORD_FOUND').length > 0 && (
                 <div className="feedback">
-                  {events.map((e, i) => (
+                  {events.filter(e => e.type !== 'WORD_FOUND').map((e, i) => (
                     <div key={i} className={`event ${e.type}`}>
-                      {e.type === 'WORD_FOUND' && `Found: ${e.wordId} (${e.category})`}
                       {e.type === 'INVALID_SELECTION' && 'Invalid selection'}
                       {e.type === 'ALREADY_FOUND' && `Already found: ${e.wordId}`}
                       {e.type === 'HINT_APPLIED' && `💡 Hint ${e.source === 'BONUS' ? '(from bonus)' : ''} applied!`}
