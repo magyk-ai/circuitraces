@@ -24,7 +24,8 @@ export type AuditErrorCode =
   | 'ERR_PLACEMENT_NOT_CONTIGUOUS'
   | 'ERR_PLACEMENT_REVERSED'
   | 'ERR_PLACEMENT_DIAGONAL'
-  | 'ERR_PARALLEL_ADJACENCY';
+  | 'ERR_PARALLEL_ADJACENCY'
+  | 'ERR_SAME_DIRECTION_INTERSECTION';
 
 export interface AuditError {
   code: AuditErrorCode;
@@ -123,6 +124,9 @@ export function auditPuzzle(puzzle: WaywordsPuzzle): AuditResult {
 
   // 10. Parallel adjacency check (words touching without intersecting)
   checkParallelAdjacency(puzzle, cellMap, errors);
+
+  // 11. Intersection direction check (intersecting words must have different directions)
+  checkIntersectionDirections(puzzle, cellMap, errors);
 
   return {
     valid: errors.length === 0,
@@ -646,5 +650,71 @@ function checkParallelAdjacency(
       message: `Words "${wordA}" and "${wordB}" touch orthogonally without intersecting (parallel adjacency)`,
       severity: 'error'
     });
+  }
+}
+
+/**
+ * Check that intersecting path words have different directions (H vs V).
+ * This prevents visual confusion where two parallel words appear to be one.
+ */
+function checkIntersectionDirections(
+  puzzle: WaywordsPuzzle,
+  cellMap: Map<string, Cell>,
+  errors: AuditError[]
+): void {
+  const pathWords = puzzle.words.path;
+  if (pathWords.length < 2) return;
+
+  // Map to store word IDs that occupy each cell
+  const cellToWords = new Map<string, string[]>();
+  for (const word of pathWords) {
+    if (word.placements.length === 0) continue;
+    for (const cellId of word.placements[0]) {
+      if (!cellToWords.has(cellId)) {
+        cellToWords.set(cellId, []);
+      }
+      cellToWords.get(cellId)!.push(word.wordId);
+    }
+  }
+
+  // Helper to determine direction of a word placement
+  const getDirection = (placement: string[]): 'H' | 'V' | 'UNKNOWN' => {
+    if (placement.length < 2) return 'UNKNOWN';
+    const c1 = cellMap.get(placement[0]);
+    const c2 = cellMap.get(placement[1]);
+    if (!c1 || !c2) return 'UNKNOWN';
+    return c1.y === c2.y ? 'H' : 'V';
+  };
+
+  // Check each cell that is an intersection
+  for (const [cellId, wordIds] of cellToWords.entries()) {
+    if (wordIds.length < 2) continue;
+
+    const directions = new Map<string, 'H' | 'V' | 'UNKNOWN'>();
+    for (const wordId of wordIds) {
+      const word = pathWords.find(w => w.wordId === wordId);
+      if (word && word.placements.length > 0) {
+        directions.set(wordId, getDirection(word.placements[0]));
+      }
+    }
+
+    // Compare directions of all pairs of words at this intersection
+    for (let i = 0; i < wordIds.length; i++) {
+      for (let j = i + 1; j < wordIds.length; j++) {
+        const idA = wordIds[i];
+        const idB = wordIds[j];
+        const dirA = directions.get(idA);
+        const dirB = directions.get(idB);
+
+        if (dirA && dirB && dirA !== 'UNKNOWN' && dirB !== 'UNKNOWN' && dirA === dirB) {
+          errors.push({
+            code: 'ERR_SAME_DIRECTION_INTERSECTION',
+            path: 'words.path',
+            message: `Words "${idA}" and "${idB}" intersect at cell ${cellId} and have the same direction (${dirA})`,
+            severity: 'error'
+          });
+        }
+      }
+    }
   }
 }

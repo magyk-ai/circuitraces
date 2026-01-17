@@ -218,6 +218,15 @@ export function evaluatePuzzle(puzzle: PuzzleContent, profileName: string): QaEr
     });
   }
 
+  // Check for same-direction intersections
+  const sameDirIntersections = checkIntersectionDirections(puzzle, cellById);
+  for (const info of sameDirIntersections) {
+    errors.push({
+      code: 'ERR_QA_SAME_DIRECTION_INTERSECTION',
+      message: `Words "${info.idA}" and "${info.idB}" intersect at cell ${info.cellId} with the same direction (${info.direction})`
+    });
+  }
+
   return errors;
 }
 
@@ -411,6 +420,70 @@ function checkParallelAdjacency(
   }
 
   return Array.from(adjacencyPairs).map(key => key.split('|') as [string, string]);
+}
+
+/**
+ * Check that intersecting path words have different directions (H vs V).
+ * Returns array of objects detailing the conflict.
+ */
+function checkIntersectionDirections(
+  puzzle: PuzzleContent,
+  cellById: Map<string, PuzzleContent['grid']['cells'][number]>
+): { idA: string; idB: string; cellId: string; direction: string }[] {
+  const pathWords = puzzle.words.path;
+  if (pathWords.length < 2) return [];
+
+  // Map to store word IDs that occupy each cell
+  const cellToWords = new Map<string, string[]>();
+  for (const word of pathWords) {
+    if (word.placements.length === 0) continue;
+    for (const cellId of word.placements[0]) {
+      if (!cellToWords.has(cellId)) {
+        cellToWords.set(cellId, []);
+      }
+      cellToWords.get(cellId)!.push(word.wordId);
+    }
+  }
+
+  // Helper to determine direction of a word placement
+  const getDirection = (placement: string[]): 'H' | 'V' | 'UNKNOWN' => {
+    if (placement.length < 2) return 'UNKNOWN';
+    const c1 = cellById.get(placement[0]);
+    const c2 = cellById.get(placement[1]);
+    if (!c1 || !c2) return 'UNKNOWN';
+    return c1.y === c2.y ? 'H' : 'V';
+  };
+
+  const conflicts: { idA: string; idB: string; cellId: string; direction: string }[] = [];
+
+  // Check each cell that is an intersection
+  for (const [cellId, wordIds] of cellToWords.entries()) {
+    if (wordIds.length < 2) continue;
+
+    const directions = new Map<string, 'H' | 'V' | 'UNKNOWN'>();
+    for (const wordId of wordIds) {
+      const word = pathWords.find(w => w.wordId === wordId);
+      if (word && word.placements.length > 0) {
+        directions.set(wordId, getDirection(word.placements[0]));
+      }
+    }
+
+    // Compare directions of all pairs of words at this intersection
+    for (let i = 0; i < wordIds.length; i++) {
+      for (let j = i + 1; j < wordIds.length; j++) {
+        const idA = wordIds[i];
+        const idB = wordIds[j];
+        const dirA = directions.get(idA);
+        const dirB = directions.get(idB);
+
+        if (dirA && dirB && dirA !== 'UNKNOWN' && dirB !== 'UNKNOWN' && dirA === dirB) {
+          conflicts.push({ idA, idB, cellId, direction: dirA });
+        }
+      }
+    }
+  }
+
+  return conflicts;
 }
 
 main().catch(err => {

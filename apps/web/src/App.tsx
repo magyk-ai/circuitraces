@@ -7,6 +7,7 @@ import { WordsList } from './components/WordsList';
 import { HomeScreen } from './components/HomeScreen';
 import { TopicBrowser } from './components/TopicBrowser';
 import { useDailyPuzzle } from './hooks/useDailyPuzzle';
+import { useTopicCatalog } from './hooks/useTopicIndex';
 import './App.css';
 
 function resolveContentPath(path: string): string {
@@ -24,20 +25,7 @@ function formatTime(ms: number): string {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-interface PuzzleMetadata {
-  id: string;
-  path: string;
-  title: string;
-  difficulty: string;
-  gridSize: string;
-  estimatedMinutes: number;
-  description: string;
-}
 
-interface PuzzleIndex {
-  version: number;
-  puzzles: PuzzleMetadata[];
-}
 
 export function App() {
   // Parse query params
@@ -46,7 +34,6 @@ export function App() {
   const dailyDate = params.get('daily');
   const topicId = params.get('topic');
   const puzzleIdParam = params.get('puzzle');
-  const devMode = params.get('dev') === '1';
 
   // Determine view state
   const [view, setView] = useState<'home' | 'daily' | 'topic' | 'puzzle'>(() => {
@@ -65,9 +52,19 @@ export function App() {
   // Daily puzzle loading
   const { todaysEntry } = useDailyPuzzle(dailyDate || undefined);
 
-  // Legacy puzzle selector state
-  const [puzzleIndex, setPuzzleIndex] = useState<PuzzleIndex | null>(null);
-  const [selectedPuzzleId, setSelectedPuzzleId] = useState<string>(puzzleIdParam || 'sample');
+  // Topic catalog loading for direct puzzle links
+  const { catalog: directCatalog } = useTopicCatalog(view === 'puzzle' && !currentPuzzlePath ? currentTopic : null);
+
+  // Resolve puzzle path from catalog if missing (direct link case)
+  useEffect(() => {
+    if (view === 'puzzle' && !currentPuzzlePath && directCatalog && puzzleIdParam) {
+      const p = directCatalog.puzzles.find(p => p.id === puzzleIdParam);
+      if (p) {
+        setCurrentPuzzlePath(p.puzzlePath);
+      }
+    }
+  }, [view, currentPuzzlePath, directCatalog, puzzleIdParam]);
+
   const [puzzle, setPuzzle] = useState<WaywordsPuzzle | null>(null);
   const [state, setState] = useState<RuntimeState | null>(null);
   const [events, setEvents] = useState<EngineEvent[]>([]);
@@ -77,54 +74,7 @@ export function App() {
   const [isPaused, setIsPaused] = useState(false);
   const [showWordsList, setShowWordsList] = useState(false);
 
-  // Load puzzle index on mount
-  useEffect(() => {
-    fetch('./puzzles/index.json')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Failed to load puzzle index: ${res.status} ${res.statusText}`);
-        }
-        return res.json();
-      })
-      .then(data => {
-        setPuzzleIndex(data);
-      })
-      .catch(err => {
-        console.error('Error loading puzzle index:', err);
-        alert(`Failed to load puzzle index: ${err.message}`);
-      });
-  }, []);
 
-  // Load selected puzzle
-  useEffect(() => {
-    if (!puzzleIndex) return;
-    
-    // Prevent Legacy/Dev puzzle from overwriting Daily/Topic puzzle
-    if (view === 'daily' || (view === 'puzzle' && currentPuzzlePath)) return;
-
-    const metadata = puzzleIndex.puzzles.find(p => p.id === selectedPuzzleId);
-    if (!metadata) {
-      console.error(`Puzzle ${selectedPuzzleId} not found in index`);
-      return;
-    }
-
-    fetch(resolveContentPath(metadata.path) + '?v=' + Date.now())
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Failed to load puzzle: ${res.status} ${res.statusText}`);
-        }
-        return res.json();
-      })
-      .then(data => {
-        setPuzzle(data);
-        setState(init(data, Date.now()));
-        setEvents([]); // Clear events when switching puzzles
-      })
-      .catch(err => {
-        console.error('Error loading puzzle:', err);
-        alert(`Failed to load puzzle: ${err.message}`);
-      });
-  }, [puzzleIndex, selectedPuzzleId]);
 
   // Load puzzle from daily or topic when in those views
   useEffect(() => {
@@ -218,7 +168,7 @@ export function App() {
   useEffect(() => {
     setElapsedMs(0);
     setIsPaused(false);
-  }, [selectedPuzzleId]);
+  }, [puzzle?.puzzleId]);
 
   // Navigation handlers
   const handlePlayDaily = useCallback((topicId: string) => {
@@ -291,15 +241,6 @@ export function App() {
     />;
   }
 
-  if (!puzzleIndex) {
-    return (
-      <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
-        <h2>Loading puzzle index...</h2>
-        <p>If this takes too long, check the browser console for errors.</p>
-      </div>
-    );
-  }
-
   if (!puzzle || !state) {
     return (
       <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
@@ -312,44 +253,25 @@ export function App() {
   const pathCells = selectors.getPathCells(puzzle, state);
   const additionalCells = selectors.getAdditionalWordCells(puzzle, state);
   const hintCells = selectors.getHintCells(state);
-  const currentPuzzle = puzzleIndex.puzzles.find(p => p.id === selectedPuzzleId);
-
   return (
     <div className="app">
       <header>
         <div className="header-left">
           <h1>{puzzle.theme}</h1>
-          {currentPuzzle && (
-            <div className="puzzle-meta">
-              <span className={`difficulty ${currentPuzzle.difficulty}`}>{currentPuzzle.difficulty}</span>
-              <span className="grid-size">{currentPuzzle.gridSize}</span>
-              <span className="time-estimate">~{currentPuzzle.estimatedMinutes}m</span>
-            </div>
-          )}
+          <div className="puzzle-meta">
+            <span className="grid-size">{puzzle.grid.width}×{puzzle.grid.height}</span>
+          </div>
         </div>
-        <div className="controls">
-          <div className="timer" data-testid="timer">{formatTime(elapsedMs)}</div>
-          <button
-            onClick={() => setIsPaused(p => !p)}
-            disabled={state.status === 'COMPLETED'}
-            className="pause-button"
-            data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
-          >
-            {isPaused ? '▶️' : '⏸️'}
-          </button>
-          {devMode && (
-            <select
-              value={selectedPuzzleId}
-              onChange={(e) => setSelectedPuzzleId(e.target.value)}
-              className="puzzle-selector"
+          <div className="controls">
+            <div className="timer" data-testid="timer">{formatTime(elapsedMs)}</div>
+            <button
+              onClick={() => setIsPaused(p => !p)}
+              disabled={state.status === 'COMPLETED'}
+              className="pause-button"
+              data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
             >
-              {puzzleIndex.puzzles.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
-          )}
+              {isPaused ? '▶️' : '⏸️'}
+            </button>
           <button onClick={handleBackToHome} className="back-button">
             ← Home
           </button>

@@ -118,6 +118,7 @@ export class PuzzleConstructor {
 
     const placedPathWords: WordPlacement[] = [];
     const usedPathCells = new Set<string>();
+    const cellToDirections = new Map<string, Set<'H' | 'V'>>();
     const placedCellsByChar = new Map<string, string[]>();
 
     // 3. Place first word anchored at START
@@ -130,7 +131,13 @@ export class PuzzleConstructor {
     const firstPath = firstOptions[Math.floor(Math.random() * firstOptions.length)];
     this.commitWordToGrid(builder, firstWord, firstPath);
     placedPathWords.push(this.createWordObj(firstWord, firstPath));
-    firstPath.forEach(id => usedPathCells.add(id));
+    // Determine direction for first word
+    const firstDir: 'H' | 'V' = firstPath.length > 1 && builder.getCellById(firstPath[1])!.x > builder.getCellById(firstPath[0])!.x ? 'H' : 'V';
+    firstPath.forEach(id => {
+      usedPathCells.add(id);
+      if (!cellToDirections.has(id)) cellToDirections.set(id, new Set());
+      cellToDirections.get(id)!.add(firstDir);
+    });
     this.recordCellChars(builder, firstPath, placedCellsByChar);
 
     const remainingWords = pathCandidates.filter(w => w !== firstWord);
@@ -138,20 +145,29 @@ export class PuzzleConstructor {
 
     // 4. Place middle words via intersections only
     for (let i = 0; i < middleTarget; i++) {
-      const placementResult = this.placeNextIntersectingWord(builder, remainingWords, placedCellsByChar, usedPathCells);
+      const placementResult = this.placeNextIntersectingWord(builder, remainingWords, placedCellsByChar, usedPathCells, cellToDirections);
       if (!placementResult) throw new Error("Cannot place intersecting middle word");
-      const { word, placement } = placementResult;
+      const { word, placement, direction } = placementResult;
       placedPathWords.push(this.createWordObj(word, placement));
-      placement.forEach(id => usedPathCells.add(id));
+      placement.forEach(id => {
+        usedPathCells.add(id);
+        if (!cellToDirections.has(id)) cellToDirections.set(id, new Set());
+        cellToDirections.get(id)!.add(direction);
+      });
       this.recordCellChars(builder, placement, placedCellsByChar);
     }
 
     // 5. Place last word ending at END tile (must intersect existing path)
-    const endingResult = this.placeEndingWord(builder, remainingWords, endCell, usedPathCells);
+    const endingResult = this.placeEndingWord(builder, remainingWords, endCell, usedPathCells, cellToDirections);
     if (!endingResult) throw new Error("Cannot place ending word at END");
-    placedPathWords.push(this.createWordObj(endingResult.word, endingResult.placement));
-    endingResult.placement.forEach(id => usedPathCells.add(id));
-    this.recordCellChars(builder, endingResult.placement, placedCellsByChar);
+    const { word: endWord, placement: endPlacement, direction: endDir } = endingResult;
+    placedPathWords.push(this.createWordObj(endWord, endPlacement));
+    endPlacement.forEach(id => {
+      usedPathCells.add(id);
+      if (!cellToDirections.has(id)) cellToDirections.set(id, new Set());
+      cellToDirections.get(id)!.add(endDir);
+    });
+    this.recordCellChars(builder, endPlacement, placedCellsByChar);
 
     // Ensure intersection density meets Easy Daily requirements
     const intersectionCount = this.getIntersectionCount(placedPathWords);
@@ -261,8 +277,9 @@ export class PuzzleConstructor {
     builder: GridBuilder,
     word: string,
     placedCellsByChar: Map<string, string[]>,
-    usedCells: Set<string>
-  ): string[] | null {
+    usedCells: Set<string>,
+    cellToDirections: Map<string, Set<'H' | 'V'>>
+  ): { placement: string[]; direction: 'H' | 'V' } | null {
     // For each letter in word at index k
     const indices = Array.from({ length: word.length }, (_, i) => i).sort(() => Math.random() - 0.5);
 
@@ -283,10 +300,11 @@ export class PuzzleConstructor {
           const startX = intersectCell.x - (k * dx);
           const startY = intersectCell.y - (k * dy);
 
-          const placement = this.tryPlaceRay(builder, word, startX, startY, dx, dy, usedCells);
+          const direction = dx === 1 ? 'H' : 'V';
+          const placement = this.tryPlaceRay(builder, word, startX, startY, dx, dy, usedCells, cellToDirections);
           if (placement) {
             this.commitWordToGrid(builder, word, placement);
-            return placement;
+            return { placement, direction };
           }
         }
       }
@@ -299,20 +317,22 @@ export class PuzzleConstructor {
     builder: GridBuilder,
     word: string,
     endCell: Cell,
-    usedCells: Set<string>
-  ): string[] | null {
+    usedCells: Set<string>,
+    cellToDirections: Map<string, Set<'H' | 'V'>>
+  ): { placement: string[]; direction: 'H' | 'V' } | null {
     const forwardDirs: [number, number][] = [[1, 0], [0, 1]];
 
     for (const [dx, dy] of forwardDirs) {
       const startX = endCell.x - (word.length - 1) * dx;
       const startY = endCell.y - (word.length - 1) * dy;
 
-      const placement = this.tryPlaceRay(builder, word, startX, startY, dx, dy, usedCells);
+      const direction = dx === 1 ? 'H' : 'V';
+      const placement = this.tryPlaceRay(builder, word, startX, startY, dx, dy, usedCells, cellToDirections);
       if (placement && placement[placement.length - 1] === endCell.id) {
         const intersects = placement.some(id => usedCells.has(id));
         if (!intersects) continue;
         this.commitWordToGrid(builder, word, placement);
-        return placement;
+        return { placement, direction };
       }
     }
 
@@ -337,18 +357,20 @@ export class PuzzleConstructor {
     builder: GridBuilder,
     remainingWords: string[],
     placedCellsByChar: Map<string, string[]>,
-    usedCells: Set<string>
-  ): { word: string; placement: string[] } | null {
+    usedCells: Set<string>,
+    cellToDirections: Map<string, Set<'H' | 'V'>>
+  ): { word: string; placement: string[]; direction: 'H' | 'V' } | null {
     const shuffled = [...remainingWords].sort(() => Math.random() - 0.5);
     for (const word of shuffled) {
-      const placement = this.placeWordWithIntersection(builder, word, placedCellsByChar, usedCells);
-      if (!placement) continue;
+      const result = this.placeWordWithIntersection(builder, word, placedCellsByChar, usedCells, cellToDirections);
+      if (!result) continue;
+      const { placement, direction } = result;
       const intersects = placement.some(id => usedCells.has(id));
       if (!intersects) continue;
 
       const index = remainingWords.indexOf(word);
       if (index >= 0) remainingWords.splice(index, 1);
-      return { word, placement };
+      return { word, placement, direction };
     }
     return null;
   }
@@ -357,18 +379,20 @@ export class PuzzleConstructor {
     builder: GridBuilder,
     remainingWords: string[],
     endCell: Cell,
-    usedCells: Set<string>
-  ): { word: string; placement: string[] } | null {
+    usedCells: Set<string>,
+    cellToDirections: Map<string, Set<'H' | 'V'>>
+  ): { word: string; placement: string[]; direction: 'H' | 'V' } | null {
     const shuffled = [...remainingWords].sort(() => Math.random() - 0.5);
     for (const word of shuffled) {
-      const placement = this.placeWordEndingAt(builder, word, endCell, usedCells);
-      if (!placement) continue;
+      const result = this.placeWordEndingAt(builder, word, endCell, usedCells, cellToDirections);
+      if (!result) continue;
+      const { placement, direction } = result;
       const intersects = placement.some(id => usedCells.has(id));
       if (!intersects) continue;
 
       const index = remainingWords.indexOf(word);
       if (index >= 0) remainingWords.splice(index, 1);
-      return { word, placement };
+      return { word, placement, direction };
     }
     return null;
   }
@@ -380,8 +404,10 @@ export class PuzzleConstructor {
     startY: number,
     dx: number,
     dy: number,
-    usedCells: Set<string>
+    usedCells: Set<string>,
+    cellToDirections: Map<string, Set<'H' | 'V'>>
   ): string[] | null {
+    const direction = dx === 1 ? 'H' : 'V';
     const path: string[] = [];
 
     for (let i = 0; i < word.length; i++) {
@@ -395,7 +421,11 @@ export class PuzzleConstructor {
       if (cell.value !== '' && cell.value !== word[i]) return null;
 
       // Check overlap with existing cells (allow if character matches)
-      if (usedCells.has(cell.id) && cell.value !== word[i]) return null;
+      if (usedCells.has(cell.id)) {
+        if (cell.value !== word[i]) return null;
+        // Direction conflict check: If this cell is an intersection, it must NOT have the same direction
+        if (cellToDirections.get(cell.id)?.has(direction)) return null;
+      }
 
       path.push(cell.id);
     }

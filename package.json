@@ -17,7 +17,8 @@
     "build": "npm run build -w @circuitraces/engine && npm run build -w @circuitraces/web",
     "dev": "npm run dev -w @circuitraces/web",
     "validate": "npm run validate -w @circuitraces/generator",
-    "audit": "npm run audit -w @circuitraces/generator"
+    "audit": "npm run audit -w @circuitraces/generator",
+    "wordlist:stats": "npm run wordlist:stats -w @circuitraces/generator"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

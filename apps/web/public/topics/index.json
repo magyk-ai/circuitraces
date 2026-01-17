@@ -5,7 +5,7 @@
       "topicId": "product-management",
       "title": "Product Management",
       "description": "Roadmaps, strategy, metrics, execution.",
-      "icon": "PM",
+      "icon": "📋",
       "indexPath": "/topics/product-management/index.json",
       "defaultDifficulty": "easy",
       "tags": ["metrics", "launch", "strategy"]
