@@ -15,265 +15,365 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "F"
+        "value": "N"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "S"
+        "value": "K"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "C"
+        "value": "L"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "L"
+        "value": "G"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "C"
+        "value": "G"
       },
       {
         "id": "r0c5",
         "x": 5,
         "y": 0,
         "type": "LETTER",
-        "value": "L"
+        "value": "C"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "O"
+        "value": "I"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "H"
+        "value": "U"
       },
       {
         "id": "r1c2",
         "x": 2,
         "y": 1,
         "type": "LETTER",
-        "value": "S"
+        "value": "B"
       },
       {
         "id": "r1c3",
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "G"
+        "value": "L"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "H"
+        "value": "U"
       },
       {
         "id": "r1c5",
         "x": 5,
         "y": 1,
         "type": "LETTER",
-        "value": "W"
+        "value": "R"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "R"
+        "value": "L"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "A"
+        "value": "F"
       },
       {
         "id": "r2c2",
         "x": 2,
         "y": 2,
         "type": "LETTER",
-        "value": "S"
+        "value": "Q"
       },
       {
         "id": "r2c3",
         "x": 3,
         "y": 2,
         "type": "LETTER",
-        "value": "T"
+        "value": "C"
       },
       {
         "id": "r2c4",
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "E"
+        "value": "O"
       },
       {
         "id": "r2c5",
         "x": 5,
         "y": 2,
         "type": "LETTER",
-        "value": "R"
+        "value": "O"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "M"
+        "value": "B"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "D"
+        "value": "I"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "K"
+        "value": "T"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "Y"
+        "value": "M"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "C"
+        "value": "A"
       },
       {
         "id": "r3c5",
         "x": 5,
         "y": 3,
         "type": "LETTER",
-        "value": "S"
+        "value": "P"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "H"
+        "value": "R"
       },
       {
         "id": "r4c1",
         "x": 1,
         "y": 4,
         "type": "LETTER",
-        "value": "O"
+        "value": "L"
       },
       {
         "id": "r4c2",
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "H"
+        "value": "B"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "P"
+        "value": "Y"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "X"
+        "value": "M"
       },
       {
         "id": "r4c5",
         "x": 5,
         "y": 4,
         "type": "LETTER",
-        "value": "D"
+        "value": "A"
       },
       {
         "id": "r5c0",
         "x": 0,
         "y": 5,
         "type": "LETTER",
-        "value": "N"
+        "value": "Q"
       },
       {
         "id": "r5c1",
         "x": 1,
         "y": 5,
         "type": "LETTER",
-        "value": "W"
+        "value": "L"
       },
       {
         "id": "r5c2",
         "x": 2,
         "y": 5,
         "type": "LETTER",
-        "value": "B"
+        "value": "C"
       },
       {
         "id": "r5c3",
         "x": 3,
         "y": 5,
         "type": "LETTER",
-        "value": "E"
+        "value": "K"
       },
       {
         "id": "r5c4",
         "x": 4,
         "y": 5,
         "type": "LETTER",
-        "value": "V"
+        "value": "C"
       },
       {
         "id": "r5c5",
         "x": 5,
         "y": 5,
         "type": "LETTER",
-        "value": "Z"
+        "value": "M"
       }
     ],
     "start": {
-      "adjacentCellId": "r0c0"
+      "adjacentCellId": "r0c5"
     },
     "end": {
-      "adjacentCellId": "r5c3"
+      "adjacentCellId": "r5c1"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "FORM",
+        "wordId": "CROP",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "C"
+          },
+          {
+            "t": "L",
+            "v": "R"
+          },
+          {
+            "t": "L",
+            "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "P"
+          }
+        ],
+        "size": 4,
+        "placements": [
+          [
+            "r0c5",
+            "r1c5",
+            "r2c5",
+            "r3c5"
+          ]
+        ]
+      },
+      {
+        "wordId": "BLUR",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "B"
+          },
+          {
+            "t": "L",
+            "v": "L"
+          },
+          {
+            "t": "L",
+            "v": "U"
+          },
+          {
+            "t": "L",
+            "v": "R"
+          }
+        ],
+        "size": 4,
+        "placements": [
+          [
+            "r1c2",
+            "r1c3",
+            "r1c4",
+            "r1c5"
+          ]
+        ]
+      },
+      {
+        "wordId": "BITMAP",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "B"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "T"
+          },
+          {
+            "t": "L",
+            "v": "M"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "P"
+          }
+        ],
+        "size": 6,
+        "placements": [
+          [
+            "r3c0",
+            "r3c1",
+            "r3c2",
+            "r3c3",
+            "r3c4",
+            "r3c5"
+          ]
+        ]
+      },
+      {
+        "wordId": "FILL",
         "tokens": [
           {
             "t": "L",
@@ -281,113 +381,39 @@
           },
           {
             "t": "L",
-            "v": "O"
+            "v": "I"
           },
           {
             "t": "L",
-            "v": "R"
+            "v": "L"
           },
           {
             "t": "L",
-            "v": "M"
+            "v": "L"
           }
         ],
         "size": 4,
         "placements": [
           [
-            "r0c0",
-            "r1c0",
-            "r2c0",
-            "r3c0"
-          ]
-        ]
-      },
-      {
-        "wordId": "RASTER",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "R"
-          },
-          {
-            "t": "L",
-            "v": "A"
-          },
-          {
-            "t": "L",
-            "v": "S"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          },
-          {
-            "t": "L",
-            "v": "R"
-          }
-        ],
-        "size": 6,
-        "placements": [
-          [
-            "r2c0",
-            "r2c1",
-            "r2c2",
-            "r2c3",
-            "r2c4",
-            "r2c5"
-          ]
-        ]
-      },
-      {
-        "wordId": "SHADOW",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "S"
-          },
-          {
-            "t": "L",
-            "v": "H"
-          },
-          {
-            "t": "L",
-            "v": "A"
-          },
-          {
-            "t": "L",
-            "v": "D"
-          },
-          {
-            "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "W"
-          }
-        ],
-        "size": 6,
-        "placements": [
-          [
-            "r0c1",
-            "r1c1",
             "r2c1",
             "r3c1",
             "r4c1",
             "r5c1"
           ]
         ]
-      },
+      }
+    ],
+    "additional": [
       {
-        "wordId": "TYPE",
+        "wordId": "CMYK",
         "tokens": [
           {
             "t": "L",
-            "v": "T"
+            "v": "C"
+          },
+          {
+            "t": "L",
+            "v": "M"
           },
           {
             "t": "L",
@@ -395,11 +421,7 @@
           },
           {
             "t": "L",
-            "v": "P"
-          },
-          {
-            "t": "L",
-            "v": "E"
+            "v": "K"
           }
         ],
         "size": 4,
@@ -410,35 +432,8 @@
             "r4c3",
             "r5c3"
           ]
-        ]
-      }
-    ],
-    "additional": [
-      {
-        "wordId": "CSS",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "C"
-          },
-          {
-            "t": "L",
-            "v": "S"
-          },
-          {
-            "t": "L",
-            "v": "S"
-          }
         ],
-        "size": 3,
-        "placements": [
-          [
-            "r0c2",
-            "r1c2",
-            "r2c2"
-          ]
-        ],
-        "hintCellId": "r2c2"
+        "hintCellId": "r3c3"
       }
     ]
   }
