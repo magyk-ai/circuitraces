@@ -19,6 +19,10 @@ export function useTopicIndex() {
         if (!response.ok) {
           throw new Error(`Failed to load topic index: ${response.statusText}`);
         }
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('Topic index is not valid JSON');
+        }
         const data: TopicMasterIndex = await response.json();
         setIndex(data);
         setError(null);
@@ -57,6 +61,10 @@ export function useTopicCatalog(topicId: string | null) {
         const response = await fetch(`${baseUrl}/topics/${topicId}/index.json?v=${Date.now()}`);
         if (!response.ok) {
           throw new Error(`Failed to load topic catalog: ${response.statusText}`);
+        }
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error(`Topic catalog for ${topicId} is not valid JSON`);
         }
         const data: TopicCatalog = await response.json();
         setCatalog(data);

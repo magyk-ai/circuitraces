@@ -1,14 +1,14 @@
 {
   "version": 1,
   "contentVersion": "2026.01.17-v2",
-  "topicId": "product-management",
-  "title": "Product Management",
-  "description": "Roadmaps, strategy, metrics, execution.",
+  "topicId": "personal-finance",
+  "title": "Personal Finance",
+  "description": "Budgeting, investing, saving, retirement.",
   "puzzles": [
     {
-      "id": "daily-2026-01-17-product-management",
+      "id": "daily-2026-01-17-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -16,13 +16,13 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-17-product-management.json",
+      "puzzlePath": "/daily/2026-01-17-personal-finance.json",
       "createdAt": "2026-01-17"
     },
     {
-      "id": "daily-2026-01-18-product-management",
+      "id": "daily-2026-01-18-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -30,13 +30,13 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-18-product-management.json",
+      "puzzlePath": "/daily/2026-01-18-personal-finance.json",
       "createdAt": "2026-01-18"
     },
     {
-      "id": "daily-2026-01-19-product-management",
+      "id": "daily-2026-01-19-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -44,13 +44,13 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-19-product-management.json",
+      "puzzlePath": "/daily/2026-01-19-personal-finance.json",
       "createdAt": "2026-01-19"
     },
     {
-      "id": "daily-2026-01-20-product-management",
+      "id": "daily-2026-01-20-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -58,13 +58,13 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-20-product-management.json",
+      "puzzlePath": "/daily/2026-01-20-personal-finance.json",
       "createdAt": "2026-01-20"
     },
     {
-      "id": "daily-2026-01-21-product-management",
+      "id": "daily-2026-01-21-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -72,13 +72,13 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-21-product-management.json",
+      "puzzlePath": "/daily/2026-01-21-personal-finance.json",
       "createdAt": "2026-01-21"
     },
     {
-      "id": "daily-2026-01-22-product-management",
+      "id": "daily-2026-01-22-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -86,13 +86,13 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-22-product-management.json",
+      "puzzlePath": "/daily/2026-01-22-personal-finance.json",
       "createdAt": "2026-01-22"
     },
     {
-      "id": "daily-2026-01-23-product-management",
+      "id": "daily-2026-01-23-personal-finance",
       "revision": 1,
-      "title": "Product Management Daily",
+      "title": "Personal Finance Daily",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -100,7 +100,7 @@
       },
       "estimatedMinutes": 3,
       "tags": [],
-      "puzzlePath": "/daily/2026-01-23-product-management.json",
+      "puzzlePath": "/daily/2026-01-23-personal-finance.json",
       "createdAt": "2026-01-23"
     }
   ]
