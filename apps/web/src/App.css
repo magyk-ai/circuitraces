@@ -19,6 +19,17 @@
   --feedback-bg: #2a2a2a;
   --completion-border: #4ade80;
   --overlay-bg: rgba(0, 0, 0, 0.85);
+  /* v1.1 */
+  --accent-orange: #f97316;
+  --cell-path-bg: #2a7a2a;
+  --cell-path-border: #3a9a3a;
+  --cell-hint-bg: #ffc107;
+  --cell-hint-border: #ffca28;
+  --cell-hint-text: #000000;
+  --cell-additional-bg: #4a4a4a;
+  --cell-additional-border: #5a5a5a;
+  --cell-preview-bg: #4a4aaa;
+  --cell-preview-border: #5a5aff;
 }
 
 @media (prefers-color-scheme: light) {
@@ -37,12 +48,27 @@
     --accent-yellow: #eab308;
     --accent-red: #ef4444;
     --accent-blue: #3b82f6;
+    --accent-orange: #ea580c;
     --button-bg: #e0e0e0;
     --button-hover: #d0d0d0;
     --feedback-bg: #ffffff;
     --completion-border: #22c55e;
     --overlay-bg: rgba(255, 255, 255, 0.9);
+    
+    --cell-path-bg: #4ade80;
+    --cell-path-border: #22c55e;
+    --cell-hint-bg: #fde047;
+    --cell-hint-border: #eab308;
+    --cell-hint-text: #000000;
+    --cell-additional-bg: #d1d5db;
+    --cell-additional-border: #9ca3af;
+    --cell-preview-bg: #c7d2fe;
+    --cell-preview-border: #6366f1;
   }
+}
+
+.timer.hidden {
+  display: none;
 }
 
 .app {

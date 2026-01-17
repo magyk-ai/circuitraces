@@ -9,7 +9,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-17-product-management",
-          "title": "Product Management Daily",
+          "title": "Roadmap Ahead",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -21,7 +21,7 @@
         },
         "devops": {
           "id": "daily-2026-01-17-devops",
-          "title": "DevOps Daily",
+          "title": "Pipeline Run",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -31,21 +31,9 @@
           "puzzlePath": "/daily/2026-01-17-devops.json",
           "tags": []
         },
-        "personal-finance": {
-          "id": "daily-2026-01-17-personal-finance",
-          "title": "Personal Finance Daily",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-17-personal-finance.json",
-          "tags": []
-        },
         "design": {
           "id": "daily-2026-01-17-design",
-          "title": "Design Daily",
+          "title": "Color Theory",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -57,7 +45,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-17-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Breach Alert",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -69,7 +57,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-17-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Audit Trail",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -81,7 +69,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-17-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Flex Quest",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -98,7 +86,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-18-product-management",
-          "title": "Product Management Daily",
+          "title": "Feature Sprint",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -110,7 +98,7 @@
         },
         "devops": {
           "id": "daily-2026-01-18-devops",
-          "title": "DevOps Daily",
+          "title": "Build & Ship",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -122,7 +110,7 @@
         },
         "personal-finance": {
           "id": "daily-2026-01-18-personal-finance",
-          "title": "Personal Finance Daily",
+          "title": "Save Smart",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -134,7 +122,7 @@
         },
         "design": {
           "id": "daily-2026-01-18-design",
-          "title": "Design Daily",
+          "title": "Layout Lab",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -146,7 +134,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-18-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Secure Mode",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -158,7 +146,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-18-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Number Crunch",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -170,7 +158,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-18-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Motion Path",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -187,7 +175,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-19-product-management",
-          "title": "Product Management Daily",
+          "title": "Metric Mastery",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -199,7 +187,7 @@
         },
         "devops": {
           "id": "daily-2026-01-19-devops",
-          "title": "DevOps Daily",
+          "title": "Infra Hunt",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -211,7 +199,7 @@
         },
         "design": {
           "id": "daily-2026-01-19-design",
-          "title": "Design Daily",
+          "title": "UX Quest",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -223,7 +211,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-19-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Firewall Up",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -235,7 +223,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-19-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Fiscal Flow",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -247,7 +235,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-19-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Strength Run",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -264,7 +252,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-20-product-management",
-          "title": "Product Management Daily",
+          "title": "Ship It",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -276,7 +264,7 @@
         },
         "devops": {
           "id": "daily-2026-01-20-devops",
-          "title": "DevOps Daily",
+          "title": "Deploy Day",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -288,7 +276,7 @@
         },
         "personal-finance": {
           "id": "daily-2026-01-20-personal-finance",
-          "title": "Personal Finance Daily",
+          "title": "Money Moves",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -300,7 +288,7 @@
         },
         "design": {
           "id": "daily-2026-01-20-design",
-          "title": "Design Daily",
+          "title": "Pixel Perfect",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -312,7 +300,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-20-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Threat Hunt",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -324,7 +312,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-20-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Ledger Logic",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -336,7 +324,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-20-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Move Well",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -353,7 +341,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-21-product-management",
-          "title": "Product Management Daily",
+          "title": "Launch Mode",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -365,7 +353,7 @@
         },
         "devops": {
           "id": "daily-2026-01-21-devops",
-          "title": "DevOps Daily",
+          "title": "Ops Quest",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -377,7 +365,7 @@
         },
         "personal-finance": {
           "id": "daily-2026-01-21-personal-finance",
-          "title": "Personal Finance Daily",
+          "title": "Budget Quest",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -389,7 +377,7 @@
         },
         "design": {
           "id": "daily-2026-01-21-design",
-          "title": "Design Daily",
+          "title": "Design Sprint",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -401,7 +389,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-21-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Crypto Quest",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -413,7 +401,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-21-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Balance Sheet",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -425,7 +413,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-21-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Rehab Road",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -442,7 +430,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-22-product-management",
-          "title": "Product Management Daily",
+          "title": "Roadmap Ahead",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -454,7 +442,7 @@
         },
         "devops": {
           "id": "daily-2026-01-22-devops",
-          "title": "DevOps Daily",
+          "title": "Pipeline Run",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -466,7 +454,7 @@
         },
         "personal-finance": {
           "id": "daily-2026-01-22-personal-finance",
-          "title": "Personal Finance Daily",
+          "title": "Wealth Path",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -478,7 +466,7 @@
         },
         "design": {
           "id": "daily-2026-01-22-design",
-          "title": "Design Daily",
+          "title": "Color Theory",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -490,7 +478,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-22-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Breach Alert",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -502,7 +490,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-22-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Audit Trail",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -514,7 +502,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-22-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Flex Quest",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -531,7 +519,7 @@
       "puzzles": {
         "product-management": {
           "id": "daily-2026-01-23-product-management",
-          "title": "Product Management Daily",
+          "title": "Feature Sprint",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -543,7 +531,7 @@
         },
         "devops": {
           "id": "daily-2026-01-23-devops",
-          "title": "DevOps Daily",
+          "title": "Build & Ship",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -555,7 +543,7 @@
         },
         "design": {
           "id": "daily-2026-01-23-design",
-          "title": "Design Daily",
+          "title": "Layout Lab",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -567,7 +555,7 @@
         },
         "cybersecurity": {
           "id": "daily-2026-01-23-cybersecurity",
-          "title": "Cybersecurity Daily",
+          "title": "Secure Mode",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -579,7 +567,7 @@
         },
         "finance-accounting": {
           "id": "daily-2026-01-23-finance-accounting",
-          "title": "Finance Daily",
+          "title": "Number Crunch",
           "difficulty": "easy",
           "grid": {
             "width": 6,
@@ -591,7 +579,7 @@
         },
         "physiotherapy": {
           "id": "daily-2026-01-23-physiotherapy",
-          "title": "Physio Daily",
+          "title": "Motion Path",
           "difficulty": "easy",
           "grid": {
             "width": 6,

@@ -47,6 +47,26 @@ interface DailyScheduleEntry {
   puzzles: Record<string, DailyPuzzleMeta>;
 }
 
+const TOPIC_TITLES: Record<string, string[]> = {
+  'product-management': ['Ship It', 'Launch Mode', 'Roadmap Ahead', 'Feature Sprint', 'Metric Mastery'],
+  'devops': ['Deploy Day', 'Ops Quest', 'Pipeline Run', 'Build & Ship', 'Infra Hunt'],
+  'personal-finance': ['Money Moves', 'Budget Quest', 'Wealth Path', 'Save Smart', 'Invest Now'],
+  'design': ['Pixel Perfect', 'Design Sprint', 'Color Theory', 'Layout Lab', 'UX Quest'],
+  'cybersecurity': ['Threat Hunt', 'Crypto Quest', 'Breach Alert', 'Secure Mode', 'Firewall Up'],
+  'finance-accounting': ['Ledger Logic', 'Balance Sheet', 'Audit Trail', 'Number Crunch', 'Fiscal Flow'],
+  'physiotherapy': ['Move Well', 'Rehab Road', 'Flex Quest', 'Motion Path', 'Strength Run']
+};
+
+function getFunTitle(topicId: string, dateStr: string): string {
+  const titles = TOPIC_TITLES[topicId];
+  if (!titles) return 'Daily Challenge';
+  
+  // Use day of year or hash of date to pick title
+  const date = new Date(dateStr);
+  const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000);
+  return titles[dayOfYear % titles.length];
+}
+
 async function main() {
   const constructor = new PuzzleConstructor(WORDLISTS_PATH);
   await constructor.loadWordlists(WORDLISTS_PATH);
@@ -60,18 +80,14 @@ async function main() {
     for (const topic of TOPICS) {
       // Namespacing: daily-2026-01-18-devops.json
       const puzzleId = `daily-${date}-${topic.id}`;
-      // Basic titles - we can randomize or rotate via LLM list later.
-      // For now, consistent title per topic? Or generic?
-      // "Daily DevOps", "Daily PM"? 
-      // Plan said: "Ship It" etc.
-      // Let's use generic titles for batch gen to ensure safety, or array of titles?
+      const funTitle = getFunTitle(topic.id, date);
       
       const config = {
         date,
         topicId: topic.id,
         topicTitle: topic.title,
         puzzleId,
-        title: `${topic.title} Daily`, // Generic safe title
+        title: funTitle,
         tags: [],
         selectionModel: 'RAY_4DIR' as const // Forward-only placements (→ ↓)
       };

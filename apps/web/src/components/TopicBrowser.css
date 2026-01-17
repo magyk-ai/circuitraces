@@ -11,7 +11,7 @@
   justify-content: center;
   min-height: 50vh;
   font-size: 1.2rem;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
 }
 
 .topic-header {
@@ -19,8 +19,9 @@
 }
 
 .back-button {
-  background: none;
-  border: 1px solid #e0e0e0;
+  background: var(--button-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 1rem;
@@ -30,18 +31,18 @@
 }
 
 .back-button:hover {
-  border-color: #667eea;
-  color: #667eea;
+  background: var(--button-hover);
+  border-color: var(--accent-blue);
 }
 
 .topic-header h1 {
   font-size: 2rem;
   margin: 0 0 0.5rem 0;
-  color: var(--text-primary, #000);
+  color: var(--text-primary);
 }
 
 .topic-description {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin: 0;
 }
@@ -55,14 +56,14 @@
 
 .no-puzzles {
   text-align: center;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
   padding: 3rem;
   font-size: 1.1rem;
 }
 
 .puzzle-card {
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
@@ -70,9 +71,9 @@
 }
 
 .puzzle-card:hover {
-  border-color: #667eea;
+  border-color: var(--accent-blue);
   transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .puzzle-header {
@@ -85,7 +86,7 @@
 .puzzle-header h3 {
   margin: 0;
   font-size: 1.3rem;
-  color: var(--text-primary, #000);
+  color: var(--text-primary);
 }
 
 .difficulty {
@@ -97,25 +98,25 @@
 }
 
 .difficulty.easy {
-  background: #d4edda;
-  color: #155724;
+  background: rgba(74, 222, 128, 0.2);
+  color: var(--accent-green);
 }
 
 .difficulty.medium {
-  background: #fff3cd;
-  color: #856404;
+  background: rgba(251, 191, 36, 0.2);
+  color: var(--accent-yellow);
 }
 
 .difficulty.hard {
-  background: #f8d7da;
-  color: #721c24;
+  background: rgba(248, 113, 113, 0.2);
+  color: var(--accent-red);
 }
 
 .puzzle-meta {
   display: flex;
   gap: 1rem;
   font-size: 0.9rem;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
 }
 
 .puzzle-meta > span {

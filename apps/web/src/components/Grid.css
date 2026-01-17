@@ -26,14 +26,8 @@
 }
 
 .objective-text .end-label {
-  color: #f97316;
+  color: var(--accent-orange, #f97316);
   font-weight: 700;
-}
-
-@media (prefers-color-scheme: light) {
-  .objective-text .start-label {
-    color: #16a34a;
-  }
 }
 
 /* Start marker */
@@ -46,7 +40,7 @@
   margin: 0 auto;
   grid-column: var(--marker-col);
   justify-self: center;
-  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  background: var(--accent-green, #22c55e);
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -56,7 +50,6 @@
 }
 
 .start-marker.connected {
-  background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
   box-shadow: 0 2px 12px rgba(74, 222, 128, 0.5);
 }
 
@@ -70,7 +63,7 @@
   margin: 0 auto;
   grid-column: var(--marker-col);
   justify-self: center;
-  background: linear-gradient(180deg, #ea580c 0%, #f97316 100%);
+  background: var(--accent-orange, #f97316);
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -80,7 +73,7 @@
 }
 
 .end-marker.connected {
-  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  background: var(--accent-green, #22c55e);
   box-shadow: 0 2px 12px rgba(74, 222, 128, 0.5);
 }
 
@@ -107,6 +100,7 @@
   cursor: pointer;
   user-select: none;
   transition: all 0.15s;
+  color: var(--text-primary);
 }
 
 .cell.void {
@@ -116,7 +110,7 @@
 }
 
 .cell:hover:not(.void) {
-  border-color: #5a5aff;
+  border-color: var(--accent-blue, #5a5aff);
 }
 
 /* v1.1: Visual priority order (lowest to highest):
@@ -125,44 +119,44 @@
 
 /* Additional word cells (gray) - found bonus word tiles */
 .cell.additional {
-  background: #4a4a4a;
-  border-color: #5a5a5a;
-  color: #999;
+  background: var(--cell-additional-bg);
+  border-color: var(--cell-additional-border);
+  color: var(--text-secondary);
 }
 
 /* Hint cells (yellow) - solid background, persistent */
 .cell.hint {
-  background: #ffc107;
-  border-color: #ffca28;
-  color: #000;
+  background: var(--cell-hint-bg);
+  border-color: var(--cell-hint-border);
+  color: var(--cell-hint-text);
 }
 
 /* Path cells (green) - found path word tiles */
 .cell.path {
-  background: #2a7a2a;
-  border-color: #3a9a3a;
+  background: var(--cell-path-bg);
+  border-color: var(--cell-path-border);
   color: #fff;
 }
 
 /* Preview (purple) - highest priority during drag selection */
 .cell.preview {
-  background: #4a4aaa;
-  border-color: #5a5aff;
+  background: var(--cell-preview-bg);
+  border-color: var(--cell-preview-border);
   transform: scale(0.95);
 }
 
 /* Start cell indicator ring */
 .cell.start-cell {
-  box-shadow: 0 0 0 3px #22c55e, 0 0 12px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 0 3px var(--accent-green), 0 0 12px rgba(34, 197, 94, 0.4);
 }
 
 /* End cell indicator ring */
 .cell.end-cell {
-  box-shadow: 0 0 0 3px #f97316, 0 0 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 0 0 3px var(--accent-orange), 0 0 12px rgba(249, 115, 22, 0.4);
 }
 
 /* When both path and start/end, keep the ring but show green background */
 .cell.path.start-cell,
 .cell.path.end-cell {
-  box-shadow: 0 0 0 3px #4ade80, 0 0 16px rgba(74, 222, 128, 0.6);
+  box-shadow: 0 0 0 3px var(--accent-green), 0 0 16px rgba(74, 222, 128, 0.6);
 }

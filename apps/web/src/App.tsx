@@ -255,6 +255,10 @@ export function App() {
   const hintCells = selectors.getHintCells(state);
   return (
     <div className="app">
+      <button onClick={handleBackToHome} className="home-icon" aria-label="Back to home">
+        ←
+      </button>
+
       <header>
         <div className="header-left">
           <h1>{puzzle.theme}</h1>
@@ -262,18 +266,15 @@ export function App() {
             <span className="grid-size">{puzzle.grid.width}×{puzzle.grid.height}</span>
           </div>
         </div>
-          <div className="controls">
-            <div className="timer" data-testid="timer">{formatTime(elapsedMs)}</div>
-            <button
-              onClick={() => setIsPaused(p => !p)}
-              disabled={state.status === 'COMPLETED'}
-              className="pause-button"
-              data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
-            >
-              {isPaused ? '▶️' : '⏸️'}
-            </button>
-          <button onClick={handleBackToHome} className="back-button">
-            ← Home
+        <div className="controls">
+          <div className="timer hidden" data-testid="timer">{formatTime(elapsedMs)}</div>
+          <button
+            onClick={() => setIsPaused(p => !p)}
+            disabled={state.status === 'COMPLETED'}
+            className="pause-button"
+            data-testid={isPaused ? 'btn-resume' : 'btn-pause'}
+          >
+            {isPaused ? '▶️' : '⏸️'}
           </button>
           <button onClick={() => setShowWordsList(true)} disabled={state.status === 'COMPLETED'} data-testid="btn-words">
             📝 Words
