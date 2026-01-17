@@ -363,8 +363,8 @@ function checkConnectivity(
 
 /**
  * Check that every path word is required (critical) to connect START to END.
- * If a path word can be removed (along with its unique cells) and a path still exists,
- * it is considered a non-critical "dead end" or "optional branch".
+ * A word is critical if at least one of its cells lies on the shortest path from START to END.
+ * Dead-end branches and bypassable words will fail this check.
  */
 function checkCriticalPathWords(
   puzzle: WaywordsPuzzle,
@@ -376,49 +376,49 @@ function checkCriticalPathWords(
   const startId = puzzle.grid.start.adjacentCellId;
   const endId = puzzle.grid.end.adjacentCellId;
 
+  // Find ALL cells that lie on ANY shortest path from START to END
+  const criticalCells = findCriticalPathCells(startId, endId, allPathWordCells, cellMap, posMap);
+
   for (const word of puzzle.words.path) {
     if (word.placements.length === 0) continue;
-    const placement = new Set(word.placements[0]);
+    const placement = word.placements[0];
 
-    // Determine cells remaining if this word is "removed"
-    const allowedCells = new Set<string>();
-    for (const cellId of allPathWordCells) {
-      const isShared = puzzle.words.path.some(w => w !== word && w.placements[0].includes(cellId));
-      if (isShared) {
-        allowedCells.add(cellId);
-      } else if (!placement.has(cellId)) {
-        allowedCells.add(cellId);
-      }
-    }
+    // A word is critical if ANY of its cells are on the critical path
+    const isOnPath = placement.some(cellId => criticalCells.has(cellId));
 
-    // BFS to see if start and end are still connected
-    if (isStartEndConnected(startId, endId, allowedCells, cellMap, posMap)) {
+    if (!isOnPath) {
       errors.push({
         code: 'ERR_NON_CRITICAL_PATH_WORD',
         path: `words.path.${word.wordId}`,
-        message: `Path word "${word.wordId}" is non-critical (it can be bypassed or is a dead end branch)`,
+        message: `Path word "${word.wordId}" is non-critical (dead-end branch or bypassable)`,
         severity: 'error'
       });
     }
   }
 }
 
-function isStartEndConnected(
+/**
+ * Find all cells that lie on ANY shortest path from start to end.
+ * Uses BFS to find distance from start, then checks which cells can be part of a shortest path.
+ */
+function findCriticalPathCells(
   startId: string,
   endId: string,
   allowedCells: Set<string>,
   cellMap: Map<string, Cell>,
   posMap: Map<string, Cell>
-): boolean {
-  if (!allowedCells.has(startId) || !allowedCells.has(endId)) return false;
+): Set<string> {
+  if (!allowedCells.has(startId) || !allowedCells.has(endId)) {
+    return new Set();
+  }
 
+  // BFS from start to compute distances
+  const distFromStart = new Map<string, number>();
   const queue: string[] = [startId];
-  const visited = new Set<string>([startId]);
+  distFromStart.set(startId, 0);
 
   while (queue.length > 0) {
     const cellId = queue.shift()!;
-    if (cellId === endId) return true;
-
     const cell = cellMap.get(cellId);
     if (!cell) continue;
 
@@ -426,14 +426,52 @@ function isStartEndConnected(
     for (const neighbor of neighbors) {
       if (neighbor.type === 'VOID') continue;
       if (!allowedCells.has(neighbor.id)) continue;
-      if (visited.has(neighbor.id)) continue;
+      if (distFromStart.has(neighbor.id)) continue;
 
-      visited.add(neighbor.id);
+      distFromStart.set(neighbor.id, distFromStart.get(cellId)! + 1);
       queue.push(neighbor.id);
     }
   }
 
-  return false;
+  // If end is not reachable, no critical cells
+  if (!distFromStart.has(endId)) {
+    return new Set();
+  }
+
+  // BFS from end to compute distances
+  const distFromEnd = new Map<string, number>();
+  const queue2: string[] = [endId];
+  distFromEnd.set(endId, 0);
+
+  while (queue2.length > 0) {
+    const cellId = queue2.shift()!;
+    const cell = cellMap.get(cellId);
+    if (!cell) continue;
+
+    const neighbors = getOrtho4Neighbors(cell, posMap);
+    for (const neighbor of neighbors) {
+      if (neighbor.type === 'VOID') continue;
+      if (!allowedCells.has(neighbor.id)) continue;
+      if (distFromEnd.has(neighbor.id)) continue;
+
+      distFromEnd.set(neighbor.id, distFromEnd.get(cellId)! + 1);
+      queue2.push(neighbor.id);
+    }
+  }
+
+  // A cell is on a shortest path if distFromStart[cell] + distFromEnd[cell] == shortestPathLength
+  const shortestPathLength = distFromStart.get(endId)!;
+  const criticalCells = new Set<string>();
+
+  for (const cellId of allowedCells) {
+    const dStart = distFromStart.get(cellId);
+    const dEnd = distFromEnd.get(cellId);
+    if (dStart !== undefined && dEnd !== undefined && dStart + dEnd === shortestPathLength) {
+      criticalCells.add(cellId);
+    }
+  }
+
+  return criticalCells;
 }
 
 /**

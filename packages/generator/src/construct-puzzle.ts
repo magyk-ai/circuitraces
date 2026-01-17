@@ -475,9 +475,8 @@ export class PuzzleConstructor {
 
   /**
    * Verify every path word is critical for START-END connectivity.
-   * A word is critical if removing its unique cells (those not shared with other path words)
-   * breaks all orthogonal paths from START to END.
-   * This prevents "branching" layouts with non-critical words that can be bypassed.
+   * A word is critical if at least one of its cells lies on the shortest path from START to END.
+   * Dead-end branches and bypassable words will fail this check.
    */
   private verifyAllWordsCritical(
     builder: GridBuilder,
@@ -486,58 +485,83 @@ export class PuzzleConstructor {
     endId: string,
     allPathCells: Set<string>
   ): boolean {
+    // Find all cells on shortest paths from START to END
+    const criticalCells = this.findCriticalPathCells(builder, startId, endId, allPathCells);
+
     for (const word of pathWords) {
-      const placement = new Set(word.placements[0]);
-
-      // Determine which cells would remain if we "removed" this word.
-      // We only remove cells that are UNIQUE to this word.
-      const allowedCells = new Set<string>();
-      for (const cellId of allPathCells) {
-        const isShared = pathWords.some(w => w !== word && w.placements[0].includes(cellId));
-        if (isShared) {
-          allowedCells.add(cellId);
-        } else if (!placement.has(cellId)) {
-          allowedCells.add(cellId);
-        }
-      }
-
-      // Check if START and END are still connected using the remaining cells
-      if (this.isStartEndConnected(builder, startId, endId, allowedCells)) {
+      const placement = word.placements[0];
+      // A word is critical if ANY of its cells are on the critical path
+      const isOnPath = placement.some(cellId => criticalCells.has(cellId));
+      if (!isOnPath) {
         return false;
       }
     }
     return true;
   }
 
-  private isStartEndConnected(
+  /**
+   * Find all cells that lie on ANY shortest path from start to end.
+   * Uses BFS to find distance from start and end, then checks which cells can be part of a shortest path.
+   */
+  private findCriticalPathCells(
     builder: GridBuilder,
     startId: string,
     endId: string,
     allowedCells: Set<string>
-  ): boolean {
-    if (!allowedCells.has(startId) || !allowedCells.has(endId)) return false;
+  ): Set<string> {
+    if (!allowedCells.has(startId) || !allowedCells.has(endId)) {
+      return new Set();
+    }
 
-    const visited = new Set<string>();
-    const queue = [startId];
-    visited.add(startId);
+    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+
+    // BFS from start
+    const distFromStart = new Map<string, number>();
+    const queue: string[] = [startId];
+    distFromStart.set(startId, 0);
 
     while (queue.length > 0) {
       const cellId = queue.shift()!;
-      if (cellId === endId) return true;
-
       const cell = builder.getCellById(cellId)!;
-      const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
       for (const [dx, dy] of dirs) {
-        const nx = cell.x + dx;
-        const ny = cell.y + dy;
-        const neighbor = builder.getCell(nx, ny);
-        if (neighbor && allowedCells.has(neighbor.id) && !visited.has(neighbor.id)) {
-          visited.add(neighbor.id);
+        const neighbor = builder.getCell(cell.x + dx, cell.y + dy);
+        if (neighbor && allowedCells.has(neighbor.id) && !distFromStart.has(neighbor.id)) {
+          distFromStart.set(neighbor.id, distFromStart.get(cellId)! + 1);
           queue.push(neighbor.id);
         }
       }
     }
-    return false;
+
+    if (!distFromStart.has(endId)) return new Set();
+
+    // BFS from end
+    const distFromEnd = new Map<string, number>();
+    const queue2: string[] = [endId];
+    distFromEnd.set(endId, 0);
+
+    while (queue2.length > 0) {
+      const cellId = queue2.shift()!;
+      const cell = builder.getCellById(cellId)!;
+      for (const [dx, dy] of dirs) {
+        const neighbor = builder.getCell(cell.x + dx, cell.y + dy);
+        if (neighbor && allowedCells.has(neighbor.id) && !distFromEnd.has(neighbor.id)) {
+          distFromEnd.set(neighbor.id, distFromEnd.get(cellId)! + 1);
+          queue2.push(neighbor.id);
+        }
+      }
+    }
+
+    // Cells on shortest path: distFromStart[cell] + distFromEnd[cell] == shortestPathLength
+    const shortestPathLength = distFromStart.get(endId)!;
+    const criticalCells = new Set<string>();
+    for (const cellId of allowedCells) {
+      const dStart = distFromStart.get(cellId);
+      const dEnd = distFromEnd.get(cellId);
+      if (dStart !== undefined && dEnd !== undefined && dStart + dEnd === shortestPathLength) {
+        criticalCells.add(cellId);
+      }
+    }
+    return criticalCells;
   }
 
   private getCoverageThreshold(width: number, height: number): number {

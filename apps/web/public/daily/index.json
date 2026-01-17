@@ -209,18 +209,6 @@
           "puzzlePath": "/daily/2026-01-19-devops.json",
           "tags": []
         },
-        "personal-finance": {
-          "id": "daily-2026-01-19-personal-finance",
-          "title": "Invest Now",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-19-personal-finance.json",
-          "tags": []
-        },
         "design": {
           "id": "daily-2026-01-19-design",
           "title": "UX Quest",
@@ -563,18 +551,6 @@
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-23-devops.json",
-          "tags": []
-        },
-        "personal-finance": {
-          "id": "daily-2026-01-23-personal-finance",
-          "title": "Save Smart",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-23-personal-finance.json",
           "tags": []
         },
         "design": {
