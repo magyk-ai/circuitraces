@@ -4,7 +4,7 @@
   "config": {
     "selectionModel": "RAY_4DIR",
     "connectivityModel": "ORTHO_4",
-    "allowReverseSelection": true
+    "allowReverseSelection": false
   },
   "grid": {
     "width": 8,
@@ -15,70 +15,70 @@
         "x": 0,
         "y": 0,
         "type": "LETTER",
-        "value": "C"
+        "value": "Z"
       },
       {
         "id": "r0c1",
         "x": 1,
         "y": 0,
         "type": "LETTER",
-        "value": "C"
+        "value": "D"
       },
       {
         "id": "r0c2",
         "x": 2,
         "y": 0,
         "type": "LETTER",
-        "value": "N"
+        "value": "P"
       },
       {
         "id": "r0c3",
         "x": 3,
         "y": 0,
         "type": "LETTER",
-        "value": "C"
+        "value": "V"
       },
       {
         "id": "r0c4",
         "x": 4,
         "y": 0,
         "type": "LETTER",
-        "value": "B"
+        "value": "S"
       },
       {
         "id": "r0c5",
         "x": 5,
         "y": 0,
         "type": "LETTER",
-        "value": "U"
+        "value": "H"
       },
       {
         "id": "r0c6",
         "x": 6,
         "y": 0,
         "type": "LETTER",
-        "value": "H"
+        "value": "Q"
       },
       {
         "id": "r0c7",
         "x": 7,
         "y": 0,
         "type": "LETTER",
-        "value": "D"
+        "value": "I"
       },
       {
         "id": "r1c0",
         "x": 0,
         "y": 1,
         "type": "LETTER",
-        "value": "B"
+        "value": "M"
       },
       {
         "id": "r1c1",
         "x": 1,
         "y": 1,
         "type": "LETTER",
-        "value": "E"
+        "value": "Q"
       },
       {
         "id": "r1c2",
@@ -92,49 +92,49 @@
         "x": 3,
         "y": 1,
         "type": "LETTER",
-        "value": "L"
+        "value": "T"
       },
       {
         "id": "r1c4",
         "x": 4,
         "y": 1,
         "type": "LETTER",
-        "value": "V"
+        "value": "H"
       },
       {
         "id": "r1c5",
         "x": 5,
         "y": 1,
         "type": "LETTER",
-        "value": "L"
+        "value": "I"
       },
       {
         "id": "r1c6",
         "x": 6,
         "y": 1,
         "type": "LETTER",
-        "value": "G"
+        "value": "C"
       },
       {
         "id": "r1c7",
         "x": 7,
         "y": 1,
         "type": "LETTER",
-        "value": "G"
+        "value": "S"
       },
       {
         "id": "r2c0",
         "x": 0,
         "y": 2,
         "type": "LETTER",
-        "value": "I"
+        "value": "S"
       },
       {
         "id": "r2c1",
         "x": 1,
         "y": 2,
         "type": "LETTER",
-        "value": "P"
+        "value": "M"
       },
       {
         "id": "r2c2",
@@ -155,91 +155,91 @@
         "x": 4,
         "y": 2,
         "type": "LETTER",
-        "value": "F"
+        "value": "K"
       },
       {
         "id": "r2c5",
         "x": 5,
         "y": 2,
         "type": "LETTER",
-        "value": "I"
+        "value": "Z"
       },
       {
         "id": "r2c6",
         "x": 6,
         "y": 2,
         "type": "LETTER",
-        "value": "T"
+        "value": "O"
       },
       {
         "id": "r2c7",
         "x": 7,
         "y": 2,
         "type": "LETTER",
-        "value": "C"
+        "value": "B"
       },
       {
         "id": "r3c0",
         "x": 0,
         "y": 3,
         "type": "LETTER",
-        "value": "T"
+        "value": "Q"
       },
       {
         "id": "r3c1",
         "x": 1,
         "y": 3,
         "type": "LETTER",
-        "value": "P"
+        "value": "W"
       },
       {
         "id": "r3c2",
         "x": 2,
         "y": 3,
         "type": "LETTER",
-        "value": "B"
+        "value": "I"
       },
       {
         "id": "r3c3",
         "x": 3,
         "y": 3,
         "type": "LETTER",
-        "value": "S"
+        "value": "R"
       },
       {
         "id": "r3c4",
         "x": 4,
         "y": 3,
         "type": "LETTER",
-        "value": "O"
+        "value": "E"
       },
       {
         "id": "r3c5",
         "x": 5,
         "y": 3,
         "type": "LETTER",
-        "value": "Q"
+        "value": "Z"
       },
       {
         "id": "r3c6",
         "x": 6,
         "y": 3,
         "type": "LETTER",
-        "value": "B"
+        "value": "N"
       },
       {
         "id": "r3c7",
         "x": 7,
         "y": 3,
         "type": "LETTER",
-        "value": "L"
+        "value": "R"
       },
       {
         "id": "r4c0",
         "x": 0,
         "y": 4,
         "type": "LETTER",
-        "value": "R"
+        "value": "A"
       },
       {
         "id": "r4c1",
@@ -253,84 +253,84 @@
         "x": 2,
         "y": 4,
         "type": "LETTER",
-        "value": "T"
+        "value": "O"
       },
       {
         "id": "r4c3",
         "x": 3,
         "y": 4,
         "type": "LETTER",
-        "value": "E"
+        "value": "W"
       },
       {
         "id": "r4c4",
         "x": 4,
         "y": 4,
         "type": "LETTER",
-        "value": "P"
+        "value": "N"
       },
       {
         "id": "r4c5",
         "x": 5,
         "y": 4,
         "type": "LETTER",
-        "value": "U"
+        "value": "N"
       },
       {
         "id": "r4c6",
         "x": 6,
         "y": 4,
         "type": "LETTER",
-        "value": "R"
+        "value": "T"
       },
       {
         "id": "r4c7",
         "x": 7,
         "y": 4,
         "type": "LETTER",
-        "value": "A"
+        "value": "Z"
       },
       {
         "id": "r5c0",
         "x": 0,
         "y": 5,
         "type": "LETTER",
-        "value": "I"
+        "value": "J"
       },
       {
         "id": "r5c1",
         "x": 1,
         "y": 5,
         "type": "LETTER",
-        "value": "Y"
+        "value": "C"
       },
       {
         "id": "r5c2",
         "x": 2,
         "y": 5,
         "type": "LETTER",
-        "value": "J"
+        "value": "D"
       },
       {
         "id": "r5c3",
         "x": 3,
         "y": 5,
         "type": "LETTER",
-        "value": "N"
+        "value": "H"
       },
       {
         "id": "r5c4",
         "x": 4,
         "y": 5,
         "type": "LETTER",
-        "value": "W"
+        "value": "T"
       },
       {
         "id": "r5c5",
         "x": 5,
         "y": 5,
         "type": "LETTER",
-        "value": "I"
+        "value": "Z"
       },
       {
         "id": "r5c6",
@@ -344,70 +344,70 @@
         "x": 7,
         "y": 5,
         "type": "LETTER",
-        "value": "E"
+        "value": "G"
       },
       {
         "id": "r6c0",
         "x": 0,
         "y": 6,
         "type": "LETTER",
-        "value": "A"
+        "value": "K"
       },
       {
         "id": "r6c1",
         "x": 1,
         "y": 6,
         "type": "LETTER",
-        "value": "I"
+        "value": "R"
       },
       {
         "id": "r6c2",
         "x": 2,
         "y": 6,
         "type": "LETTER",
-        "value": "B"
+        "value": "Y"
       },
       {
         "id": "r6c3",
         "x": 3,
         "y": 6,
         "type": "LETTER",
-        "value": "E"
+        "value": "C"
       },
       {
         "id": "r6c4",
         "x": 4,
         "y": 6,
         "type": "LETTER",
-        "value": "S"
+        "value": "R"
       },
       {
         "id": "r6c5",
         "x": 5,
         "y": 6,
         "type": "LETTER",
-        "value": "D"
+        "value": "V"
       },
       {
         "id": "r6c6",
         "x": 6,
         "y": 6,
         "type": "LETTER",
-        "value": "K"
+        "value": "A"
       },
       {
         "id": "r6c7",
         "x": 7,
         "y": 6,
         "type": "LETTER",
-        "value": "K"
+        "value": "T"
       },
       {
         "id": "r7c0",
         "x": 0,
         "y": 7,
         "type": "LETTER",
-        "value": "L"
+        "value": "D"
       },
       {
         "id": "r7c1",
@@ -421,90 +421,55 @@
         "x": 2,
         "y": 7,
         "type": "LETTER",
-        "value": "F"
+        "value": "T"
       },
       {
         "id": "r7c3",
         "x": 3,
         "y": 7,
         "type": "LETTER",
-        "value": "Y"
+        "value": "F"
       },
       {
         "id": "r7c4",
         "x": 4,
         "y": 7,
         "type": "LETTER",
-        "value": "O"
+        "value": "Y"
       },
       {
         "id": "r7c5",
         "x": 5,
         "y": 7,
         "type": "LETTER",
-        "value": "F"
+        "value": "K"
       },
       {
         "id": "r7c6",
         "x": 6,
         "y": 7,
         "type": "LETTER",
-        "value": "G"
+        "value": "R"
       },
       {
         "id": "r7c7",
         "x": 7,
         "y": 7,
         "type": "LETTER",
-        "value": "L"
+        "value": "A"
       }
     ],
     "start": {
-      "adjacentCellId": "r0c3"
+      "adjacentCellId": "r0c2"
     },
     "end": {
-      "adjacentCellId": "r7c0"
+      "adjacentCellId": "r7c4"
     }
   },
   "words": {
     "path": [
       {
-        "wordId": "CLOSE",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "C"
-          },
-          {
-            "t": "L",
-            "v": "L"
-          },
-          {
-            "t": "L",
-            "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "S"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          }
-        ],
-        "size": 5,
-        "placements": [
-          [
-            "r0c3",
-            "r1c3",
-            "r2c3",
-            "r3c3",
-            "r4c3"
-          ]
-        ]
-      },
-      {
-        "wordId": "PROFIT",
+        "wordId": "PERIOD",
         "tokens": [
           {
             "t": "L",
@@ -512,89 +477,19 @@
           },
           {
             "t": "L",
+            "v": "E"
+          },
+          {
+            "t": "L",
             "v": "R"
+          },
+          {
+            "t": "L",
+            "v": "I"
           },
           {
             "t": "L",
             "v": "O"
-          },
-          {
-            "t": "L",
-            "v": "F"
-          },
-          {
-            "t": "L",
-            "v": "I"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          }
-        ],
-        "size": 6,
-        "placements": [
-          [
-            "r2c1",
-            "r2c2",
-            "r2c3",
-            "r2c4",
-            "r2c5",
-            "r2c6"
-          ]
-        ]
-      },
-      {
-        "wordId": "RATE",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "R"
-          },
-          {
-            "t": "L",
-            "v": "A"
-          },
-          {
-            "t": "L",
-            "v": "T"
-          },
-          {
-            "t": "L",
-            "v": "E"
-          }
-        ],
-        "size": 4,
-        "placements": [
-          [
-            "r4c0",
-            "r4c1",
-            "r4c2",
-            "r4c3"
-          ]
-        ]
-      },
-      {
-        "wordId": "LIQUID",
-        "tokens": [
-          {
-            "t": "L",
-            "v": "L"
-          },
-          {
-            "t": "L",
-            "v": "I"
-          },
-          {
-            "t": "L",
-            "v": "Q"
-          },
-          {
-            "t": "L",
-            "v": "U"
-          },
-          {
-            "t": "L",
-            "v": "I"
           },
           {
             "t": "L",
@@ -604,12 +499,12 @@
         "size": 6,
         "placements": [
           [
-            "r1c5",
-            "r2c5",
-            "r3c5",
-            "r4c5",
-            "r5c5",
-            "r6c5"
+            "r0c2",
+            "r1c2",
+            "r2c2",
+            "r3c2",
+            "r4c2",
+            "r5c2"
           ]
         ]
       },
@@ -636,16 +531,68 @@
         "size": 4,
         "placements": [
           [
-            "r5c4",
-            "r5c5",
-            "r5c6",
-            "r5c7"
+            "r3c1",
+            "r3c2",
+            "r3c3",
+            "r3c4"
           ]
         ]
       },
       {
-        "wordId": "TRIAL",
+        "wordId": "ETHICS",
         "tokens": [
+          {
+            "t": "L",
+            "v": "E"
+          },
+          {
+            "t": "L",
+            "v": "T"
+          },
+          {
+            "t": "L",
+            "v": "H"
+          },
+          {
+            "t": "L",
+            "v": "I"
+          },
+          {
+            "t": "L",
+            "v": "C"
+          },
+          {
+            "t": "L",
+            "v": "S"
+          }
+        ],
+        "size": 6,
+        "placements": [
+          [
+            "r1c2",
+            "r1c3",
+            "r1c4",
+            "r1c5",
+            "r1c6",
+            "r1c7"
+          ]
+        ]
+      },
+      {
+        "wordId": "CONTRA",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "C"
+          },
+          {
+            "t": "L",
+            "v": "O"
+          },
+          {
+            "t": "L",
+            "v": "N"
+          },
           {
             "t": "L",
             "v": "T"
@@ -656,55 +603,83 @@
           },
           {
             "t": "L",
-            "v": "I"
-          },
-          {
-            "t": "L",
             "v": "A"
-          },
-          {
-            "t": "L",
-            "v": "L"
           }
         ],
-        "size": 5,
+        "size": 6,
         "placements": [
           [
-            "r3c0",
-            "r4c0",
-            "r5c0",
-            "r6c0",
-            "r7c0"
+            "r1c6",
+            "r2c6",
+            "r3c6",
+            "r4c6",
+            "r5c6",
+            "r6c6"
           ]
         ]
-      }
-    ],
-    "additional": [
+      },
       {
-        "wordId": "PAY",
+        "wordId": "ENTRY",
         "tokens": [
           {
             "t": "L",
-            "v": "P"
+            "v": "E"
           },
           {
             "t": "L",
-            "v": "A"
+            "v": "N"
+          },
+          {
+            "t": "L",
+            "v": "T"
+          },
+          {
+            "t": "L",
+            "v": "R"
           },
           {
             "t": "L",
             "v": "Y"
           }
         ],
+        "size": 5,
+        "placements": [
+          [
+            "r3c4",
+            "r4c4",
+            "r5c4",
+            "r6c4",
+            "r7c4"
+          ]
+        ]
+      }
+    ],
+    "additional": [
+      {
+        "wordId": "VAT",
+        "tokens": [
+          {
+            "t": "L",
+            "v": "V"
+          },
+          {
+            "t": "L",
+            "v": "A"
+          },
+          {
+            "t": "L",
+            "v": "T"
+          }
+        ],
         "size": 3,
         "placements": [
           [
-            "r3c1",
-            "r4c1",
-            "r5c1"
+            "r6c5",
+            "r6c6",
+            "r6c7"
           ]
         ],
-        "hintCellId": "r4c1"
+        "hintCellId": "r6c6"
       }
     ]
   }

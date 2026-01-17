@@ -4,11 +4,12 @@
   "topicId": "devops",
   "title": "DevOps",
   "description": "CI/CD, deployment, infrastructure, monitoring.",
+  "icon": "⚙️",
   "puzzles": [
     {
       "id": "daily-2026-01-17-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Pipeline Run",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -22,7 +23,7 @@
     {
       "id": "daily-2026-01-18-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Build & Ship",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -36,7 +37,7 @@
     {
       "id": "daily-2026-01-19-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Infra Hunt",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -50,7 +51,7 @@
     {
       "id": "daily-2026-01-20-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Deploy Day",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -64,7 +65,7 @@
     {
       "id": "daily-2026-01-21-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Ops Quest",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -78,7 +79,7 @@
     {
       "id": "daily-2026-01-22-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Pipeline Run",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -92,7 +93,7 @@
     {
       "id": "daily-2026-01-23-devops",
       "revision": 1,
-      "title": "DevOps Daily",
+      "title": "Build & Ship",
       "difficulty": "easy",
       "grid": {
         "width": 6,

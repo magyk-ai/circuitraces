@@ -15,30 +15,29 @@ export class PlacementIndex {
   }
 
   private buildIndex(puzzle: WaywordsPuzzle): void {
-    // Index path words
+    // Index path words - always allow reverse selection for finding words
     for (const word of puzzle.words.path) {
-      this.indexWord(word, 'PATH', puzzle.config.allowReverseSelection);
+      this.indexWord(word, 'PATH');
     }
 
     // Index additional words
     for (const word of puzzle.words.additional) {
-      this.indexWord(word, 'ADDITIONAL', puzzle.config.allowReverseSelection);
+      this.indexWord(word, 'ADDITIONAL');
     }
   }
 
   private indexWord(
     word: WordDef,
-    category: 'PATH' | 'ADDITIONAL',
-    allowReverse: boolean
+    category: 'PATH' | 'ADDITIONAL'
   ): void {
     word.placements.forEach((placement, idx) => {
       const key = placement.join('|');
       this.map.set(key, { wordId: word.wordId, category, placementIndex: idx });
 
-      if (allowReverse) {
-        const reverseKey = [...placement].reverse().join('|');
-        this.map.set(reverseKey, { wordId: word.wordId, category, placementIndex: idx });
-      }
+      // Always index reverse direction - users can select cells in either order
+      // to find the same word. The word content itself is not reversed.
+      const reverseKey = [...placement].reverse().join('|');
+      this.map.set(reverseKey, { wordId: word.wordId, category, placementIndex: idx });
     });
   }
 

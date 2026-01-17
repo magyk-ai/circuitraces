@@ -31,10 +31,12 @@ export function TopicBrowser({ topicId, onSelectPuzzle, onBack }: TopicBrowserPr
   return (
     <div className="topic-browser">
       <header className="topic-header">
-        <button className="back-button" onClick={onBack}>← Back</button>
-        <div>
-          <h1>{catalog.title}</h1>
-          <p className="topic-description">{catalog.description}</p>
+        <div className="topic-info">
+          <span className="topic-icon">{catalog.icon || '🧩'}</span>
+          <div>
+            <h1>{catalog.title}</h1>
+            <p className="topic-description">{catalog.description}</p>
+          </div>
         </div>
       </header>
 

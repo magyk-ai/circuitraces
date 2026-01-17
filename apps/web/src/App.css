@@ -1,14 +1,14 @@
 /* CSS Variables for theming */
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
   --bg-tertiary: #2a2a2a;
-  --bg-quaternary: #3a3a3a;
-  --text-primary: #ffffff;
-  --text-secondary: #999999;
-  --text-muted: #888888;
-  --border-color: #3a3a3a;
-  --border-hover: #5a5a5a;
+  --bg-quaternary: #333333;
+  --text-primary: #f0f0f0;
+  --text-secondary: #aaaaaa;
+  --text-muted: #777777;
+  --border-color: #333333;
+  --border-hover: #444444;
   --accent-green: #4ade80;
   --accent-green-dark: #2a7a2a;
   --accent-yellow: #fbbf24;
@@ -79,19 +79,30 @@
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 80px 1fr 80px; /* Space for back button, centered title, and tools */
   align-items: center;
-  padding: 20px;
+  padding: 10px 20px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   gap: 20px;
 }
 
 .header-left {
+  grid-column: 2;
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.controls {
+  grid-column: 3;
+  display: flex;
   gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 header h1 {
@@ -177,6 +188,16 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Header control buttons - consistent sizing */
+.controls button {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 .feedback {
   position: fixed;
   top: 80px;
@@ -240,70 +261,197 @@ button:disabled {
   color: var(--text-muted);
 }
 
+/* Subtle sparkle animation for completion */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Gentle glow pulse for completion banner */
+@keyframes gentle-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--accent-green), 0 0 8px rgba(74, 222, 128, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--accent-green), 0 0 16px rgba(74, 222, 128, 0.25);
+  }
+}
+
+/* Completion banner - inline below puzzle, centered */
 .completion {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 40px;
+  max-width: 320px;
+  margin: 16px auto;
+  padding: 16px 24px;
   background: var(--bg-secondary);
-  border: 2px solid var(--completion-border);
-  border-radius: 12px;
+  border: 1px solid var(--accent-green);
+  border-radius: 8px;
   text-align: center;
-  z-index: 200;
+  animation: gentle-glow 2s ease-in-out infinite;
 }
 
 .completion h2 {
-  margin: 0 0 20px;
-  color: var(--accent-green);
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  position: relative;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.completion p {
+  margin: 4px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.completion-stats {
+  margin-bottom: 12px;
+}
+
+.completion-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.completion-actions button {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.completion-actions .primary-btn {
+  background: var(--button-bg);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.completion-actions .primary-btn:hover {
+  background: var(--button-hover);
+  border-color: var(--border-hover);
+}
+
+/* Sparkle effects on completion heading */
+.completion h2::before,
+.completion h2::after {
+  content: '✨';
+  position: absolute;
+  font-size: 14px;
+  opacity: 0.7;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.completion h2::before {
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation-delay: 0s;
+}
+
+.completion h2::after {
+  right: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation-delay: 0.75s;
 }
 
 /* Home button - floating top-left */
 .home-icon {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  width: 36px;
-  height: 36px;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  /* Ensure button stays circular - explicit sizing */
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  font-size: 18px;
+  color: var(--text-primary);
+  font-size: 20px;
   cursor: pointer;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  transition: all 0.15s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .home-icon:hover {
-  background: var(--button-hover);
-  color: var(--text-primary);
-  transform: none;
+  background: var(--accent-blue);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+/* Medium screens: stack controls below title */
+@media (max-width: 900px) {
+  header {
+    grid-template-columns: 60px 1fr 60px;
+    grid-template-rows: auto auto;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+
+  .header-left {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .controls {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+  }
 }
 
 /* Responsive layout for mobile */
 @media (max-width: 600px) {
   header {
+    display: flex;
     flex-direction: column;
-    gap: 15px;
-    align-items: flex-start;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
+
+  header .header-left {
+    padding-top: 0.5rem;
+  }
+
+  header h1 {
+    font-size: 20px;
   }
 
   .controls {
     width: 100%;
+    justify-content: center;
     flex-wrap: wrap;
-  }
-
-  .puzzle-selector {
-    flex: 1;
-    min-width: 0;
+    gap: 6px;
   }
 
   button {
-    flex: 1;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .home-icon {
+    top: 1rem;
+    left: 1rem;
+    /* Ensure circular shape on mobile */
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    font-size: 16px;
   }
 }

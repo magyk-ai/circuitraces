@@ -16,17 +16,33 @@
 
 .topic-header {
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.topic-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.topic-info .topic-icon {
+  font-size: 3.5rem;
+  line-height: 1;
 }
 
 .back-button {
-  background: var(--button-bg);
+  align-self: flex-start;
+  background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  margin-bottom: 1rem;
   transition: all 0.2s;
 }
 
@@ -36,8 +52,8 @@
 }
 
 .topic-header h1 {
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  margin: 0 0 0.25rem 0;
   color: var(--text-primary);
 }
 
@@ -45,6 +61,7 @@
   color: var(--text-secondary);
   font-size: 1.1rem;
   margin: 0;
+  opacity: 0.8;
 }
 
 /* Puzzles list */
@@ -63,17 +80,18 @@
 
 .puzzle-card {
   background: var(--bg-secondary);
-  border: 2px solid var(--border-color);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .puzzle-card:hover {
   border-color: var(--accent-blue);
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .puzzle-header {

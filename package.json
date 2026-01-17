@@ -13,7 +13,7 @@
     "lint": "eslint packages apps",
     "lint:fix": "eslint packages apps --fix",
     "typecheck": "tsc --noEmit -p packages/engine && tsc --noEmit -p packages/generator && tsc --noEmit -p apps/web",
-    "precommit": "npm run lint && npm run typecheck && npm test && npm run build",
+    "precommit": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e",
     "build": "npm run build -w @circuitraces/engine && npm run build -w @circuitraces/web",
     "dev": "npm run dev -w @circuitraces/web",
     "validate": "npm run validate -w @circuitraces/generator",

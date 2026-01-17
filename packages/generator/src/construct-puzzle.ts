@@ -75,8 +75,13 @@ export class PuzzleConstructor {
   }
 
   private attemptConstruction(words: WordList, config: GeneratorConfig, preferLargerGrid: boolean) {
-    // Grid escalation: try 7x7 first, then 8x8; prefer 8x8 after repeated failures.
-    const gridSizes: [number, number][] = preferLargerGrid ? [[8, 8], [7, 7]] : [[7, 7], [8, 8]];
+    const model = config.selectionModel || 'RAY_4DIR';
+    
+    // For RAY_4DIR, we start smaller (6x6) but can go up to 8x8.
+    // For ADJACENT/SNAKE, 5x5 or 6x6 is usually enough, but we use the shared pool for safety.
+    const gridSizes: [number, number][] = model === 'RAY_4DIR'
+        ? (preferLargerGrid ? [[8, 8], [7, 7]] : [[6, 6], [7, 7], [8, 8]])
+        : (preferLargerGrid ? [[7, 7], [6, 6]] : [[5, 5], [6, 6], [7, 7]]);
 
     for (const [width, height] of gridSizes) {
       try {
@@ -227,7 +232,7 @@ export class PuzzleConstructor {
       config: {
         selectionModel: model,
         connectivityModel: "ORTHO_4",
-        allowReverseSelection: true
+        allowReverseSelection: model === 'RAY_4DIR' ? false : true
       },
       grid: {
         ...gridObj,

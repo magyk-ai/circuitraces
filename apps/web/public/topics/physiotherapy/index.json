@@ -4,11 +4,12 @@
   "topicId": "physiotherapy",
   "title": "Physiotherapy",
   "description": "Movement, rehabilitation, injury prevention, mobility.",
+  "icon": "🏃",
   "puzzles": [
     {
       "id": "daily-2026-01-17-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Flex Quest",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -22,7 +23,7 @@
     {
       "id": "daily-2026-01-18-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Motion Path",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -36,7 +37,7 @@
     {
       "id": "daily-2026-01-19-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Strength Run",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -50,7 +51,7 @@
     {
       "id": "daily-2026-01-20-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Move Well",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -64,7 +65,7 @@
     {
       "id": "daily-2026-01-21-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Rehab Road",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -78,7 +79,7 @@
     {
       "id": "daily-2026-01-22-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Flex Quest",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -92,7 +93,7 @@
     {
       "id": "daily-2026-01-23-physiotherapy",
       "revision": 1,
-      "title": "Physio Daily",
+      "title": "Motion Path",
       "difficulty": "easy",
       "grid": {
         "width": 6,

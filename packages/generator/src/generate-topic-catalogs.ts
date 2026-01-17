@@ -22,6 +22,7 @@ type TopicMasterIndex = {
     topicId: string;
     title: string;
     description: string;
+    icon?: string;
   }>;
 };
 
@@ -43,12 +44,19 @@ type TopicCatalog = {
   topicId: string;
   title: string;
   description: string;
+  icon?: string;
   puzzles: TopicPuzzleEntry[];
 };
 
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 async function main() {
-  const dailyPath = path.resolve('apps/web/public/daily/index.json');
-  const topicsPath = path.resolve('apps/web/public/topics/index.json');
+  const rootDir = path.resolve(__dirname, '../../..');
+  const dailyPath = path.join(rootDir, 'apps/web/public/daily/index.json');
+  const topicsPath = path.join(rootDir, 'apps/web/public/topics/index.json');
 
   const dailyRaw = await fs.readFile(dailyPath, 'utf-8');
   const topicsRaw = await fs.readFile(topicsPath, 'utf-8');
@@ -82,10 +90,11 @@ async function main() {
       topicId: topic.topicId,
       title: topic.title,
       description: topic.description,
+      icon: topic.icon,
       puzzles
     };
 
-    const outDir = path.resolve('apps/web/public/topics', topic.topicId);
+    const outDir = path.join(rootDir, 'apps/web/public/topics', topic.topicId);
     await fs.mkdir(outDir, { recursive: true });
     await fs.writeFile(path.join(outDir, 'index.json'), JSON.stringify(catalog, null, 2));
   }

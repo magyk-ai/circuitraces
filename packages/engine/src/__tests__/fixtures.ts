@@ -67,6 +67,53 @@ export const simplePuzzle: WaywordsPuzzle = {
   }
 };
 
+// Same as simplePuzzle but with allowReverseSelection: false
+// Used to test that reverse SELECTION still works (user can drag right-to-left)
+// even though the puzzle content doesn't contain reversed WORDS
+export const noReverseConfigPuzzle: WaywordsPuzzle = {
+  puzzleId: 'test-no-reverse-config',
+  theme: 'No Reverse Config Test',
+  config: {
+    selectionModel: 'RAY_4DIR',
+    connectivityModel: 'ORTHO_4',
+    allowReverseSelection: false // Config says no, but we should still allow reverse selection
+  },
+  grid: {
+    width: 3,
+    height: 3,
+    cells: [
+      { id: 'c0', x: 0, y: 0, type: 'LETTER', value: 'C' },
+      { id: 'c1', x: 1, y: 0, type: 'LETTER', value: 'A' },
+      { id: 'c2', x: 2, y: 0, type: 'LETTER', value: 'T' },
+      { id: 'c3', x: 0, y: 1, type: 'LETTER', value: 'X' },
+      { id: 'c4', x: 1, y: 1, type: 'LETTER', value: 'R' },
+      { id: 'c5', x: 2, y: 1, type: 'LETTER', value: 'Y' },
+      { id: 'c6', x: 0, y: 2, type: 'LETTER', value: 'D' },
+      { id: 'c7', x: 1, y: 2, type: 'LETTER', value: 'O' },
+      { id: 'c8', x: 2, y: 2, type: 'LETTER', value: 'G' }
+    ],
+    start: { adjacentCellId: 'c0' },
+    end: { adjacentCellId: 'c8' }
+  },
+  words: {
+    path: [
+      {
+        wordId: 'CAT',
+        tokens: [{ t: 'L', v: 'C' }, { t: 'L', v: 'A' }, { t: 'L', v: 'T' }],
+        size: 3,
+        placements: [['c0', 'c1', 'c2']] // Horizontal: left-to-right
+      },
+      {
+        wordId: 'DOG',
+        tokens: [{ t: 'L', v: 'D' }, { t: 'L', v: 'O' }, { t: 'L', v: 'G' }],
+        size: 3,
+        placements: [['c6', 'c7', 'c8']] // Horizontal: left-to-right
+      }
+    ],
+    additional: []
+  }
+};
+
 // 4x4 grid with DISCONNECTED path words (for testing connectivity rejection)
 // Grid layout:
 // A B C D

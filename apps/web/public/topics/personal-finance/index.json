@@ -4,11 +4,12 @@
   "topicId": "personal-finance",
   "title": "Personal Finance",
   "description": "Budgeting, investing, saving, retirement.",
+  "icon": "💰",
   "puzzles": [
     {
       "id": "daily-2026-01-17-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Wealth Path",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -22,7 +23,7 @@
     {
       "id": "daily-2026-01-18-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Save Smart",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -36,7 +37,7 @@
     {
       "id": "daily-2026-01-19-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Invest Now",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -50,7 +51,7 @@
     {
       "id": "daily-2026-01-20-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Money Moves",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -64,7 +65,7 @@
     {
       "id": "daily-2026-01-21-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Budget Quest",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -78,7 +79,7 @@
     {
       "id": "daily-2026-01-22-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Wealth Path",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -92,7 +93,7 @@
     {
       "id": "daily-2026-01-23-personal-finance",
       "revision": 1,
-      "title": "Personal Finance Daily",
+      "title": "Save Smart",
       "difficulty": "easy",
       "grid": {
         "width": 6,

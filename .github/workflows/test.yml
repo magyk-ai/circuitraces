@@ -29,11 +29,11 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      - name: Validate sample puzzle
+      - name: Validate daily puzzle
         run: |
           cd packages/generator
           npm run build
-          node dist/cli.js ../../puzzles/sample.json
+          node dist/cli.js ../../apps/web/public/daily/2026-01-17-devops.json
 
       - name: Build web app
         run: cd apps/web && npm run build

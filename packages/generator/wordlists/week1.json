@@ -4,23 +4,25 @@
     "product-management": {
       "path": [
         "METRIC", "VALUE", "LAUNCH", "USERS", "TEAM", "DATA", "PLAN", "GOAL", "SCOPE", "TASK",
-        "ROAD", "SHIP", "TEST", "DEMO", "AGILE", "SPRINT", "USER", "NEED", "IDEA", "LOOP",
-        "GROWTH", "CHURN", "RETENTION", "FUNNEL", "COHORT", "STAKE", "HOLDER", "VISION", "STRATEGY", "OKRS",
-        "KPI", "DEV", "DESIGN", "SYNC", "STAND", "UP", "BACK", "LOG", "EPIC", "STORY",
-        "SIZE", "POINT", "VELOCITY", "BURN", "DOWN", "CHART", "RELEASE", "ALPHA", "BETA", "GTM"
+        "ROADMAP", "SHIP", "TEST", "DEMO", "AGILE", "SPRINT", "USER", "NEED", "IDEA", "LOOP",
+        "GROWTH", "CHURN", "RETENTION", "FUNNEL", "COHORT", "STAKEHOLDER", "VISION", "STRATEGY", "OKRS",
+        "KPI", "DEV", "DESIGN", "SYNC", "STANDUP", "BACKLOG", "EPIC", "STORY",
+        "SIZE", "POINT", "VELOCITY", "BURNDOWN", "CHART", "RELEASE", "ALPHA", "BETA", "GTM",
+        "BLOCKER", "DEBT", "SPIKE", "SWARM", "REFINE", "RANK", "VOTE", "PILOT", "LEARN", "ITERATE"
       ],
       "bonus": [
         "KPI", "OKR", "ROI", "MVP", "UX", "UI", "PRD", "QA", "DEV", "BIZ",
-        "MAP", "KEY", "WIN", "FIX", "BUG", "REQ", "SPEC", "DOC", "deck", "slide"
+        "MAP", "KEY", "WIN", "FIX", "BUG", "REQ", "SPEC", "DOC", "DECK"
       ]
     },
     "devops": {
       "path": [
         "BUILD", "DEPLOY", "LOGS", "SCALE", "CLOUD", "CODE", "TEST", "MERGE", "HOST", "NODE",
-        "PUSH", "PULL", "REPO", "PIPE", "ROOT", "USER", "SUDO", "BASH", "SHELL", "DISK",
-        "DOCKER", "KUBE", "POD", "SERVICE", "LOAD", "BALANCER", "GATEWAY", "PROXY", "FIREWALL", "RULE",
+        "PUSH", "PULL", "REPO", "PIPELINE", "ROOT", "USER", "SUDO", "BASH", "SHELL", "DISK",
+        "DOCKER", "KUBE", "POD", "SERVICE", "LOADBALANCER", "GATEWAY", "PROXY", "FIREWALL", "RULE",
         "ALERT", "MONITOR", "GRAPH", "TRACE", "DEBUG", "ERROR", "WARN", "INFO", "FATAL", "CRASH",
-        "RETRY", "TIMEOUT", "LATENCY", "UPTIME", "SLA", "SLO", "SLI", "HEAP", "STACK", "QUEUE"
+        "RETRY", "TIMEOUT", "LATENCY", "UPTIME", "SLA", "SLO", "SLI", "HEAP", "STACK", "QUEUE",
+        "HELM", "MESH", "SECRET", "VOLUME", "CLAIM", "STATE", "REVERT", "STABLE", "DRAIN", "CORDON"
       ],
       "bonus": [
         "OPS", "DEV", "CI", "CD", "API", "SSL", "SSH", "AWS", "URL", "DNS",
@@ -32,21 +34,23 @@
         "SAVE", "SPEND", "FUND", "DEBT", "PLAN", "GOAL", "RATE", "CASH", "COST", "TAX",
         "BILL", "PAY", "LOAN", "CARD", "BANK", "RENT", "BUY", "SELL", "MINT", "COIN",
         "BUDGET", "INCOME", "SALARY", "WAGE", "BONUS", "STOCK", "BOND", "ETF", "INDEX", "MUTUAL",
-        "RETIRE", "NEST", "EGG", "EMERGENCY", "DIVIDEND", "YIELD", "GAIN", "LOSS", "ASSET", "LIABILITY",
-        "NET", "WORTH", "SCORE", "REPORT", "FEES", "TERM", "LIFE", "AUTO", "HOME", "INSURE"
+        "RETIRE", "NESTEGG", "EMERGENCY", "DIVIDEND", "YIELD", "GAIN", "LOSS", "ASSET", "LIABILITY",
+        "NETWORTH", "CREDITSCORE", "CREDITREPORT", "FEES", "TERMLIFE", "INSURE",
+        "VEST", "GRANT", "LIMIT", "OPTION", "BULL", "BEAR", "HEDGE", "SHORT", "LONG", "PRIME"
       ],
       "bonus": [
         "IRA", "APR", "APY", "FEE", "DUE", "NET", "LOW", "HIGH", "MAX", "MIN",
-        "ADD", "CUT", "EARN", "OWE", "401K", "HSA", "FSA", "CD", "ROI", "PITI"
+        "ADD", "CUT", "EARN", "OWE", "HSA", "FSA", "CD", "ROI", "PITI"
       ]
     },
     "design": {
       "path": [
         "GRID", "SPACE", "TYPE", "COLOR", "ICON", "STYLE", "FONT", "MODE", "DARK", "BOLD",
         "TEXT", "SIZE", "HUE", "TINT", "LINE", "SHAPE", "FORM", "ART", "LOOK", "FEEL",
-        "LAYOUT", "ALIGN", "SCALE", "RATIO", "GOLDEN", "WHITE", "NEGATIVE", "BALANCE", "CONTRAST", "DEPTH",
+        "LAYOUT", "ALIGN", "SCALE", "RATIO", "GOLDEN", "WHITESPACE", "BALANCE", "CONTRAST", "DEPTH",
         "SHADOW", "BLUR", "FOCUS", "CROP", "MASK", "LAYER", "OPACITY", "BLEND", "GRADIENT", "SOLID",
-        "STROKE", "FILL", "PATH", "NODE", "VECTOR", "PIXEL", "RASTER", "BITMAP", "CANVAS", "FRAME"
+        "STROKE", "FILL", "PATH", "NODE", "VECTOR", "PIXEL", "RASTER", "BITMAP", "CANVAS", "FRAME",
+        "TRACK", "ALIAS", "DITHER", "GRAIN", "NOISE", "TILE", "SYMBOL", "GUIDE", "RULER", "SNAP"
       ],
       "bonus": [
         "UX", "UI", "HEX", "RGB", "CMYK", "DPI", "SVG", "PNG", "JPG", "GIF",
@@ -55,28 +59,30 @@
     },
     "cybersecurity": {
       "path": [
-        "RISK", "LOGIN", "PATCH", "VAULT", "ALERT", "GUARD", "SAFE", "LOCK", "KEY", "PASS",
+        "RISK", "LOGIN", "PATCH", "VAULT", "ALERT", "KEY", "PASSWORD",
         "USER", "ADMIN", "ROOT", "HASH", "SALT", "SCAN", "TEST", "BLOCK", "DENY", "ALLOW",
         "PHISH", "SPOOF", "HACK", "BREACH", "LEAK", "THREAT", "VECTOR", "ATTACK", "DEFEND", "SHIELD",
-        "FIREWALL", "PROXY", "TOKEN", "SESSION", "COOKIE", "HEADER", "PAYLOAD", "EXPLOIT", "ZERO", "DAY",
-        "MALWARE", "VIRUS", "WORM", "TROJAN", "RANSOM", "SPY", "BOT", "NET", "WEB", "DARK"
+        "FIREWALL", "PROXY", "TOKEN", "SESSION", "COOKIE", "HEADER", "PAYLOAD", "EXPLOIT", "ZERODAY",
+        "MALWARE", "VIRUS", "WORM", "TROJAN", "RANSOM", "SPY", "BOT", "NETWORK", "WEB", "DARK",
+        "HONEY", "TRAP", "SNIFF", "DUMP", "INJECT", "FUZZ", "WIPE", "SHRED", "CLOAK", "RECON"
       ],
       "bonus": [
-        "VPN", "SSL", "TLS", "2FA", "OTP", "LOG", "IP", "MAC", "LAN", "WAN",
+        "VPN", "SSL", "TLS", "OTP", "LOG", "IP", "MAC", "LAN", "WAN",
         "BUG", "BOT", "IDS", "WAF", "SOC", "NOC", "APT", "DDOS", "XSS", "SQLI"
       ]
     },
     "finance-accounting": {
       "path": [
-        "LEDGER", "TAX", "COST", "CASH", "PROFIT", "ASSET", "AUDIT", "BOOK", "BILL", "RATE",
+        "LEDGER", "TAX", "COST", "CASH", "PROFIT", "ASSET", "AUDIT", "BILL", "RATE",
         "DEBIT", "CREDIT", "ENTRY", "CLOSE", "GAIN", "LOSS", "MARGIN", "SALES", "PRICE", "VALUE",
-        "BALANCE", "SHEET", "INCOME", "EQUITY", "LIABILITY", "ACCRUAL", "DEFERRAL", "JOURNAL", "TRIAL", "RECON",
-        "VARIANCE", "BUDGET", "FORECAST", "MODEL", "RATIO", "LIQUID", "SOLVENT", "FISCAL", "YEAR", "QUARTER",
-        "MONTH", "PERIOD", "REPORT", "STMT", "BANK", "WIRE", "CHECK", "FLOAT", "DEPOSIT", "WITHDRAW"
+        "BALANCESHEET", "INCOME", "EQUITY", "LIABILITY", "ACCRUAL", "DEFERRAL", "JOURNAL", "TRIAL", "RECON",
+        "VARIANCE", "BUDGET", "FORECAST", "MODEL", "RATIO", "LIQUID", "SOLVENT", "FISCAL", "YEAREND", "QUARTER",
+        "MONTH", "PERIOD", "REPORT", "STMT", "BANK", "WIRE", "CHECK", "FLOAT", "DEPOSIT", "WITHDRAW",
+        "FRAUD", "ETHICS", "CONTRA", "BATCH", "POST", "MATCH", "COUPON", "FIXED", "CURRENT", "GROSS"
       ],
       "bonus": [
         "CPA", "CFO", "PANDL", "ROI", "ROE", "ROA", "IPO", "SEC", "IRS", "VAT",
-        "TAX", "FEE", "DUE", "PAY", "GAAP", "IFRS", "EBITDA", "COGS", "SG&A", "EPS"
+        "TAX", "FEE", "DUE", "PAY", "GAAP", "IFRS", "EBITDA", "COGS", "EPS"
       ]
     },
     "physiotherapy": {
@@ -85,7 +91,8 @@
         "FOOT", "KNEE", "NECK", "BACK", "ARM", "LEG", "HIP", "BONE", "NERVE", "SKIN",
         "FLEX", "EXTEND", "ROTATE", "BEND", "STRETCH", "STRONG", "WEAK", "TIGHT", "LOOSE", "RANGE",
         "MOTION", "GAIT", "POSTURE", "BALANCE", "STABIL", "MOBIL", "MANUAL", "THERAPY", "EXERCISE", "REHAB",
-        "ACUTE", "CHRONIC", "INJURY", "TRAUMA", "SPRAIN", "STRAIN", "TEAR", "BREAK", "FRACTURE", "BRUISE"
+        "ACUTE", "CHRONIC", "INJURY", "TRAUMA", "SPRAIN", "STRAIN", "TEAR", "BREAK", "FRACTURE", "BRUISE",
+        "TENDON", "FASCIA", "DISC", "LUMBAR", "SACRAL", "PELVIC", "RADIAL", "ULNAR", "TIBIAL", "FEMUR"
       ],
       "bonus": [
         "PT", "OT", "ROM", "ICE", "HEAT", "REST", "GYM", "FIT", "RUN", "JOG",

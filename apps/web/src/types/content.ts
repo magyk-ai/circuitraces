@@ -63,5 +63,6 @@ export interface TopicCatalog {
   topicId: string;
   title: string;
   description: string;
+  icon?: string;
   puzzles: TopicPuzzleEntry[];
 }

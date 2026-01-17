@@ -13,7 +13,7 @@
     "audit": "node ./dist/cli.js --audit",
     "content:qa": "npm run build && node ./dist/content-qa.js",
     "wordlist:stats": "npm run build && node ./dist/wordlist-stats.js",
-    "generate": "npm run build && node ./dist/batch-generate.js"
+    "generate": "npm run build && node ./dist/batch-generate.js && node ./dist/generate-topic-catalogs.js"
   },
   "dependencies": {
     "@circuitraces/engine": "*"

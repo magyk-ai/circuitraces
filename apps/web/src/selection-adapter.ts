@@ -54,6 +54,9 @@ export class SelectionAdapter {
 
         if (this.isRay4Dir) {
           const newDir = this.snapTo4Dir(dx, dy);
+          // Note: We allow selecting in any direction (left, up, right, down).
+          // The engine validates whether the selected cells form a valid word.
+          // This allows users to select words by dragging in either direction.
           this.lockedDirection = newDir;
           this.currentDirection = newDir;
           return this.getCellsAlongRay(start, newDir, current);

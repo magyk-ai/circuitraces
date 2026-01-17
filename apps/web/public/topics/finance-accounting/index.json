@@ -4,11 +4,12 @@
   "topicId": "finance-accounting",
   "title": "Finance & Accounting",
   "description": "Financial statements, accounting principles, analysis.",
+  "icon": "📊",
   "puzzles": [
     {
       "id": "daily-2026-01-17-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Audit Trail",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -22,7 +23,7 @@
     {
       "id": "daily-2026-01-18-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Number Crunch",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -36,7 +37,7 @@
     {
       "id": "daily-2026-01-19-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Fiscal Flow",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -50,7 +51,7 @@
     {
       "id": "daily-2026-01-20-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Ledger Logic",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -64,7 +65,7 @@
     {
       "id": "daily-2026-01-21-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Balance Sheet",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -78,7 +79,7 @@
     {
       "id": "daily-2026-01-22-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Audit Trail",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -92,7 +93,7 @@
     {
       "id": "daily-2026-01-23-finance-accounting",
       "revision": 1,
-      "title": "Finance Daily",
+      "title": "Number Crunch",
       "difficulty": "easy",
       "grid": {
         "width": 6,

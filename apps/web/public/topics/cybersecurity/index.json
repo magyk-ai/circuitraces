@@ -4,11 +4,12 @@
   "topicId": "cybersecurity",
   "title": "Cybersecurity",
   "description": "Threat modeling, encryption, authentication, attacks.",
+  "icon": "🔒",
   "puzzles": [
     {
       "id": "daily-2026-01-17-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Breach Alert",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -22,7 +23,7 @@
     {
       "id": "daily-2026-01-18-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Secure Mode",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -36,7 +37,7 @@
     {
       "id": "daily-2026-01-19-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Firewall Up",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -50,7 +51,7 @@
     {
       "id": "daily-2026-01-20-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Threat Hunt",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -64,7 +65,7 @@
     {
       "id": "daily-2026-01-21-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Crypto Quest",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -78,7 +79,7 @@
     {
       "id": "daily-2026-01-22-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Breach Alert",
       "difficulty": "easy",
       "grid": {
         "width": 6,
@@ -92,7 +93,7 @@
     {
       "id": "daily-2026-01-23-cybersecurity",
       "revision": 1,
-      "title": "Cybersecurity Daily",
+      "title": "Secure Mode",
       "difficulty": "easy",
       "grid": {
         "width": 6,

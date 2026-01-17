@@ -31,6 +31,18 @@
           "puzzlePath": "/daily/2026-01-17-devops.json",
           "tags": []
         },
+        "personal-finance": {
+          "id": "daily-2026-01-17-personal-finance",
+          "title": "Wealth Path",
+          "difficulty": "easy",
+          "grid": {
+            "width": 6,
+            "height": 6
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-personal-finance.json",
+          "tags": []
+        },
         "design": {
           "id": "daily-2026-01-17-design",
           "title": "Color Theory",
@@ -195,6 +207,18 @@
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-19-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-19-personal-finance",
+          "title": "Invest Now",
+          "difficulty": "easy",
+          "grid": {
+            "width": 6,
+            "height": 6
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-19-personal-finance.json",
           "tags": []
         },
         "design": {
@@ -539,6 +563,18 @@
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-23-devops.json",
+          "tags": []
+        },
+        "personal-finance": {
+          "id": "daily-2026-01-23-personal-finance",
+          "title": "Save Smart",
+          "difficulty": "easy",
+          "grid": {
+            "width": 6,
+            "height": 6
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-23-personal-finance.json",
           "tags": []
         },
         "design": {
