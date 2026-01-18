@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import type { Cell } from '@circuitraces/engine';
 import { GridBuilder } from './grid-builder.js';
+import { getCoverageThreshold, getMinIntersections, getMinRouteLength } from './validation-constants.js';
 
 interface WordList {
   path: string[];
@@ -50,9 +51,9 @@ export class PuzzleConstructor {
 
     console.log(`Generating ${config.puzzleId} (${config.topicId})...`);
 
-    // Retry loop - increased to handle parallel adjacency constraint
-    const maxAttempts = 500;
-    const escalateAfter = 50;
+    // Retry loop - increased to handle dead-end extension constraint
+    const maxAttempts = 1000;
+    const escalateAfter = 100;
     let attempts = 0;
     while (attempts < maxAttempts) {
       attempts++;
@@ -176,8 +177,9 @@ export class PuzzleConstructor {
 
     // Ensure intersection density meets Easy Daily requirements
     const intersectionCount = this.getIntersectionCount(placedPathWords);
-    if (intersectionCount < numWords - 1) {
-      throw new Error(`Path intersections too low (${intersectionCount}/${numWords - 1})`);
+    const minIntersections = getMinIntersections(numWords);
+    if (intersectionCount < minIntersections) {
+      throw new Error(`Path intersections too low (${intersectionCount}/${minIntersections})`);
     }
 
     // Reject puzzles with parallel adjacency (non-intersecting words that touch)
@@ -211,20 +213,23 @@ export class PuzzleConstructor {
       throw new Error("Path words are not connected");
     }
 
-    // Ensure all words are critical (no optional branches or bypasses)
-    // This characterizes "dead-end" words as non-critical.
-    if (!this.verifyAllWordsCritical(builder, placedPathWords, startCell.id, endCell.id, usedPathCells)) {
-      throw new Error("Branching layout detected: some path words are non-critical");
+    // Compute critical path cells for subsequent checks
+    const criticalCells = this.findCriticalPathCells(builder, startCell.id, endCell.id, usedPathCells);
+
+    // Ensure no word has cells extending too far from the critical path
+    if (!this.verifyNoDeadEndExtensions(placedPathWords, criticalCells)) {
+      throw new Error("Dead-end extension detected: word extends too far from critical path");
     }
 
-    const coverageThreshold = this.getCoverageThreshold(width, height);
+    const coverageThreshold = getCoverageThreshold(width, height);
     if (usedPathCells.size < coverageThreshold) {
       throw new Error(`Path coverage too low (${usedPathCells.size}/${coverageThreshold})`);
     }
 
     const routeLength = this.computeShortestPathLength(builder, startCell.id, endCell.id, usedPathCells);
-    if (routeLength === null || routeLength < height - 1) {
-      throw new Error(`Route too short (${routeLength ?? 'null'})`);
+    const minRouteLength = getMinRouteLength(height);
+    if (routeLength === null || routeLength < minRouteLength) {
+      throw new Error(`Route too short (${routeLength ?? 'null'}/${minRouteLength})`);
     }
 
     // 8. Fill remaining cells
@@ -474,25 +479,28 @@ export class PuzzleConstructor {
   }
 
   /**
-   * Verify every path word is critical for START-END connectivity.
-   * A word is critical if at least one of its cells lies on the shortest path from START to END.
-   * Dead-end branches and bypassable words will fail this check.
+   * Verify each path word has at least MIN_CRITICAL_CELLS cells on the critical path.
+   * This prevents words with minimal contribution to START→END connectivity
+   * (e.g., HEADER with only 1 cell on the critical path and 5 cells in a dead-end).
    */
-  private verifyAllWordsCritical(
-    builder: GridBuilder,
+  private verifyNoDeadEndExtensions(
     pathWords: WordPlacement[],
-    startId: string,
-    endId: string,
-    allPathCells: Set<string>
+    criticalCells: Set<string>,
+    minCriticalCells: number = 2
   ): boolean {
-    // Find all cells on shortest paths from START to END
-    const criticalCells = this.findCriticalPathCells(builder, startId, endId, allPathCells);
-
     for (const word of pathWords) {
       const placement = word.placements[0];
-      // A word is critical if ANY of its cells are on the critical path
-      const isOnPath = placement.some(cellId => criticalCells.has(cellId));
-      if (!isOnPath) {
+
+      // Count how many cells of this word are on the critical path
+      let criticalCount = 0;
+      for (const cellId of placement) {
+        if (criticalCells.has(cellId)) {
+          criticalCount++;
+        }
+      }
+
+      // Require at least minCriticalCells on the critical path
+      if (criticalCount < minCriticalCells) {
         return false;
       }
     }
@@ -562,13 +570,6 @@ export class PuzzleConstructor {
       }
     }
     return criticalCells;
-  }
-
-  private getCoverageThreshold(width: number, height: number): number {
-    if (width === 6 && height === 6) return 14;
-    if (width === 7 && height === 7) return 18;
-    if (width === 8 && height === 8) return 22;
-    return Math.max(12, Math.floor((width * height) / 4));
   }
 
   private computeShortestPathLength(

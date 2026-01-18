@@ -41,17 +41,21 @@ Circuit Races is a path-based word puzzle game built with an engine-first archit
 ## Quick Start
 
 ```bash
+# If node commands fail, ensure correct Node version:
+nvm use 24
+
 # Install all dependencies
 npm install
 
 # Before ANY commit - run this!
-npm run precommit  # Runs: lint + typecheck + test + build
+npm run precommit  # Runs: lint + typecheck + test + build + e2e
 
 # Or run checks individually:
 npm run lint        # ESLint code quality check
 npm run typecheck   # TypeScript type checking
-npm test            # Unit tests (9 tests)
+npm test            # Unit tests (56 tests: 35 engine + 21 generator)
 npm run build       # Build engine + web app
+npm run test:e2e    # E2E tests (10 Playwright tests)
 
 # Development
 npm run dev         # Start dev server (http://localhost:5173)
@@ -110,21 +114,22 @@ npm run validate puzzles/sample.json  # Validate puzzle JSON
 ## Current MVP Scope
 
 **Implemented:**
-- ✅ Core engine with path words only
-- ✅ RAY_8DIR drag selection
+- ✅ Core engine with path words and bonus words
+- ✅ RAY_4DIR drag selection (forward-only: right and down)
 - ✅ BFS connectivity check (win condition)
-- ✅ Unit tests (9 tests, all passing)
-- ✅ Sample puzzle (5x5 grid, 4 words)
+- ✅ Unit tests (56 tests: 35 engine + 21 generator)
+- ✅ E2E tests (10 Playwright tests)
+- ✅ Daily puzzles (7 days × 7 topics = 49 puzzles)
+- ✅ Puzzle generation pipeline with validation
+- ✅ Content QA system
 - ✅ Basic web UI with drag selection
 - ✅ Puzzle validation CLI
 
 **Deferred (Post-MVP):**
-- ❌ Hints system
-- ❌ Additional words + clues
+- ❌ Hints system (UI exists, needs polish)
 - ❌ Emoji tokens (letters only for now)
 - ❌ Circuit Traces visual skin
 - ❌ Persistence/localStorage
-- ❌ Multiple puzzles
 
 ## Development Workflow
 
@@ -179,21 +184,19 @@ npm run audit ../../puzzles/sample.json
 The `packages/generator` package includes several CLI tools for content creation and debugging:
 
 ```bash
+# From repository root:
+npm run generate      # Generate all daily puzzles (7 days × 7 topics = 49 puzzles)
+npm run content:qa    # Run content QA on all generated puzzles
+npm run wordlist:stats # View wordlist statistics and length histograms
+npm run validate <path-to-puzzle.json>  # Validate a single puzzle
+npm run audit <path-to-puzzle.json>     # Deep audit (geometry, connectivity, hints)
+
+# Or from packages/generator directory:
 cd packages/generator
-
-# Generate all daily puzzles (7 days × 7 topics = 49 puzzles)
 npm run generate
-
-# Run content QA on all generated puzzles
 npm run content:qa
-
-# View wordlist statistics and length histograms
 npm run wordlist:stats
-
-# Validate a single puzzle
 npm run validate <path-to-puzzle.json>
-
-# Deep audit a puzzle (geometry, connectivity, hints)
 npm run audit <path-to-puzzle.json>
 ```
 

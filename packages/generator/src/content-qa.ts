@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getCoverageThreshold, getMinIntersections, getMinRouteLength } from './validation-constants.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DAILY_DIR = path.resolve(__dirname, '../../../apps/web/public/daily');
@@ -269,13 +270,6 @@ function shortestPathLength(
   return null;
 }
 
-function getCoverageThreshold(width: number, height: number): number {
-  if (width === 6 && height === 6) return 14;
-  if (width === 7 && height === 7) return 18;
-  if (width === 8 && height === 8) return 22;
-  return Math.max(12, Math.floor((width * height) / 4));
-}
-
 function getProfile(profileName: string): ContentProfile {
   if (profileName !== 'EASY_DAILY_V1') {
     throw new Error(`Unknown content QA profile: ${profileName}`);
@@ -287,9 +281,9 @@ function getProfile(profileName: string): ContentProfile {
     requireTopStart: true,
     requireBottomEnd: true,
     requireWordIntersectionConnectivity: true,
-    minIntersections: (pathWordCount) => Math.max(pathWordCount - 1, 0),
+    minIntersections: getMinIntersections,
     minCoverage: getCoverageThreshold,
-    minRouteLength: (height) => height - 1,
+    minRouteLength: getMinRouteLength,
   };
 }
 

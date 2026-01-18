@@ -26,7 +26,7 @@ export type AuditErrorCode =
   | 'ERR_PLACEMENT_DIAGONAL'
   | 'ERR_PARALLEL_ADJACENCY'
   | 'ERR_SAME_DIRECTION_INTERSECTION'
-  | 'ERR_NON_CRITICAL_PATH_WORD';
+  | 'ERR_DEAD_END_EXTENSION';
 
 export interface AuditError {
   code: AuditErrorCode;
@@ -129,8 +129,8 @@ export function auditPuzzle(puzzle: WaywordsPuzzle): AuditResult {
   // 11. Intersection direction check (intersecting words must have different directions)
   checkIntersectionDirections(puzzle, cellMap, errors);
 
-  // 12. Criticality check (all path words must be required for connectivity)
-  checkCriticalPathWords(puzzle, cellMap, posMap, allPathWordCells, errors);
+  // 12. Dead-end extension check (no word should extend too far from critical path)
+  checkDeadEndExtensions(puzzle, cellMap, posMap, allPathWordCells, errors);
 
   return {
     valid: errors.length === 0,
@@ -362,11 +362,11 @@ function checkConnectivity(
 }
 
 /**
- * Check that every path word is required (critical) to connect START to END.
- * A word is critical if at least one of its cells lies on the shortest path from START to END.
- * Dead-end branches and bypassable words will fail this check.
+ * Check that each path word has at least MIN_CRITICAL_CELLS cells on the critical path.
+ * This prevents words with minimal contribution to START→END connectivity
+ * (e.g., HEADER with only 1 cell on the critical path and 5 cells in a dead-end).
  */
-function checkCriticalPathWords(
+function checkDeadEndExtensions(
   puzzle: WaywordsPuzzle,
   cellMap: Map<string, Cell>,
   posMap: Map<string, Cell>,
@@ -375,6 +375,7 @@ function checkCriticalPathWords(
 ): void {
   const startId = puzzle.grid.start.adjacentCellId;
   const endId = puzzle.grid.end.adjacentCellId;
+  const minCriticalCells = 2;
 
   // Find ALL cells that lie on ANY shortest path from START to END
   const criticalCells = findCriticalPathCells(startId, endId, allPathWordCells, cellMap, posMap);
@@ -383,14 +384,20 @@ function checkCriticalPathWords(
     if (word.placements.length === 0) continue;
     const placement = word.placements[0];
 
-    // A word is critical if ANY of its cells are on the critical path
-    const isOnPath = placement.some(cellId => criticalCells.has(cellId));
+    // Count how many cells of this word are on the critical path
+    let criticalCount = 0;
+    for (const cellId of placement) {
+      if (criticalCells.has(cellId)) {
+        criticalCount++;
+      }
+    }
 
-    if (!isOnPath) {
+    // Require at least minCriticalCells on the critical path
+    if (criticalCount < minCriticalCells) {
       errors.push({
-        code: 'ERR_NON_CRITICAL_PATH_WORD',
+        code: 'ERR_DEAD_END_EXTENSION',
         path: `words.path.${word.wordId}`,
-        message: `Path word "${word.wordId}" is non-critical (dead-end branch or bypassable)`,
+        message: `Path word "${word.wordId}" has only ${criticalCount} cell(s) on the critical path (minimum required: ${minCriticalCells})`,
         severity: 'error'
       });
     }

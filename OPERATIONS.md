@@ -4,7 +4,7 @@
 
 **Always run these locally BEFORE pushing:**
 
-### Quick Check (30 seconds)
+### Quick Check (60 seconds)
 ```bash
 # Run all checks at once
 npm run precommit
@@ -12,8 +12,9 @@ npm run precommit
 # This runs:
 # 1. ESLint (code quality)
 # 2. TypeScript type checking
-# 3. Unit tests
+# 3. Unit tests (56 tests: 35 engine + 21 generator)
 # 4. Build (engine + web app)
+# 5. E2E tests (10 Playwright tests)
 ```
 
 ### Detailed Check (if precommit fails)
@@ -30,17 +31,21 @@ npm run typecheck
 
 # 3. Run unit tests
 npm test
-# Expected: 9/9 tests passing
+# Expected: 56/56 tests passing (35 engine + 21 generator)
 
 # 4. Validate puzzle
-npm run validate puzzles/sample.json
+npm run validate apps/web/public/daily/2026-01-17-devops.json
 # Expected: "✓ Puzzle is valid"
 
 # 5. Build everything
 npm run build
 # Expected: No errors, dist/ directories created
 
-# 6. Preview production build locally
+# 6. Run E2E tests
+npm run test:e2e
+# Expected: 10/10 tests passing
+
+# 7. Preview production build locally (optional)
 cd apps/web && npm run preview
 # Visit http://localhost:4173 and test the game
 # - Can drag to select words
@@ -171,9 +176,10 @@ gh run rerun <previous-successful-run-id>
 
 - ✅ Install dependencies
 - ✅ Build engine package
-- ✅ Run unit tests (9 tests)
-- ✅ Validate sample puzzle
+- ✅ Run unit tests (56 tests)
+- ✅ Validate daily puzzle
 - ✅ Build web app
+- ✅ Run E2E tests (10 tests)
 
 ### Deploy Workflow Steps
 
