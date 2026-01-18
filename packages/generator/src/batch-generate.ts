@@ -1,7 +1,7 @@
 // packages/generator/src/batch-generate.ts
 import fs from 'fs/promises';
 import path from 'path';
-import { PuzzleConstructor } from './construct-puzzle.js';
+import { PuzzleConstructor, GeneratorOptions } from './construct-puzzle.js';
 
 import { fileURLToPath } from 'url';
 
@@ -60,18 +60,34 @@ const TOPIC_TITLES: Record<string, string[]> = {
 function getFunTitle(topicId: string, dateStr: string): string {
   const titles = TOPIC_TITLES[topicId];
   if (!titles) return 'Daily Challenge';
-  
+
   // Use day of year or hash of date to pick title
   const date = new Date(dateStr);
   const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000);
   return titles[dayOfYear % titles.length];
 }
 
+/**
+ * Extract all words (path + bonus) from a generated puzzle
+ */
+function extractWordsFromPuzzle(puzzle: { words: { path: { wordId: string }[]; additional: { wordId: string }[] } }): string[] {
+  const pathWords = puzzle.words.path.map(w => w.wordId);
+  const bonusWords = puzzle.words.additional.map(w => w.wordId);
+  return [...pathWords, ...bonusWords];
+}
+
 async function main() {
   const constructor = new PuzzleConstructor(WORDLISTS_PATH);
   await constructor.loadWordlists(WORDLISTS_PATH);
-  
+
   const scheduleEntries: DailyScheduleEntry[] = [];
+
+  // Track used words per topic across the entire batch
+  // Each word can only appear once per topic (across all 7 days)
+  const usedWordsByTopic = new Map<string, Set<string>>();
+  for (const topic of TOPICS) {
+    usedWordsByTopic.set(topic.id, new Set());
+  }
 
   for (const date of DATES) {
     console.log(`\n📅 Generating date: ${date}`);
@@ -81,7 +97,7 @@ async function main() {
       // Namespacing: daily-2026-01-18-devops.json
       const puzzleId = `daily-${date}-${topic.id}`;
       const funTitle = getFunTitle(topic.id, date);
-      
+
       const config = {
         date,
         topicId: topic.id,
@@ -92,13 +108,23 @@ async function main() {
         selectionModel: 'RAY_4DIR' as const // Forward-only placements (→ ↓)
       };
 
+      // Get words already used in this topic's batch
+      const excludeWords = usedWordsByTopic.get(topic.id)!;
+      const options: GeneratorOptions = { excludeWords };
+
       try {
-        await constructor.generate(config, OUTPUT_DIR);
-        
+        const puzzle = await constructor.generate(config, OUTPUT_DIR, options);
+
+        // Track the words used in this puzzle
+        const wordsUsed = extractWordsFromPuzzle(puzzle);
+        for (const word of wordsUsed) {
+          excludeWords.add(word);
+        }
+
         // Add to map
         // Note: Filename logic in constructor is: 2026-01-18-devops.json
         const filename = `${date}-${topic.id}.json`;
-        
+
         puzzleMap[topic.id] = {
           id: puzzleId,
           title: config.title,
@@ -108,7 +134,7 @@ async function main() {
           puzzlePath: `/daily/${filename}`,
           tags: []
         };
-        
+
       } catch (e) {
         console.error(`❌ Failed ${topic.id}:`, e);
       }

@@ -19,6 +19,11 @@ interface GeneratorConfig {
   selectionModel?: 'RAY_8DIR' | 'RAY_4DIR' | 'ADJACENT';
 }
 
+export interface GeneratorOptions {
+  /** Words to exclude from selection (e.g., already used in this topic's batch) */
+  excludeWords?: Set<string>;
+}
+
 interface TokenLetter {
   t: 'L';
   v: string;
@@ -45,7 +50,7 @@ export class PuzzleConstructor {
       this.wordlists = data.topics;
   }
 
-  async generate(config: GeneratorConfig, outputDir: string) {
+  async generate(config: GeneratorConfig, outputDir: string, options?: GeneratorOptions) {
     const topicWords = this.wordlists[config.topicId];
     if (!topicWords) throw new Error(`Topic ${config.topicId} not found`);
 
@@ -59,14 +64,14 @@ export class PuzzleConstructor {
       attempts++;
       try {
         const preferLargerGrid = attempts > escalateAfter;
-        const puzzle = this.attemptConstruction(topicWords, config, preferLargerGrid);
-        
+        const puzzle = this.attemptConstruction(topicWords, config, preferLargerGrid, options?.excludeWords);
+
         const outPath = path.join(outputDir, `${config.puzzleId.replace('daily-', '')}.json`);
-        
+
         await fs.writeFile(outPath, JSON.stringify(puzzle, null, 2));
         console.log(`✅ Success (Attempt ${attempts}): ${outPath}`);
         return puzzle;
-        
+
       } catch {
         // Continue retry
         // console.log(`Attempt ${attempts} failed: ${(e as Error).message}`);
@@ -75,9 +80,9 @@ export class PuzzleConstructor {
     throw new Error(`Failed to generate ${config.puzzleId} after ${maxAttempts} attempts`);
   }
 
-  private attemptConstruction(words: WordList, config: GeneratorConfig, preferLargerGrid: boolean) {
+  private attemptConstruction(words: WordList, config: GeneratorConfig, preferLargerGrid: boolean, excludeWords?: Set<string>) {
     const model = config.selectionModel || 'RAY_4DIR';
-    
+
     // For RAY_4DIR, we start smaller (6x6) but can go up to 8x8.
     // For ADJACENT/SNAKE, 5x5 or 6x6 is usually enough, but we use the shared pool for safety.
     const gridSizes: [number, number][] = model === 'RAY_4DIR'
@@ -86,7 +91,7 @@ export class PuzzleConstructor {
 
     for (const [width, height] of gridSizes) {
       try {
-        return this.tryConstruction(words, config, width, height);
+        return this.tryConstruction(words, config, width, height, excludeWords);
       } catch {
         // Try next size
       }
@@ -94,7 +99,7 @@ export class PuzzleConstructor {
     throw new Error("Could not place words even on 8x8 grid");
   }
 
-  private tryConstruction(words: WordList, config: GeneratorConfig, width: number, height: number) {
+  private tryConstruction(words: WordList, config: GeneratorConfig, width: number, height: number, excludeWords?: Set<string>) {
     const builder = new GridBuilder(width, height);
     const model = config.selectionModel || 'RAY_4DIR';
     const geometry: 'RAY' | 'SNAKE' = model === 'ADJACENT' ? 'SNAKE' : 'RAY';
@@ -102,7 +107,9 @@ export class PuzzleConstructor {
     // 1. Choose path words (Easy: 4-6 words, forward-only)
     const MIN_PATH_WORDS = 4;
     const MAX_PATH_WORDS = 6;
-    const validWords = words.path.filter(w => w.length >= 3 && w.length <= 7);
+    const validWords = words.path
+      .filter(w => w.length >= 3 && w.length <= 7)
+      .filter(w => !excludeWords?.has(w));
     if (validWords.length < MIN_PATH_WORDS) throw new Error("Not enough valid path words");
 
     const shuffled = [...validWords].sort(() => Math.random() - 0.5);
@@ -191,6 +198,7 @@ export class PuzzleConstructor {
     const pathWordIds = new Set(placedPathWords.map(word => word.wordId));
     const bonusCandidates = words.bonus
       .filter(word => !pathWordIds.has(word))
+      .filter(word => !excludeWords?.has(word))
       .sort(() => Math.random() - 0.5);
     const placedBonusWords: WordPlacement[] = [];
     for (const word of bonusCandidates) {

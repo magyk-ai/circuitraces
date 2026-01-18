@@ -3,7 +3,7 @@
   "topics": {
     "product-management": {
       "path": [
-        "METRIC", "VALUE", "LAUNCH", "USERS", "TEAM", "DATA", "PLAN", "GOAL", "SCOPE", "TASK",
+        "METRIC", "VALUE", "LAUNCH", "TEAM", "DATA", "PLAN", "GOAL", "SCOPE", "TASK",
         "ROADMAP", "SHIP", "TEST", "DEMO", "AGILE", "SPRINT", "USER", "NEED", "IDEA", "LOOP",
         "GROWTH", "CHURN", "RETENTION", "FUNNEL", "COHORT", "STAKEHOLDER", "VISION", "STRATEGY", "OKRS",
         "KPI", "DEV", "DESIGN", "SYNC", "STANDUP", "BACKLOG", "EPIC", "STORY",
@@ -34,9 +34,10 @@
         "SAVE", "SPEND", "FUND", "DEBT", "PLAN", "GOAL", "RATE", "CASH", "COST", "TAX",
         "BILL", "PAY", "LOAN", "CARD", "BANK", "RENT", "BUY", "SELL", "MINT", "COIN",
         "BUDGET", "INCOME", "SALARY", "WAGE", "BONUS", "STOCK", "BOND", "ETF", "INDEX", "MUTUAL",
-        "RETIRE", "NESTEGG", "EMERGENCY", "DIVIDEND", "YIELD", "GAIN", "LOSS", "ASSET", "LIABILITY",
-        "NETWORTH", "CREDITSCORE", "CREDITREPORT", "FEES", "TERMLIFE", "INSURE",
-        "VEST", "GRANT", "LIMIT", "OPTION", "BULL", "BEAR", "HEDGE", "SHORT", "LONG", "PRIME"
+        "RETIRE", "YIELD", "GAIN", "LOSS", "ASSET", "FEES", "INSURE",
+        "VEST", "GRANT", "LIMIT", "OPTION", "BULL", "BEAR", "HEDGE", "SHORT", "LONG", "PRIME",
+        "WEALTH", "MONEY", "PROFIT", "SHARE", "TRADE", "INVEST", "GROWTH", "RISK", "RETURN", "VALUE",
+        "CREDIT", "DEBIT", "EQUITY", "MARGIN", "AUDIT", "ESCROW", "TRUST", "WILL", "ESTATE", "HEIR"
       ],
       "bonus": [
         "IRA", "APR", "APY", "FEE", "DUE", "NET", "LOW", "HIGH", "MAX", "MIN",
@@ -90,7 +91,7 @@
         "MUSCLE", "BREATH", "JOINT", "SPINE", "CORE", "PAIN", "HEAL", "WALK", "MOVE", "HAND",
         "FOOT", "KNEE", "NECK", "BACK", "ARM", "LEG", "HIP", "BONE", "NERVE", "SKIN",
         "FLEX", "EXTEND", "ROTATE", "BEND", "STRETCH", "STRONG", "WEAK", "TIGHT", "LOOSE", "RANGE",
-        "MOTION", "GAIT", "POSTURE", "BALANCE", "STABIL", "MOBIL", "MANUAL", "THERAPY", "EXERCISE", "REHAB",
+        "MOTION", "GAIT", "POSTURE", "BALANCE", "STABLE", "MOBILE", "MANUAL", "THERAPY", "EXERCISE", "REHAB",
         "ACUTE", "CHRONIC", "INJURY", "TRAUMA", "SPRAIN", "STRAIN", "TEAR", "BREAK", "FRACTURE", "BRUISE",
         "TENDON", "FASCIA", "DISC", "LUMBAR", "SACRAL", "PELVIC", "RADIAL", "ULNAR", "TIBIAL", "FEMUR"
       ],
