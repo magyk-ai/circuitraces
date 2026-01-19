@@ -39,6 +39,16 @@ interface WordPlacement {
 
 export class PuzzleConstructor {
   private wordlists: Record<string, WordList>;
+  // Debug counters to identify constraint bottlenecks
+  private failureCounts = {
+    intersections: 0,
+    parallelAdjacency: 0,
+    bonusWord: 0,
+    connectivity: 0,
+    deadEnds: 0,
+    coverage: 0,
+    routeLength: 0
+  };
 
   constructor(_wordlistsPath: string) {
     this.wordlists = {};
@@ -50,11 +60,35 @@ export class PuzzleConstructor {
       this.wordlists = data.topics;
   }
 
+  private logFailureStats() {
+    const total = Object.values(this.failureCounts).reduce((a, b) => a + b, 0);
+    if (total === 0) return;
+    console.log(`  📊 Failure breakdown:`);
+    console.log(`     Intersections: ${this.failureCounts.intersections}`);
+    console.log(`     Parallel Adjacency: ${this.failureCounts.parallelAdjacency}`);
+    console.log(`     Bonus Word: ${this.failureCounts.bonusWord}`);
+    console.log(`     Connectivity: ${this.failureCounts.connectivity}`);
+    console.log(`     Dead-Ends: ${this.failureCounts.deadEnds}`);
+    console.log(`     Coverage: ${this.failureCounts.coverage}`);
+    console.log(`     Route Length: ${this.failureCounts.routeLength}`);
+  }
+
   async generate(config: GeneratorConfig, outputDir: string, options?: GeneratorOptions) {
     const topicWords = this.wordlists[config.topicId];
     if (!topicWords) throw new Error(`Topic ${config.topicId} not found`);
 
     console.log(`Generating ${config.puzzleId} (${config.topicId})...`);
+
+    // Reset failure counters for this puzzle
+    this.failureCounts = {
+      intersections: 0,
+      parallelAdjacency: 0,
+      bonusWord: 0,
+      connectivity: 0,
+      deadEnds: 0,
+      coverage: 0,
+      routeLength: 0
+    };
 
     // Retry loop - increased to handle dead-end extension constraint
     const maxAttempts = 1000;
@@ -77,17 +111,14 @@ export class PuzzleConstructor {
         // console.log(`Attempt ${attempts} failed: ${(e as Error).message}`);
       }
     }
+    // Log failure stats before throwing
+    this.logFailureStats();
     throw new Error(`Failed to generate ${config.puzzleId} after ${maxAttempts} attempts`);
   }
 
-  private attemptConstruction(words: WordList, config: GeneratorConfig, preferLargerGrid: boolean, excludeWords?: Set<string>) {
-    const model = config.selectionModel || 'RAY_4DIR';
-
-    // For RAY_4DIR, we start smaller (6x6) but can go up to 8x8.
-    // For ADJACENT/SNAKE, 5x5 or 6x6 is usually enough, but we use the shared pool for safety.
-    const gridSizes: [number, number][] = model === 'RAY_4DIR'
-        ? (preferLargerGrid ? [[8, 8], [7, 7]] : [[6, 6], [7, 7], [8, 8]])
-        : (preferLargerGrid ? [[7, 7], [6, 6]] : [[5, 5], [6, 6], [7, 7]]);
+  private attemptConstruction(words: WordList, config: GeneratorConfig, _preferLargerGrid: boolean, excludeWords?: Set<string>) {
+    // Fixed 12x12 grid for harder puzzles
+    const gridSizes: [number, number][] = [[12, 12]];
 
     for (const [width, height] of gridSizes) {
       try {
@@ -96,7 +127,7 @@ export class PuzzleConstructor {
         // Try next size
       }
     }
-    throw new Error("Could not place words even on 8x8 grid");
+    throw new Error("Could not place words even on 12x12 grid");
   }
 
   private tryConstruction(words: WordList, config: GeneratorConfig, width: number, height: number, excludeWords?: Set<string>) {
@@ -104,11 +135,11 @@ export class PuzzleConstructor {
     const model = config.selectionModel || 'RAY_4DIR';
     const geometry: 'RAY' | 'SNAKE' = model === 'ADJACENT' ? 'SNAKE' : 'RAY';
 
-    // 1. Choose path words (Easy: 4-6 words, forward-only)
+    // 1. Choose path words (Harder: 4-8 words, forward-only)
     const MIN_PATH_WORDS = 4;
-    const MAX_PATH_WORDS = 6;
+    const MAX_PATH_WORDS = 8;
     const validWords = words.path
-      .filter(w => w.length >= 3 && w.length <= 7)
+      .filter(w => w.length >= 3 && w.length <= 16)
       .filter(w => !excludeWords?.has(w));
     if (validWords.length < MIN_PATH_WORDS) throw new Error("Not enough valid path words");
 
@@ -186,11 +217,13 @@ export class PuzzleConstructor {
     const intersectionCount = this.getIntersectionCount(placedPathWords);
     const minIntersections = getMinIntersections(numWords);
     if (intersectionCount < minIntersections) {
+      this.failureCounts.intersections++;
       throw new Error(`Path intersections too low (${intersectionCount}/${minIntersections})`);
     }
 
     // Reject puzzles with parallel adjacency (non-intersecting words that touch)
     if (this.hasParallelAdjacency(builder, placedPathWords)) {
+      this.failureCounts.parallelAdjacency++;
       throw new Error('Parallel adjacency detected (non-intersecting touching words)');
     }
 
@@ -214,10 +247,14 @@ export class PuzzleConstructor {
         });
       }
     }
-    if (placedBonusWords.length === 0) throw new Error("Could not place bonus word");
+    if (placedBonusWords.length === 0) {
+      this.failureCounts.bonusWord++;
+      throw new Error("Could not place bonus word");
+    }
 
     // 7. Verify connectivity & coverage constraints
     if (!this.verifyConnectivity(builder, usedPathCells)) {
+      this.failureCounts.connectivity++;
       throw new Error("Path words are not connected");
     }
 
@@ -226,17 +263,20 @@ export class PuzzleConstructor {
 
     // Ensure no word has cells extending too far from the critical path
     if (!this.verifyNoDeadEndExtensions(placedPathWords, criticalCells)) {
+      this.failureCounts.deadEnds++;
       throw new Error("Dead-end extension detected: word extends too far from critical path");
     }
 
     const coverageThreshold = getCoverageThreshold(width, height);
     if (usedPathCells.size < coverageThreshold) {
+      this.failureCounts.coverage++;
       throw new Error(`Path coverage too low (${usedPathCells.size}/${coverageThreshold})`);
     }
 
     const routeLength = this.computeShortestPathLength(builder, startCell.id, endCell.id, usedPathCells);
     const minRouteLength = getMinRouteLength(height);
     if (routeLength === null || routeLength < minRouteLength) {
+      this.failureCounts.routeLength++;
       throw new Error(`Route too short (${routeLength ?? 'null'}/${minRouteLength})`);
     }
 

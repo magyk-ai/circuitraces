@@ -12,23 +12,11 @@
           "title": "Roadmap Ahead",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-17-product-management.json",
-          "tags": []
-        },
-        "devops": {
-          "id": "daily-2026-01-17-devops",
-          "title": "Pipeline Run",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-17-devops.json",
           "tags": []
         },
         "personal-finance": {
@@ -36,8 +24,8 @@
           "title": "Wealth Path",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-17-personal-finance.json",
@@ -48,35 +36,11 @@
           "title": "Color Theory",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-17-design.json",
-          "tags": []
-        },
-        "cybersecurity": {
-          "id": "daily-2026-01-17-cybersecurity",
-          "title": "Breach Alert",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-17-cybersecurity.json",
-          "tags": []
-        },
-        "finance-accounting": {
-          "id": "daily-2026-01-17-finance-accounting",
-          "title": "Audit Trail",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-17-finance-accounting.json",
           "tags": []
         },
         "physiotherapy": {
@@ -84,8 +48,8 @@
           "title": "Flex Quest",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-17-physiotherapy.json",
@@ -96,88 +60,16 @@
     {
       "date": "2026-01-18",
       "puzzles": {
-        "product-management": {
-          "id": "daily-2026-01-18-product-management",
-          "title": "Feature Sprint",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-18-product-management.json",
-          "tags": []
-        },
-        "devops": {
-          "id": "daily-2026-01-18-devops",
-          "title": "Build & Ship",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-18-devops.json",
-          "tags": []
-        },
-        "personal-finance": {
-          "id": "daily-2026-01-18-personal-finance",
-          "title": "Save Smart",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-18-personal-finance.json",
-          "tags": []
-        },
-        "design": {
-          "id": "daily-2026-01-18-design",
-          "title": "Layout Lab",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-18-design.json",
-          "tags": []
-        },
-        "cybersecurity": {
-          "id": "daily-2026-01-18-cybersecurity",
-          "title": "Secure Mode",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-18-cybersecurity.json",
-          "tags": []
-        },
         "finance-accounting": {
           "id": "daily-2026-01-18-finance-accounting",
           "title": "Number Crunch",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-18-finance-accounting.json",
-          "tags": []
-        },
-        "physiotherapy": {
-          "id": "daily-2026-01-18-physiotherapy",
-          "title": "Motion Path",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-18-physiotherapy.json",
           "tags": []
         }
       }
@@ -190,8 +82,8 @@
           "title": "Metric Mastery",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-19-product-management.json",
@@ -202,8 +94,8 @@
           "title": "Infra Hunt",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-19-devops.json",
@@ -214,35 +106,11 @@
           "title": "Invest Now",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-19-personal-finance.json",
-          "tags": []
-        },
-        "design": {
-          "id": "daily-2026-01-19-design",
-          "title": "UX Quest",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-19-design.json",
-          "tags": []
-        },
-        "cybersecurity": {
-          "id": "daily-2026-01-19-cybersecurity",
-          "title": "Firewall Up",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-19-cybersecurity.json",
           "tags": []
         },
         "finance-accounting": {
@@ -250,23 +118,11 @@
           "title": "Fiscal Flow",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-19-finance-accounting.json",
-          "tags": []
-        },
-        "physiotherapy": {
-          "id": "daily-2026-01-19-physiotherapy",
-          "title": "Strength Run",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-19-physiotherapy.json",
           "tags": []
         }
       }
@@ -279,8 +135,8 @@
           "title": "Ship It",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-20-product-management.json",
@@ -291,8 +147,8 @@
           "title": "Deploy Day",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-20-devops.json",
@@ -303,8 +159,8 @@
           "title": "Money Moves",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-20-personal-finance.json",
@@ -315,35 +171,11 @@
           "title": "Pixel Perfect",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-20-design.json",
-          "tags": []
-        },
-        "cybersecurity": {
-          "id": "daily-2026-01-20-cybersecurity",
-          "title": "Threat Hunt",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-20-cybersecurity.json",
-          "tags": []
-        },
-        "finance-accounting": {
-          "id": "daily-2026-01-20-finance-accounting",
-          "title": "Ledger Logic",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-20-finance-accounting.json",
           "tags": []
         },
         "physiotherapy": {
@@ -351,8 +183,8 @@
           "title": "Move Well",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-20-physiotherapy.json",
@@ -368,8 +200,8 @@
           "title": "Launch Mode",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-21-product-management.json",
@@ -380,35 +212,11 @@
           "title": "Ops Quest",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-21-devops.json",
-          "tags": []
-        },
-        "personal-finance": {
-          "id": "daily-2026-01-21-personal-finance",
-          "title": "Budget Quest",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-21-personal-finance.json",
-          "tags": []
-        },
-        "design": {
-          "id": "daily-2026-01-21-design",
-          "title": "Design Sprint",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-21-design.json",
           "tags": []
         },
         "cybersecurity": {
@@ -416,8 +224,8 @@
           "title": "Crypto Quest",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-21-cybersecurity.json",
@@ -428,23 +236,11 @@
           "title": "Balance Sheet",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-21-finance-accounting.json",
-          "tags": []
-        },
-        "physiotherapy": {
-          "id": "daily-2026-01-21-physiotherapy",
-          "title": "Rehab Road",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-21-physiotherapy.json",
           "tags": []
         }
       }
@@ -452,25 +248,13 @@
     {
       "date": "2026-01-22",
       "puzzles": {
-        "product-management": {
-          "id": "daily-2026-01-22-product-management",
-          "title": "Roadmap Ahead",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-22-product-management.json",
-          "tags": []
-        },
         "devops": {
           "id": "daily-2026-01-22-devops",
           "title": "Pipeline Run",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-22-devops.json",
@@ -481,35 +265,11 @@
           "title": "Wealth Path",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-22-personal-finance.json",
-          "tags": []
-        },
-        "design": {
-          "id": "daily-2026-01-22-design",
-          "title": "Color Theory",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-22-design.json",
-          "tags": []
-        },
-        "cybersecurity": {
-          "id": "daily-2026-01-22-cybersecurity",
-          "title": "Breach Alert",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-22-cybersecurity.json",
           "tags": []
         },
         "finance-accounting": {
@@ -517,8 +277,8 @@
           "title": "Audit Trail",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-22-finance-accounting.json",
@@ -529,8 +289,8 @@
           "title": "Flex Quest",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-22-physiotherapy.json",
@@ -546,8 +306,8 @@
           "title": "Feature Sprint",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-23-product-management.json",
@@ -558,23 +318,11 @@
           "title": "Build & Ship",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-23-devops.json",
-          "tags": []
-        },
-        "personal-finance": {
-          "id": "daily-2026-01-23-personal-finance",
-          "title": "Save Smart",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-23-personal-finance.json",
           "tags": []
         },
         "design": {
@@ -582,35 +330,11 @@
           "title": "Layout Lab",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-23-design.json",
-          "tags": []
-        },
-        "cybersecurity": {
-          "id": "daily-2026-01-23-cybersecurity",
-          "title": "Secure Mode",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-23-cybersecurity.json",
-          "tags": []
-        },
-        "finance-accounting": {
-          "id": "daily-2026-01-23-finance-accounting",
-          "title": "Number Crunch",
-          "difficulty": "easy",
-          "grid": {
-            "width": 6,
-            "height": 6
-          },
-          "estimatedMinutes": 3,
-          "puzzlePath": "/daily/2026-01-23-finance-accounting.json",
           "tags": []
         },
         "physiotherapy": {
@@ -618,8 +342,8 @@
           "title": "Motion Path",
           "difficulty": "easy",
           "grid": {
-            "width": 6,
-            "height": 6
+            "width": 12,
+            "height": 12
           },
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-23-physiotherapy.json",

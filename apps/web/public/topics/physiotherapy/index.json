@@ -12,8 +12,8 @@
       "title": "Flex Quest",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],
@@ -26,8 +26,8 @@
       "title": "Motion Path",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],
@@ -35,41 +35,13 @@
       "createdAt": "2026-01-18"
     },
     {
-      "id": "daily-2026-01-19-physiotherapy",
-      "revision": 1,
-      "title": "Strength Run",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-19-physiotherapy.json",
-      "createdAt": "2026-01-19"
-    },
-    {
-      "id": "daily-2026-01-20-physiotherapy",
-      "revision": 1,
-      "title": "Move Well",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-20-physiotherapy.json",
-      "createdAt": "2026-01-20"
-    },
-    {
       "id": "daily-2026-01-21-physiotherapy",
       "revision": 1,
       "title": "Rehab Road",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],
@@ -77,27 +49,13 @@
       "createdAt": "2026-01-21"
     },
     {
-      "id": "daily-2026-01-22-physiotherapy",
-      "revision": 1,
-      "title": "Flex Quest",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-22-physiotherapy.json",
-      "createdAt": "2026-01-22"
-    },
-    {
       "id": "daily-2026-01-23-physiotherapy",
       "revision": 1,
       "title": "Motion Path",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],

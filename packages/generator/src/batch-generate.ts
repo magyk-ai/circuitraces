@@ -129,7 +129,7 @@ async function main() {
           id: puzzleId,
           title: config.title,
           difficulty: 'easy',
-          grid: { width: 6, height: 6 }, // Updated: 6x6 default grid
+          grid: { width: 12, height: 12 }, // Updated: 12x12 default grid (harder puzzles)
           estimatedMinutes: 3,
           puzzlePath: `/daily/${filename}`,
           tags: []

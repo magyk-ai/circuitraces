@@ -7,27 +7,13 @@
   "icon": "💰",
   "puzzles": [
     {
-      "id": "daily-2026-01-17-personal-finance",
-      "revision": 1,
-      "title": "Wealth Path",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-17-personal-finance.json",
-      "createdAt": "2026-01-17"
-    },
-    {
       "id": "daily-2026-01-18-personal-finance",
       "revision": 1,
       "title": "Save Smart",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],
@@ -35,27 +21,13 @@
       "createdAt": "2026-01-18"
     },
     {
-      "id": "daily-2026-01-19-personal-finance",
-      "revision": 1,
-      "title": "Invest Now",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-19-personal-finance.json",
-      "createdAt": "2026-01-19"
-    },
-    {
       "id": "daily-2026-01-20-personal-finance",
       "revision": 1,
       "title": "Money Moves",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],
@@ -63,46 +35,18 @@
       "createdAt": "2026-01-20"
     },
     {
-      "id": "daily-2026-01-21-personal-finance",
-      "revision": 1,
-      "title": "Budget Quest",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-21-personal-finance.json",
-      "createdAt": "2026-01-21"
-    },
-    {
       "id": "daily-2026-01-22-personal-finance",
       "revision": 1,
       "title": "Wealth Path",
       "difficulty": "easy",
       "grid": {
-        "width": 6,
-        "height": 6
+        "width": 12,
+        "height": 12
       },
       "estimatedMinutes": 3,
       "tags": [],
       "puzzlePath": "/daily/2026-01-22-personal-finance.json",
       "createdAt": "2026-01-22"
-    },
-    {
-      "id": "daily-2026-01-23-personal-finance",
-      "revision": 1,
-      "title": "Save Smart",
-      "difficulty": "easy",
-      "grid": {
-        "width": 6,
-        "height": 6
-      },
-      "estimatedMinutes": 3,
-      "tags": [],
-      "puzzlePath": "/daily/2026-01-23-personal-finance.json",
-      "createdAt": "2026-01-23"
     }
   ]
 }

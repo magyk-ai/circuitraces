@@ -11,6 +11,9 @@ export function getCoverageThreshold(width: number, height: number): number {
   if (width === 6 && height === 6) return 10;  // 27.8%
   if (width === 7 && height === 7) return 12;  // 24.5%
   if (width === 8 && height === 8) return 16;  // 25.0%
+  if (width === 10 && height === 10) return 25; // 25%
+  if (width === 11 && height === 11) return 30; // 24.8%
+  if (width === 12 && height === 12) return 20; // 13.9% - reduced for generatability
   return Math.max(8, Math.floor((width * height) / 6));
 }
 
