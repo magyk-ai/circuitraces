@@ -1,6 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
+import { test, expect } from '@playwright/test';
+import { Puzzle, loadDailyPuzzle, cellIdsToCoords, dragSelect } from './test-utils';
 
 /**
  * Circuit Races E2E Smoke Tests
@@ -12,88 +11,6 @@ import path from 'path';
 // Test configuration - use a known daily puzzle
 const TEST_DATE = '2026-01-17';
 const TEST_TOPIC = 'devops';
-
-interface PuzzleCell {
-  id: string;
-  x: number;
-  y: number;
-  type: string;
-  value: string;
-}
-
-interface PuzzleWord {
-  wordId: string;
-  size: number;
-  placements: string[][];
-  hintCellId?: string;
-}
-
-interface Puzzle {
-  puzzleId: string;
-  theme: string;
-  grid: {
-    width: number;
-    height: number;
-    cells: PuzzleCell[];
-    start: { adjacentCellId: string };
-    end: { adjacentCellId: string };
-  };
-  words: {
-    path: PuzzleWord[];
-    additional?: PuzzleWord[];
-  };
-}
-
-// Load puzzle file for test setup
-function loadDailyPuzzle(date: string, topic: string): Puzzle {
-  const filePath = path.resolve(process.cwd(), 'public/daily', `${date}-${topic}.json`);
-  const raw = fs.readFileSync(filePath, 'utf-8');
-  return JSON.parse(raw);
-}
-
-// Convert cell IDs to row/col coordinates for drag selection
-function cellIdsToCoords(puzzle: Puzzle, cellIds: string[]): Array<{ row: number; col: number }> {
-  const cellById = new Map(puzzle.grid.cells.map(cell => [cell.id, cell]));
-  return cellIds.map(cellId => {
-    const cell = cellById.get(cellId);
-    if (!cell) throw new Error(`Missing cell ${cellId} in puzzle grid`);
-    return { row: cell.y, col: cell.x };
-  });
-}
-
-// Helper to drag-select cells on the grid
-async function dragSelect(
-  page: Page,
-  gridSelector: string,
-  gridWidth: number,
-  gridHeight: number,
-  cells: Array<{ row: number; col: number }>
-) {
-  const grid = page.locator(gridSelector);
-  const gridBox = await grid.boundingBox();
-  if (!gridBox) throw new Error('Grid not found');
-
-  const cellWidth = gridBox.width / gridWidth;
-  const cellHeight = gridBox.height / gridHeight;
-
-  const getCellCenter = (row: number, col: number) => ({
-    x: gridBox.x + col * cellWidth + cellWidth / 2,
-    y: gridBox.y + row * cellHeight + cellHeight / 2,
-  });
-
-  const start = getCellCenter(cells[0].row, cells[0].col);
-
-  await page.mouse.move(start.x, start.y);
-  await page.mouse.down();
-
-  // Move through intermediate points for better gesture recognition
-  for (let i = 1; i < cells.length; i++) {
-    const point = getCellCenter(cells[i].row, cells[i].col);
-    await page.mouse.move(point.x, point.y);
-  }
-
-  await page.mouse.up();
-}
 
 test.describe('Circuit Races - Smoke Tests', () => {
   let puzzle: Puzzle;
@@ -188,7 +105,8 @@ test.describe('Circuit Races - Smoke Tests', () => {
         '[data-testid="grid"]',
         puzzle.grid.width,
         puzzle.grid.height,
-        cells
+        cells,
+        pathWordToEnd.placements[0]  // Pass cell IDs for precise targeting
       );
 
       await page.waitForTimeout(300);
@@ -204,7 +122,8 @@ test.describe('Circuit Races - Smoke Tests', () => {
         '[data-testid="grid"]',
         puzzle.grid.width,
         puzzle.grid.height,
-        cells
+        cells,
+        pathWord.placements[0]  // Pass cell IDs for precise targeting
       );
 
       await page.waitForTimeout(300);
@@ -249,7 +168,8 @@ test.describe('Circuit Races - Smoke Tests', () => {
       '[data-testid="grid"]',
       puzzle.grid.width,
       puzzle.grid.height,
-      cells
+      cells,
+      bonusWord.placements[0]  // Pass cell IDs for precise targeting
     );
 
     await page.waitForTimeout(500);

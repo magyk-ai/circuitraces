@@ -54,6 +54,42 @@
           "estimatedMinutes": 3,
           "puzzlePath": "/daily/2026-01-17-physiotherapy.json",
           "tags": []
+        },
+        "devops": {
+          "id": "daily-2026-01-17-devops",
+          "title": "Pipeline Run",
+          "difficulty": "easy",
+          "grid": {
+            "width": 12,
+            "height": 12
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-devops.json",
+          "tags": []
+        },
+        "cybersecurity": {
+          "id": "daily-2026-01-17-cybersecurity",
+          "title": "Secure Path",
+          "difficulty": "easy",
+          "grid": {
+            "width": 12,
+            "height": 12
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-cybersecurity.json",
+          "tags": []
+        },
+        "finance-accounting": {
+          "id": "daily-2026-01-17-finance-accounting",
+          "title": "Ledger Logic",
+          "difficulty": "easy",
+          "grid": {
+            "width": 12,
+            "height": 12
+          },
+          "estimatedMinutes": 3,
+          "puzzlePath": "/daily/2026-01-17-finance-accounting.json",
+          "tags": []
         }
       }
     },
